@@ -1,8 +1,13 @@
-import mysql from 'mysql2';
-import dotenv from 'dotenv';
+var mysql = require('mysql2');
+const dotenv = require('dotenv');
 dotenv.config({ path: '../.env' });
 
-export var con = mysql.createConnection({
+console.log(process.env.MYSQL_HOST);
+console.log(process.env.MYSQL_USER);
+console.log(process.env.MYSQL_PASSWORD);
+console.log(process.env.MYSQL_DATABASE);
+
+var con = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
@@ -16,3 +21,4 @@ con.connect(function(err) {
     }
     console.log('Connected to MySQL database');
 });
+module.exports = con.promise();
