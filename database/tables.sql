@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS roles (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  rolename VARCHAR(50)
+  rolename VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS user_roles (
@@ -47,4 +47,5 @@ CREATE TABLE IF NOT EXISTS images(
     image_url VARCHAR(255),
     FOREIGN KEY (apartment_id) REFERENCES apartments(id)
 );
+
 

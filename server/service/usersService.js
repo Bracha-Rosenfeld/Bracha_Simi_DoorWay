@@ -24,7 +24,7 @@ exports.postUser = async ({ username, email, phone, address, password }) => {
             [username, email, phone, address]
         );
         await db.query(
-            'INSERT INTO passwords (userId,password) VALUES (?,?)',
+            'INSERT INTO passwords (user_id,password) VALUES (?,?)',
             [result.insertId, password]
         );
 
@@ -65,7 +65,7 @@ exports.queryUserByUsername = async (username) => {
 
 exports.queryUserPassword = async (userId) => {
     try {
-        const [rows] = await db.query('SELECT * FROM passwords WHERE userId = ?', [userId]);
+        const [rows] = await db.query('SELECT * FROM passwords WHERE user_id = ?', [userId]);
         return rows.length > 0 ? rows[0] : null;
     } catch (err) {
         throw new Error('Error fetching user password: ' + err.message);
