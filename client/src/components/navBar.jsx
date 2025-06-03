@@ -7,8 +7,8 @@ const navBar = () => {
             <nav>
                 <h2>🏠The DoorWay</h2>
                 <ul>
-                    <li><Link to="/login">About</Link></li>
-                    <li><Link to="/login">Deals</Link></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/deals">Deals</Link></li>
                     <li><Link to="/login">Contact</Link></li>
                     <li><Link to="/login">👤</Link></li>
                     <li><Link to="/login">🛒</Link></li>
