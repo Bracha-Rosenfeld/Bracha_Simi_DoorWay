@@ -1,5 +1,5 @@
 const { queryAllUsers, queryUserByUsername, queryUserById, postUser, queryUserPassword, putUser, deleteUser, queryUserRoleName/*!!!!!!!!!!!*/ } = require('../service/usersService');
-const { getCoordinatesFromAddress } = require('../helpers');
+const { getCoordinatesFromAddress } = require('../helpers/calculations');
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await queryAllUsers();

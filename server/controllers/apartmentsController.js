@@ -1,5 +1,5 @@
 const {queryAllApartments,  queryApartmentById, postApartment ,putApartment, deleteApartment} = require('../service/apartmentsService');
-const { getCoordinatesFromAddress } = require('../helpers');
+const { getCoordinatesFromAddress } = require('../helpers/calculations');
 exports.getAllApartments = async (req, res) => {
     try {
         const apartments = await queryAllApartments();

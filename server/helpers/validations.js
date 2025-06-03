@@ -1,4 +1,4 @@
-export const validateSignup = (req, res, next) => {
+exports.validateSignup = (req, res, next) => {
     const { username, email, phone, password } = req.body;
 
     // Check if all fields are provided
@@ -44,7 +44,7 @@ export const validateSignup = (req, res, next) => {
     next(); // Proceed to the next middleware or controller
 };
 
-export const validateLogin = (req, res, next) => {
+exports.validateLogin = (req, res, next) => {
     
     const username = req.query.username;
 
