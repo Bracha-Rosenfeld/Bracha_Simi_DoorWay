@@ -13,12 +13,13 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS roles (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  rolename VARCHAR(255)
+  role_name VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS user_roles (
   user_id INT,
   role_id INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (user_id, role_id),
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (role_id) REFERENCES roles(id)
@@ -49,3 +50,13 @@ CREATE TABLE IF NOT EXISTS images(
 );
 
 
+-- DROP TABLE passwords;
+-- DROP TABLE user_roles;
+-- DROP TABLE images;
+-- DROP TABLE apartments;
+-- DROP TABLE users;
+-- DROP TABLE roles;
+
+-- INSERT INTO roles (role_name) VALUES ('admin'); 
+-- INSERT INTO roles (role_name) VALUES ('publisher');
+-- INSERT INTO roles (role_name) VALUES ('viewer');
