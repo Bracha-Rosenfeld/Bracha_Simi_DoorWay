@@ -1,5 +1,5 @@
-exports.getCoordinatesFromAddress= async (address)=> {
-  const apiKey = process.env.API_KEY; // שימי לב לוודא שהמפתח קיים בקובץ .env שלך
+exports.getCoordinatesFromAddress = async (address) => {
+  const apiKey = process.env.API_KEY;
   const url = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${encodeURIComponent(address)}&format=json`;
 
   const response = await fetch(url);
