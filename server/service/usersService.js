@@ -17,11 +17,11 @@ exports.queryUserById = async (id) => {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
     }
 }
-exports.postUser = async ({ username, email, phone, address, password, roleId }) => {
+exports.postUser = async ({ username, email, phone, address, password, role_id }, latitude, longitude) => {
     try {
         const [result] = await db.query(
-            'INSERT INTO users (username, email, phone, address) VALUES (?, ?, ?, ?)',
-            [username, email, phone, address]
+            'INSERT INTO users (username, email, phone, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
+            [username, email, phone, address, latitude, longitude]
         );
         await db.query(
             'INSERT INTO passwords (user_id,password) VALUES (?,?)',
@@ -29,20 +29,20 @@ exports.postUser = async ({ username, email, phone, address, password, roleId })
         );
         await db.query(
             'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
-            [result.insertId, roleId]
+            [result.insertId, role_id]
         );
 
-        return { id: result.insertId, username, email, roleId };
+        return { id: result.insertId, username, email, role_id };
     } catch (err) {
         throw new Error('Error posting user: ' + err.message);
     }
 }
 
-exports.putUser = async (id, { username, email, phone, address }) => {
+exports.putUser = async (id, { username, email, phone, address } , latitude, longitude) => {
     try {
         const [result] = await db.query(
-            'UPDATE users SET username = ?, email = ? , phone = ? , address = ? WHERE id = ?',
-            [username, email, phone, address, id]
+            'UPDATE users SET username = ?, email = ? , phone = ? , address = ? , latitude = ? , longitude = ?  WHERE id = ?',
+            [username, email, phone, address, latitude, longitude, id]
         );
         return result.affectedRows > 0;
     } catch (err) {
@@ -83,3 +83,17 @@ exports.queryUserPassword = async (userId) => {
         throw new Error('Error fetching user password: ' + err.message);
     }
 }
+////////////////????????????????????????????????
+exports.queryUserRoleName = async (userId) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM user_roles WHERE user_id = ?', [userId]);
+        const [role] = await db.query('SELECT * FROM roles WHERE id = ?', [rows[0].role_id]);
+        if (!role) {
+            throw new Error('Role not found for user with ID: ' + userId);
+        }
+        return role;
+    } catch (err) {
+        throw new Error('Error fetching user role: ' + err.message);
+    }
+}
+
