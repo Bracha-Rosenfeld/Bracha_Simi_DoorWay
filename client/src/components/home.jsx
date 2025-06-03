@@ -6,7 +6,7 @@ const home = () => {
 
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <main >
         <p>To use the website please log in or sign up.</p>
       </main>
