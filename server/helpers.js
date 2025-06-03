@@ -1,10 +1,10 @@
 exports.getCoordinatesFromAddress= async (address)=> {
-  const apiKey = process.env.LOCATIONIQ_API_KEY; // שימי לב לוודא שהמפתח קיים בקובץ .env שלך
+  const apiKey = process.env.API_KEY; // שימי לב לוודא שהמפתח קיים בקובץ .env שלך
   const url = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${encodeURIComponent(address)}&format=json`;
 
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Invalid address or API error.");
+    throw new Error("Invalid address or API error. " + address);
   }
 
   const data = await response.json();
