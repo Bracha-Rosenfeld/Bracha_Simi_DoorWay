@@ -17,10 +17,10 @@ exports.queryUserById = async (id) => {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
     }
 }
-exports.postUser = async ({ username, email, phone, address, password ,role}) => {
+exports.postUser = async ({ username, email, phone, address, password, roleId }) => {
     try {
         const [result] = await db.query(
-            'INSERT INTO users (username, email,phone, address) VALUES (?, ?, ?, ?)',
+            'INSERT INTO users (username, email, phone, address) VALUES (?, ?, ?, ?)',
             [username, email, phone, address]
         );
         await db.query(
@@ -28,21 +28,21 @@ exports.postUser = async ({ username, email, phone, address, password ,role}) =>
             [result.insertId, password]
         );
         await db.query(
-           'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
-            [result.insertId, rolename]
+            'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
+            [result.insertId, roleId]
         );
 
-        return { id: result.insertId, username, email };
+        return { id: result.insertId, username, email, roleId };
     } catch (err) {
         throw new Error('Error posting user: ' + err.message);
     }
 }
 
-exports.putUser = async (id, { username, email }) => {
+exports.putUser = async (id, { username, email, phone, address }) => {
     try {
         const [result] = await db.query(
-            'UPDATE users SET username = ?, email = ? WHERE id = ?',
-            [username, email, id]
+            'UPDATE users SET username = ?, email = ? , phone = ? , address = ? WHERE id = ?',
+            [username, email, phone, address, id]
         );
         return result.affectedRows > 0;
     } catch (err) {
@@ -51,6 +51,14 @@ exports.putUser = async (id, { username, email }) => {
 }
 exports.deleteUser = async (id) => {
     try {
+        const [res1] = await db.query('DELETE FROM passwords WHERE user_id = ?', [id]);
+        if (res1.affectedRows === 0) {
+            throw new Error('No password found for user with ID: ' + id);
+        }
+        const [res2] = await db.query('DELETE FROM user_roles WHERE user_id = ?', [id]);
+        if (res2.affectedRows === 0) {
+            throw new Error('No roles found for user with ID: ' + id);
+        }
         const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
         return result.affectedRows > 0;
     } catch (err) {
