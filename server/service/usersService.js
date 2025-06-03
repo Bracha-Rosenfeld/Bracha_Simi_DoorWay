@@ -17,7 +17,7 @@ exports.queryUserById = async (id) => {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
     }
 }
-exports.postUser = async ({ username, email, phone, address, password }) => {
+exports.postUser = async ({ username, email, phone, address, password ,role}) => {
     try {
         const [result] = await db.query(
             'INSERT INTO users (username, email,phone, address) VALUES (?, ?, ?, ?)',
@@ -26,6 +26,10 @@ exports.postUser = async ({ username, email, phone, address, password }) => {
         await db.query(
             'INSERT INTO passwords (user_id,password) VALUES (?,?)',
             [result.insertId, password]
+        );
+        await db.query(
+           'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
+            [result.insertId, rolename]
         );
 
         return { id: result.insertId, username, email };
