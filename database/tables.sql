@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS roles (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  rolename VARCHAR(255)
+  role_name VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS user_roles (
@@ -31,9 +31,16 @@ CREATE TABLE IF NOT EXISTS passwords (
 );
 
 CREATE TABLE IF NOT EXISTS apartments(
-	id INT PRIMARY KEY,
+	id INT AUTO_INCREMENT PRIMARY KEY,
     publisher_id INT,
     address VARCHAR(255),
+    longitude DOUBLE,
+    latitude DOUBLE,
+    price LONG,
+    type ENUM('rent', 'sale'),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    title VARCHAR(255),  
     num_of_rooms DECIMAL(3,1),
     area DOUBLE,
     floor_number INT,
@@ -47,5 +54,13 @@ CREATE TABLE IF NOT EXISTS images(
     image_url VARCHAR(255),
     FOREIGN KEY (apartment_id) REFERENCES apartments(id)
 );
+INSERT INTO roles (role_name) VALUES ('admin'); 
+INSERT INTO roles (role_name) VALUES ('publisher');
+INSERT INTO roles (role_name) VALUES ('viewer');
 
-
+--  DROP TABLE passwords;
+--  DROP TABLE user_roles;
+--  DROP TABLE images;
+-- DROP TABLE apartments;
+--  DROP TABLE users;
+-- DROP TABLE roles;
