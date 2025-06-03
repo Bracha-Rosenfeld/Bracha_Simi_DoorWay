@@ -1,0 +1,46 @@
+.container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #d7263d;
+}
+
+.subtitle {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  color: #444;
+}
+
+.paragraph {
+  margin-bottom: 1rem;
+}
+
+.list {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.highlight {
+  background-color: #ffe5e5;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.slogan {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: #d7263d;
+}
