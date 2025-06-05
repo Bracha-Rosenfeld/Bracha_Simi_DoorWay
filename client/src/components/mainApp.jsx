@@ -4,8 +4,8 @@ import Layout from './layout';
 import Home from '../components/home';
 import About from '../components/about/about';
 import Deals from '../components/deals';
-import Login from '../components/login';
-import Signup from '../components/signup';
+import Login from '../components/login/login';
+import Register from '../components/register/register';
 const mainApp = () => {
     return (
         <BrowserRouter>
@@ -15,7 +15,7 @@ const mainApp = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/deals" element={<Deals />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path='signup' element={<Signup />} />
+                    <Route path="/register"element={<Register />} />
                 </Routes>
             </Layout>
         </BrowserRouter>
