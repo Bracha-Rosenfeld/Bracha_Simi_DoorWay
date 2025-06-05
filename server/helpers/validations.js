@@ -1,8 +1,8 @@
 exports.validateSignup = (req, res, next) => {
-    const { username, email, phone, password } = req.body;
+    const { email, phone, password } = req.body;
 
     // Check if all fields are provided
-    if (!username || !email || !password || !phone) {
+    if ( !email || !password || !phone) {
         return res.status(400).json({ error: 'All fields are required. Please fill out all the fields.' });
     }
 
@@ -46,11 +46,9 @@ exports.validateSignup = (req, res, next) => {
 
 exports.validateLogin = (req, res, next) => {
     
-    const username = req.query.username;
-
     // Check if username and password are provided
-    if (!username) {
-        return res.status(400).json({ error: 'Username and password are required. Please fill out both fields.' });
+    if (!req.body.email || !req.body.password) {
+        return res.status(400).json({ error: 'Email and password are required. Please fill out both fields.' });
     }
 
     next(); // Proceed to the next middleware or controller
