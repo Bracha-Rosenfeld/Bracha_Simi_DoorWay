@@ -1,0 +1,35 @@
+<svg viewBox="0 0 280 65" xmlns="http://www.w3.org/2000/svg" width="280" height="65">
+  <defs>
+    <linearGradient id="keyholeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4F46E5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="roofGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EF4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC2626;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main text "Doorway" with cool font -->
+  <text x="0" y="50" font-family="Impact, Arial Black, sans-serif" font-size="48" font-weight="900" fill="#1F2937" letter-spacing="1px">DOORWAY</text>
+  
+  <!-- D's interior filled with black, keyhole cut out in white -->
+  <g transform="translate(0, 8)">
+    <!-- Black fill for D's interior -->
+    <path d="M8 4 Q20 4 20 14 L20 28 Q20 38 8 38 L8 4 Z" fill="#000000"/>
+    <!-- White keyhole cutout - classic keyhole shape -->
+    <circle cx="14" cy="16" r="3.5" fill="#FFFFFF"/>
+    <path d="M12.5 16 L12.5 28 L15.5 28 L15.5 16" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Roof over the two O's -->
+  <g transform="translate(120, 5)">
+    <!-- Roof triangle spanning both O's -->
+    <path d="M0 15 L35 0 L70 15 L65 15 L35 5 L5 15 Z" fill="url(#roofGradient)"/>
+    <!-- Roof edge -->
+    <path d="M0 15 L35 0 L70 15" fill="none" stroke="#B91C1C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Tagline -->
+  <text x="1" y="63" font-family="Arial, sans-serif" font-size="10" font-weight="300" fill="#6B7280">luxury living</text>
+</svg>
