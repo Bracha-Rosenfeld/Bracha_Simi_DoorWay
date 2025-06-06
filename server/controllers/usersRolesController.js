@@ -10,27 +10,27 @@ exports.getAllUserRoles = async (req, res) => {
         res.status(500).json({ error: 'Internal server error. ' + error.message });
     }
 };
-exports.getUserRoleById = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const userRole = await queryUserRoleById(id);
-        if (!userRole || userRole.length === 0) {
-            return res.status(404).json({ error: 'User role with id:' + id + ' not found' });
-        }
-        res.status(200).json(userRole);
-    } catch (error) {
-        res.status(500).json({ error: 'Internal server error.' + error.message });
-    }
-};
+// exports.getUserRoleById = async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         const userRole = await queryUserRoleById(id);
+//         if (!userRole || userRole.length === 0) {
+//             return res.status(404).json({ error: 'User role with id:' + id + ' not found' });
+//         }
+//         res.status(200).json(userRole);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Internal server error.' + error.message });
+//     }
+// };
 /////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 exports.getUserRoleByUserId = async (req, res) => {
     try {
         const userId = req.params.userId;
-        const userRole = await getUserRoleByUserId(userId);
-        if (!userRole || userRole.length === 0) {
+        const userRolesList = await queryUserRoleByUserId(userId);
+        if (!userRolesList || userRolesList.length === 0) {
             return res.status(404).json({ error: 'User role with userId:' + userId + ' not found' });
         }
-        res.status(200).json(userRole);
+        res.status(200).json(userRolesList);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
