@@ -7,6 +7,8 @@ import Deals from '../components/deals';
 import Login from '../components/login/login';
 import Register from '../components/register/register';
 import Apartments from '../components/apartments';
+import MyAccount from '../components/myAccount';
+
 const mainApp = () => {
     return (
         <BrowserRouter>
@@ -18,6 +20,7 @@ const mainApp = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/apartments" element={<Apartments />} />
+                    <Route path="/myAccount" element={<MyAccount />} />
                 </Routes>
             </Layout>
         </BrowserRouter>

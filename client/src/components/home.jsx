@@ -6,7 +6,7 @@ import NavBar from './navBar/navBar';
 const home = () => {
   const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useCurrentUser();
-  const data = '';
+  //const data = '';
   // const checkIfUserExists = async () => {
   //   if (currentUser && currentUser.id != -1) {
   //     console.log("currentUser:", currentUser.id);
