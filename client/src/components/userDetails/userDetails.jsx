@@ -1,12 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useCurrentUser } from '../userProvider';
 import styles from './userDetails.module.css'
 // Some more details
 const userDetails = () => {
-  const emailRef = useRef();
-  const phoneRef = useRef();
-  const alertDivRef = useRef();
+  const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [alertDiv, setAlert] = useState('');
+  const [error, setError] = useState(null);
   const { currentUser, setCurrentUser } = useCurrentUser();
   const navigate = useNavigate();
   const firstLoad = useRef(true);
@@ -21,14 +23,10 @@ const userDetails = () => {
 
   //update the text in alert div.
   const manageMassages = (message) => {
-    alertDivRef.current.innerText = message;
+    setAlert(message);
   }
 
-  //checks if the email address is valid.
-  const validateEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(email);
-  };
+
 
   //checks if the phone number is valid.
   const validatePhone = (phone) => {
@@ -39,14 +37,15 @@ const userDetails = () => {
   //Complete the register process. 
   const writeUserToDB = async () => {
     let newUser = {
-      id: currentUser.id,
-      username: currentUser.username,
-      email: emailRef.current.value,
-      phone: phoneRef.current.value,
-      website: currentUser.website,
+      username: username,
+      email: currentUser.email,
+      phone: phone,
+      address: address,
+      password: currentUser.password,
+      role_name:'publisher'
     }
     try {
-      const response = await fetch('http://localhost:3000/users', {
+      const response = await fetch('http://localhost:5000/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -55,9 +54,9 @@ const userDetails = () => {
       })
       if (!response.ok)
         throw new Error(`Error: ${response.status}`);
-      setCurrentUser(newUser);
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-      navigate('/home');
+      setCurrentUser({ id: newUser.id, username: newUser.username, email: newUser.email, phone: newUser.phone, address: newUser.address });
+      localStorage.setItem('currentUser', JSON.stringify({ id: newUser.id, username: newUser.username, email: newUser.email, phone: newUser.phone, address: newUser.address }));
+      navigate('/myAccount');
     } catch (err) {
       setError(err.message);
     }
@@ -65,32 +64,26 @@ const userDetails = () => {
   //Check the details' validation.
   const handleDetailsSubmit = (event) => {
     event.preventDefault()
-    if (!validateEmail(emailRef.current.value)) {//if email not valid
-      if (!validatePhone(phoneRef.current.value)) {//if phone not valid too
-        manageMassages("email and phone not valid!");
-        emailRef.current.value = '';
-        phoneRef.current.value = '';
-      } else {
-        manageMassages("email not valid!");//if only email not valid
-        emailRef.current.value = '';
-      }
-    } else if (!validatePhone(phoneRef.current.value)) {//if only phone not valid
+    if (!validatePhone(phone)) {//if only phone not valid
       manageMassages("phone not valid!");
-      phoneRef.current.value = '';
+      setPhone('');
     }
     else {
       writeUserToDB();
     }
   }
-
+  if (error) {
+    return <div className={styles.error}>Error: {error}</div>;
+  }
   return (
     <>
       <h3 className={styles.title}>More Details</h3>
       <div className={styles.steps}><strong>2</strong> / 2 STEPS</div>
       <form className={styles.form} onSubmit={handleDetailsSubmit}>
-        <input className={styles.input} ref={emailRef} type="email" placeholder="email" required />
-        <input className={styles.input} ref={phoneRef} type="tel" placeholder="phone number" required />
-        <div className={styles.alert} ref={alertDivRef}></div>
+        <input className={styles.input} type="text" placeholder="username" onChange={(e) => { setUsername(e.target.value) }} required />
+        <input className={styles.input} type="tel" placeholder="phone number"  onChange={(e) => { setPhone(e.target.value) }} required />
+        <input className={styles.input} type="text" placeholder="address"  onChange={(e) => { setAddress(e.target.value) }} required />
+        <div className={styles.alert} >{alertDiv}</div>
         <button className={styles.button} type="submit">submit</button>
       </form>
 

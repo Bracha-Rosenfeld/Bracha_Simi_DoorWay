@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import CryptoJS from 'crypto-js';
 //Login Form
 export default function Login() {
-    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [alertDiv, setAlert] = useState('');
     const navigate = useNavigate();
@@ -13,41 +13,36 @@ export default function Login() {
     const KEY = CryptoJS.enc.Utf8.parse('1234567890123456');
     const IV = CryptoJS.enc.Utf8.parse('6543210987654321');
     const [error, setError] = useState(null);
-    // const firstLoad = useRef(true);
 
-    // useEffect(() => {
-    //     if (firstLoad.current) {
-    //         localStorage.removeItem('currentUser');
-    //         firstLoad.current = false;
-    //     }
-    // }), [firstLoad]
     //update the text in alert div.
     const manageMassages = (message) => {
         setAlert(message);
     }
 
     // check if the user exists in the DB.Returns the response status and the user-if exists.
-    const checkUserExists = async (username, pass) => {
+    const checkUserExists = async (email, pass) => {
         try {
+            const encryptedPassword = CryptoJS.AES.encrypt(pass, KEY, {
+                iv: IV,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7,
+            }).toString()
+
             const response = await fetch('http://localhost:5000/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ "username": username, "password": pass })
+                body: JSON.stringify({ "email": email, "password": encryptedPassword })
             })
             if (!response.ok) {
                 setAlert('User does not exist! Try to register!');
                 return { ok: false, user: null };
             }
-            const users = await response.json();
+            const user = await response.json();
 
-            if ((users.length > 0) && ((users[0].website === pass) || (users[0].website == CryptoJS.AES.encrypt(pass, KEY, {
-                iv: IV,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7,
-            }).toString())))
-                return { ok: true, user: users[0] };
+            if (user)
+                return { ok: true, user: user };
             else
                 return { ok: false, user: null };
         } catch (err) {
@@ -59,18 +54,18 @@ export default function Login() {
     //if the user is valid - navigate to home page.
     const handleLoginSubmit = (event) => {
         event.preventDefault()
-        checkUserExists(name, password).then((exists) => {
+        checkUserExists(email, password).then((exists) => {
             if (!exists.ok) {
                 manageMassages('user name or password incorrect, try again');
             } else {
                 let currentUser = {
                     id: exists.user.id,
-                    username: name,
+                    username: exists.user.username,
                     email: exists.user.email,
                 }
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 setCurrentUser(currentUser);
-                navigate('/home');
+                navigate('/myAccount');
             }
         });
     }
@@ -82,7 +77,7 @@ export default function Login() {
             <div id="container" className={styles.container}>
                 <h3 className={styles.title}>Login</h3>
                 <form onSubmit={handleLoginSubmit} className={styles.form}>
-                    <input className={styles.input} type="text" placeholder="email" required onChange={(e) => { setName(e.target.value) }} />
+                    <input className={styles.input} type="text" placeholder="email" required onChange={(e) => { setEmail(e.target.value) }} />
                     <input className={styles.input} type="password" placeholder="password" required onChange={(e) => { setPassword(e.target.value) }} />
                     <div className={styles.alert} >{alertDiv}</div>
                     <button type="submit" className={styles.button}>submit</button>

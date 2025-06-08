@@ -58,10 +58,13 @@ CREATE TABLE IF NOT EXISTS images(
 INSERT INTO roles (role_name) VALUES ('admin'); 
 INSERT INTO roles (role_name) VALUES ('publisher');
 INSERT INTO roles (role_name) VALUES ('viewer');
+SELECT * FROM users;
+SELECT * FROM user_roles;
+SELECT * FROM roles;
 
---  DROP TABLE passwords;
---  DROP TABLE user_roles;
---  DROP TABLE images;
--- DROP TABLE apartments;
---  DROP TABLE users;
--- DROP TABLE roles;
+ DROP TABLE passwords;
+ DROP TABLE user_roles;
+ DROP TABLE images;
+DROP TABLE apartments;
+ DROP TABLE users;
+DROP TABLE roles;

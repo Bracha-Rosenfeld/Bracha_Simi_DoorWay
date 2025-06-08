@@ -16,30 +16,30 @@ exports.validateSignup = (req, res, next) => {
         return res.status(400).json({ error: 'Email must not contain spaces. Please check your email.' });
     }
 
-    // Password validation
-    if (password.length < 8) {
-        return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
-    }
+    // // Password validation
+    // if (password.length < 8) {
+    //     return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
+    // }
 
-    if (!/[A-Z]/.test(password)) {
-        return res.status(400).json({ error: 'Password must contain at least one uppercase letter.' });
-    }
+    // if (!/[A-Z]/.test(password)) {
+    //     return res.status(400).json({ error: 'Password must contain at least one uppercase letter.' });
+    // }
 
-    if (!/[a-z]/.test(password)) {
-        return res.status(400).json({ error: 'Password must contain at least one lowercase letter.' });
-    }
+    // if (!/[a-z]/.test(password)) {
+    //     return res.status(400).json({ error: 'Password must contain at least one lowercase letter.' });
+    // }
 
-    if (!/[0-9]/.test(password)) {
-        return res.status(400).json({ error: 'Password must contain at least one number.' });
-    }
+    // if (!/[0-9]/.test(password)) {
+    //     return res.status(400).json({ error: 'Password must contain at least one number.' });
+    // }
 
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        return res.status(400).json({ error: 'Password must contain at least one special character (e.g., !, @, #).' });
-    }
+    // if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    //     return res.status(400).json({ error: 'Password must contain at least one special character (e.g., !, @, #).' });
+    // }
 
-    if (/\s/.test(password)) {
-        return res.status(400).json({ error: 'Password must not contain spaces.' });
-    }
+    // if (/\s/.test(password)) {
+    //     return res.status(400).json({ error: 'Password must not contain spaces.' });
+    // }
 
     next(); // Proceed to the next middleware or controller
 };

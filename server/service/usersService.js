@@ -17,7 +17,7 @@ exports.queryUserById = async (id) => {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
     }
 }
-exports.postUser = async ({ username, email, phone, address, password, role_id }, latitude, longitude) => {
+exports.postUser = async ({ username, email, phone, address, password }, latitude, longitude, role_id) => {
     try {
         const [result] = await db.query(
             'INSERT INTO users (username, email, phone, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
@@ -38,7 +38,7 @@ exports.postUser = async ({ username, email, phone, address, password, role_id }
     }
 }
 
-exports.putUser = async (id, { username, email, phone, address } , latitude, longitude) => {
+exports.putUser = async (id, { username, email, phone, address }, latitude, longitude) => {
     try {
         const [result] = await db.query(
             'UPDATE users SET username = ?, email = ? , phone = ? , address = ? , latitude = ? , longitude = ?  WHERE id = ?',
@@ -66,12 +66,12 @@ exports.deleteUser = async (id) => {
     }
 }
 
-exports.queryUserByUsername = async (username) => {
+exports.queryUserByEmail = async (email) => {
     try {
-        const [rows] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
+        const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
         return rows.length > 0 ? rows[0] : null;
     } catch (err) {
-        throw new Error('Error fetching user by username: ' + err.message);
+        throw new Error('Error fetching user by email: ' + err.message);
     }
 };
 
@@ -97,3 +97,16 @@ exports.queryUserRoleName = async (userId) => {
     }
 }
 
+exports.queryUserRoleId = async (roleName) => {
+    try {
+        console.log('queryUserRoleId called with roleName:', roleName);
+        const [rows] = await db.query('SELECT * FROM roles WHERE role_name = ?', [roleName]);
+        if (rows.length === 0) {
+            throw new Error('No roles found for role name: ' + roleName);
+        }
+        console.log('queryUserRoleId found role:', rows[0].id);
+        return rows[0].id;
+    } catch (err) {
+        throw new Error('Error fetching role: ' + err.message);
+    }
+}

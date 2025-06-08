@@ -1,4 +1,4 @@
-const { queryAllUsers, queryUserByUsername, queryUserById, postUser, queryUserPassword, putUser, deleteUser, queryUserRoleName/*!!!!!!!!!!!*/ } = require('../service/usersService');
+const { queryAllUsers, queryUserByEmail, queryUserById, postUser, queryUserPassword, putUser, deleteUser, queryUserRoleName/*!!!!!!!!!!!*/, queryUserRoleId /*!!!!!!!!!!!!*/ } = require('../service/usersService');
 const { getCoordinatesFromAddress } = require('../helpers/calculations');
 exports.getAllUsers = async (req, res) => {
     try {
@@ -34,7 +34,10 @@ exports.createUser = async (req, res) => {
         if (isNaN(latitude) || isNaN(longitude)) {
             return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
         }
-        const user = await postUser(req.body, latitude, longitude);
+        const userRoleName = req.body.role_name;
+        const userRoleId = await queryUserRoleId(userRoleName);
+        console.log('userRoleId', userRoleId);
+        const user = await postUser(req.body, latitude, longitude, userRoleId);
         if (!user || user.length === 0) {
             return res.status(404).json({ error: 'User with username:' + user.username + ' cannot be created' });
         }
@@ -81,16 +84,16 @@ exports.removeUser = async (req, res) => {
 }
 exports.manageLogin = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await queryUserByUsername(username);
+        const { email, password } = req.body;
+        const user = await queryUserByEmail(email);
         if (!user) {
-            return res.status(404).json({ error: 'User with username:' + username + ' not found' });
+            return res.status(404).json({ error: 'User with email:' + email + ' not found' });
         }
         const userPassword = await queryUserPassword(user.id);
         if (!userPassword || userPassword.password !== password) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ error: 'Invalid credentials' + userPassword.password + ' ' + password });
         }
-        res.status(200).json({ message: 'Login successful', userId: user.id });
+        res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
