@@ -8,9 +8,7 @@ import Login from '../components/login/login';
 import Register from '../components/register/register';
 import Apartments from '../components/apartments';
 import MyAccount from '../components/myAccount';
-
 import UserDetails from '../components/userDetails/userDetails';
-import MyAccount from '../components/myAccount';
 const mainApp = () => {
     return (
         <BrowserRouter>
@@ -26,7 +24,6 @@ const mainApp = () => {
                     {/* Redirect any unknown paths to home */}
                     <Route path='/myAccount' element={<MyAccount />}/>
                     <Route path="/apartments" element={<Apartments />} />
-                    <Route path="/myAccount" element={<MyAccount />} />
                 </Routes>
             </Layout>
         </BrowserRouter>

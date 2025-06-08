@@ -15,7 +15,7 @@ const myAccount = () => {
     const viewUserDetails = async () => {
         try {
             if (currentUser && currentUser.id != -1) {
-                const response = await fetch(`http://localhost:3000/users?id=${currentUser.id}`);
+                const response = await fetch(`http://localhost:5000/users?id=${currentUser.id}`);
                 if (response.ok) {
                     const data = await response.json();
                     setUserData(data[0]);
@@ -67,7 +67,7 @@ const myAccount = () => {
                 console.error("Error updating user details:", err)
             }
 
-        } catch (error) {
+        } catch (err) {
             console.error("Error:", err);
         }
     }
@@ -85,7 +85,7 @@ const myAccount = () => {
                                 Name:
                                 <input
                                     type="text"
-                                    value={userData.name}
+                                    value={userData.username}
                                     onChange={(e) => handleInputChange('name', e.target.value)}
                                 />
                             </div>
@@ -122,7 +122,7 @@ const myAccount = () => {
                         </>
                     ) : (
                         <>
-                            <p><strong>Name:</strong> {userData.name}</p>
+                            <p><strong>Name:</strong> {userData.username}</p>
                             <p><strong>Email:</strong> {userData.email}</p>
                             <p><strong>Phone:</strong> {userData.phone}</p>
                             <p><strong>Address:</strong> {userData.address}</p>
