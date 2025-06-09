@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS apartments(
     area DOUBLE,
     floor_number INT,
     details TEXT,
-    isApproved BOOLEAN DEFAULT FALSE,
+    is_approved BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (publisher_id) REFERENCES users(id)
 );
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import ApartmentDetails from './apartmentDetails';
 const adminHome = () => {
     const [apartments, setApartments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,10 +17,10 @@ const adminHome = () => {
         }
     };
 
-    const approveApartment = async (id) => {
+    const approveApartment = async (apt) => {
         try {
-            await axios.put(`http://localhost:5000/apartments/${id}`, { is_approved: 1 });
-            setApartments((prev) => prev.filter((apt) => apt.id !== id));
+            await axios.put(`http://localhost:5000/apartments/${apt.id}`, { price: apt.price, title: apt.title, details: apt.details, is_approved: 1 });
+            setApartments((prev) => prev.filter((a) => a.id !== apt.id));
         } catch (error) {
             setError('Error approving apartment:', error);
         }
@@ -40,11 +40,9 @@ const adminHome = () => {
                 <p>currently no apartments to approve!</p>
             ) : (
                 apartments.map((apt) => (
-                    <div key={apt.id} style={{ border: '1px solid gray', margin: '10px', padding: '10px' }}>
-                        <p><strong>כתובת:</strong> {apt.address}</p>
-                        <p><strong>מחיר:</strong> {apt.price} ₪</p>
-                        <p><strong>כותרת:</strong> {apt.title}</p>
-                        <button onClick={() => approveApartment(apt.id)}>approve</button>
+                    <div key={apt.id} >
+                        <ApartmentDetails apt={apt} />
+                        <button onClick={() => approveApartment(apt)}>approve</button>
                     </div>
                 ))
             )}
