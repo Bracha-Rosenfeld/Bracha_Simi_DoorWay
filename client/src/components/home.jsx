@@ -37,7 +37,7 @@ const home = () => {
 
   const managePublishApartments = async () => {
     if (currentUser && currentUser.id != -1) {
-      navigate('/publish')
+      navigate('/publish');
     }
     else
       navigate('/login')
