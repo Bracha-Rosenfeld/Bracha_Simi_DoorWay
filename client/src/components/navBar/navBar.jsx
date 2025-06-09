@@ -15,6 +15,7 @@ const NavBar = () => {
                     <li className={styles.navItem}><a href="#contact" className={styles.navLink}>Contact</a></li>
                     <li className={styles.navItem}><Link to="/login" className={styles.navLink}>👤</Link></li>
                     <li className={styles.navItem}><Link to="/login" className={styles.navLink}>🛒</Link></li>
+                    
                 </ul>
             </nav>
         </div>

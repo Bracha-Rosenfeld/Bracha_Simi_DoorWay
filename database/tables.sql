@@ -62,9 +62,9 @@ SELECT * FROM users;
 SELECT * FROM user_roles;
 SELECT * FROM roles;
 
- DROP TABLE passwords;
- DROP TABLE user_roles;
- DROP TABLE images;
-DROP TABLE apartments;
- DROP TABLE users;
-DROP TABLE roles;
+--  DROP TABLE passwords;
+--  DROP TABLE user_roles;
+--  DROP TABLE images;
+-- DROP TABLE apartments;
+--  DROP TABLE users;
+-- DROP TABLE roles;

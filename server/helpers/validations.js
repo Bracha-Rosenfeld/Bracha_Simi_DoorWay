@@ -1,8 +1,8 @@
 exports.validateSignup = (req, res, next) => {
-    const { email, phone, password } = req.body;
+    const { email, password } = req.body;
 
     // Check if all fields are provided
-    if ( !email || !password || !phone) {
+    if ( !email || !password) {
         return res.status(400).json({ error: 'All fields are required. Please fill out all the fields.' });
     }
 

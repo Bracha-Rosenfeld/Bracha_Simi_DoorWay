@@ -2,6 +2,8 @@ import React from 'react'
 import { useCurrentUser, UserProvider } from './userProvider'
 import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
+import LogoutButton from './logoutButton';
+
 
 const myAccount = () => {
     const navigate = useNavigate();
@@ -75,6 +77,7 @@ const myAccount = () => {
     return (
         <>
             <h2>My Account</h2>
+             <LogoutButton />
             <button onClick={viewUserDetails}>Display My Details</button>
 
             {showDetails && userData && (
