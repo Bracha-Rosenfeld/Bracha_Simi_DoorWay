@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS apartments(
     area DOUBLE,
     floor_number INT,
     details TEXT,
+    isApproved BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (publisher_id) REFERENCES users(id)
 );
 
@@ -61,7 +62,7 @@ INSERT INTO roles (role_name) VALUES ('viewer');
 SELECT * FROM users;
 SELECT * FROM user_roles;
 SELECT * FROM roles;
-
+SELECT * FROM apartments;
 --  DROP TABLE passwords;
 --  DROP TABLE user_roles;
 --  DROP TABLE images;

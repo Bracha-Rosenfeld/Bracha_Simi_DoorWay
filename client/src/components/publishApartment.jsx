@@ -16,7 +16,8 @@ export default function publishApartment() {
     num_of_rooms: '',
     area: '',
     floor_number: '',
-    details: ''
+    details: '',
+    is_approved: false
   });
 
   const handleChange = (e) => {
@@ -27,7 +28,7 @@ export default function publishApartment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/apartments', {
+      const response = await fetch('http://localhost:5000/apartments?is_approved=true', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -46,7 +47,8 @@ export default function publishApartment() {
         num_of_rooms: '',
         area: '',
         floor_number: '',
-        details: ''
+        details: '',
+        is_approved: false
       });
       setWasAdded(true);
     } catch (error) {

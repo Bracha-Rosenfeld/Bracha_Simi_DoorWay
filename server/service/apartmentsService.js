@@ -1,11 +1,20 @@
 const db = require('../../database/connections')
 
+exports.queryAllApartments = async (is_approved) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM apartments WHERE is_approved = ?', [is_approved]);
+        return rows;
+    } catch (err) {
+        throw new Error('Error fetching apartments: ' + err.message);
+    }
+}
+
 exports.queryAllApartments = async () => {
     try {
         const [rows] = await db.query('SELECT * FROM apartments');
         return rows;
     } catch (err) {
-        throw new Error('Error fetching apartments: ' + err.message);
+        throw new Error('Error fetching all apartments: ' + err.message);
     }
 }
 
