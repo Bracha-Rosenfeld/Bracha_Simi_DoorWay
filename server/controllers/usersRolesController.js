@@ -1,4 +1,4 @@
-const{ queryAllUserRoles, queryUserRoleById, queryUserRoleByUserId, postUserRole, deleteUserRole} = require('../service/usersRolesService');
+const{ queryAllUserRoles, queryUserRoleById, queryUserRoleByUserId, postUserRole, deleteUserRole, queryUserRoleId} = require('../service/usersRolesService');
 exports.getAllUserRoles = async (req, res) => {
     try {
         const userRoles = await queryAllUserRoles();
@@ -37,7 +37,9 @@ exports.getUserRoleByUserId = async (req, res) => {
 };
 exports.createUserRole = async (req, res) => {
     try {
-        const userRole = await postUserRole(req.body);
+        const userRoleName = req.body.role_name;
+        const userRoleId = await queryUserRoleId(userRoleName);
+        const userRole = await postUserRole(req.body.user_id, userRoleId);
         if (!userRole || userRole.length === 0) {
             return res.status(404).json({ error: 'User role cannot be created' });
         }
