@@ -2,6 +2,8 @@ import React from 'react'
 import { useCurrentUser, UserProvider } from './userProvider'
 import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
+import LogoutButton from './logoutButton';
+
 
 const myAccount = () => {
     const navigate = useNavigate();
@@ -15,11 +17,11 @@ const myAccount = () => {
     const viewUserDetails = async () => {
         try {
             if (currentUser && currentUser.id != -1) {
-                const response = await fetch(`http://localhost:5000/users?id=${currentUser.id}`);
+                const response = await fetch(`http://localhost:5000/users/${currentUser.id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setUserData(data[0]);
-                    setOriginalData(data[0]);
+                    setUserData(data);
+                    setOriginalData(data);
                     setShowDetails(true);
                 }
                 else {
@@ -50,12 +52,12 @@ const myAccount = () => {
 
     const saveChanges = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/users?id=${currentUser.id}`, {
-                method: 'PATCH',
+            const response = await fetch(`http://localhost:5000/users/${currentUser.id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(userData),
+                body: JSON.stringify({username: userData.username, email: userData.email, phone: userData.phone, address: userData.address }),
             })
             if (response.ok) {
                 const updated = await response.json();
@@ -64,17 +66,18 @@ const myAccount = () => {
                 setIsChanged(false);
             }
             else {
-                console.error("Error updating user details:", err)
+                console.error("Error updating user details:", response.statusText);
             }
 
         } catch (err) {
-            console.error("Error:", err);
+            console.error("Error:", err.massage);
         }
     }
 
     return (
         <>
             <h2>My Account</h2>
+             <LogoutButton />
             <button onClick={viewUserDetails}>Display My Details</button>
 
             {showDetails && userData && (
@@ -86,7 +89,7 @@ const myAccount = () => {
                                 <input
                                     type="text"
                                     value={userData.username}
-                                    onChange={(e) => handleInputChange('name', e.target.value)}
+                                    onChange={(e) => handleInputChange('username', e.target.value)}
                                 />
                             </div>
                             <div>

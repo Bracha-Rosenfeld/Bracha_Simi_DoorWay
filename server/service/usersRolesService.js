@@ -35,7 +35,7 @@ exports.queryUserRoleByUserId = async (userId) => {
 
     }
 }
-exports.postUserRole = async ({ user_id, role_id }) => {
+exports.postUserRole = async ( user_id, role_id ) => {
     try {
         const [result] = await db.query(
             'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
@@ -52,5 +52,16 @@ exports.deleteUserRole = async (id,userId) => {
         return result.affectedRows > 0;
     } catch (err) {
         throw new Error('Error deleting user role with ID: ' + id + ' ' + err.message);
+    }
+}
+exports.queryUserRoleId = async (roleName) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM roles WHERE role_name = ?', [roleName]);
+        if (rows.length === 0) {
+            throw new Error('No roles found for role name: ' + roleName);
+        }
+        return rows[0].id;
+    } catch (err) {
+        throw new Error('Error fetching role: ' + err.message);
     }
 }

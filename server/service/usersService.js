@@ -32,7 +32,7 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
             [result.insertId, role_id]
         );
 
-        return { id: result.insertId, username, email, role_id };
+        return { id: result.insertId, username: username, email: email, role_id: role_id };
     } catch (err) {
         throw new Error('Error posting user: ' + err.message);
     }
@@ -83,7 +83,7 @@ exports.queryUserPassword = async (userId) => {
         throw new Error('Error fetching user password: ' + err.message);
     }
 }
-////////////////????????????????????????????????
+
 exports.queryUserRoleName = async (userId) => {
     try {
         const [rows] = await db.query('SELECT * FROM user_roles WHERE user_id = ?', [userId]);
@@ -99,12 +99,10 @@ exports.queryUserRoleName = async (userId) => {
 
 exports.queryUserRoleId = async (roleName) => {
     try {
-        console.log('queryUserRoleId called with roleName:', roleName);
         const [rows] = await db.query('SELECT * FROM roles WHERE role_name = ?', [roleName]);
         if (rows.length === 0) {
             throw new Error('No roles found for role name: ' + roleName);
         }
-        console.log('queryUserRoleId found role:', rows[0].id);
         return rows[0].id;
     } catch (err) {
         throw new Error('Error fetching role: ' + err.message);
