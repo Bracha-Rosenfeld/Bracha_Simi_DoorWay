@@ -7,7 +7,7 @@ import Deals from '../components/deals';
 import Login from '../components/login/login';
 import Register from '../components/register/register';
 import Apartments from '../components/apartments';
-import Publish from './publish'
+import PublishApartment from './publishApartment'
 import MyAccount from '../components/myAccount';
 import UserDetails from '../components/userDetails/userDetails';
 import NotFound from '../components/notFound';
@@ -25,7 +25,7 @@ const mainApp = () => {
                     <Route path="/userDetails" element={<UserDetails />} />
                     <Route path='/myAccount' element={<MyAccount />} />
                     <Route path="/apartments" element={<Apartments />} />
-                    <Route path="/publish" element={<Publish />} />
+                    <Route path="/publish" element={<PublishApartment />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Layout>
