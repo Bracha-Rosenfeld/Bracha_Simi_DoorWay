@@ -27,11 +27,11 @@ exports.queryApartmentById = async (id) => {
         throw new Error('Error fetching apartment with ID: ' + id + ' ' + err.message);
     }
 }
-exports.postApartment = async (latitude,longitude,{ publisher_id,address, price, type, title, num_of_rooms, area, floor_number, details }) => {
+exports.postApartment = async (latitude,longitude,{ publisher_id,address, price, type, title, num_of_rooms, area, floor_number, details,is_approved }) => {
     try {
         const [result] = await db.query(
-        'INSERT INTO apartments (publisher_id, address, longitude, latitude, price, type, title, num_of_rooms, area, floor_number, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [publisher_id, address, longitude, latitude, price, type, title, num_of_rooms, area, floor_number, details]
+        'INSERT INTO apartments (publisher_id, address, longitude, latitude, price, type, title, num_of_rooms, area, floor_number, details ,is_approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)',
+            [publisher_id, address, longitude, latitude, price, type, title, num_of_rooms, area, floor_number, details, is_approved]
         );
         return { id: result.insertId, publisher_id: publisher_id, };
 
@@ -40,11 +40,11 @@ exports.postApartment = async (latitude,longitude,{ publisher_id,address, price,
     }
 }
 
-exports.putApartment = async (id, { price, title, details }) => {
+exports.putApartment = async (id, { price, title, details ,is_approved}) => {
     try {
         const [result] = await db.query(
-            'UPDATE apartments SET price = ?, title = ?, details = ?  WHERE id = ?',
-            [price, title, details, id]
+            'UPDATE apartments SET price = ?, title = ?, details = ?, is_approved =? WHERE id = ?',
+            [price, title, details,is_approved, id]
         );
         return result.affectedRows > 0;
     } catch (err) {

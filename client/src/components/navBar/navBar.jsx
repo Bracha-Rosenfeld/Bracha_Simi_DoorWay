@@ -17,10 +17,10 @@ const NavBar = () => {
                     if (response.data.includes('admin')) {
                         setHomeNav('/adminHome');
                     } else {
-                        setHomeNav('/myAccount');
+                        setHomeNav('/');
                     }
                 } else {
-                    setHomeNav('/myAccount');
+                    setHomeNav('/');
                 }
             }).catch((error) => {
                 setError('Error fetching user roles:', error);
