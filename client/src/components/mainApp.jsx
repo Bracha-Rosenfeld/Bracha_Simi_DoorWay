@@ -25,7 +25,7 @@ const mainApp = () => {
                     <Route path="/userDetails" element={<UserDetails />} />
                     <Route path='/myAccount' element={<MyAccount />} />
                     <Route path="/apartments" element={<Apartments />} />
-                    <Route path="/publish" elemts ={<Publish/>}/>
+                    <Route path="/publish" element={<Publish />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Layout>
