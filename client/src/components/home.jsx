@@ -21,7 +21,7 @@ const home = () => {
         console.log('data:', data);
 
         if (data.find(role => role === "viewer")) {
-          Navigate('/apartments');
+          navigate('/apartments');
         }
       }
       setShowSubscriptionOptions(true);

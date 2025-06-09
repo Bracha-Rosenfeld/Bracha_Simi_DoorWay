@@ -20,10 +20,10 @@ exports.queryUserRoleByUserId = async (userId) => {
     try{
         const [rows] = await db.query('SELECT * FROM user_roles WHERE user_id = ?', [userId]);
         const rolesNamesList = [];
-        for (const role of rows[0]) {
+        for (const role of rows) {
             const [roleName] = await db.query('SELECT * FROM roles WHERE id = ?', [role.role_id]);
             if (roleName && roleName.length > 0) {
-                rolesNamesList.push(...roleName);
+                rolesNamesList.push(roleName[0].role_name);
             }
         }
         if (!rolesNamesList) {
