@@ -28,7 +28,7 @@ export default function publishApartment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/apartments?is_approved=true', {
+      const response = await fetch('http://localhost:5000/apartments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -56,9 +56,13 @@ export default function publishApartment() {
     }
   };
 
-  if (wasAdded) {
-    return <div>Apartment was added successfully!</div>;
-    <Link to="/">home</Link>
+  if (wasAdded === true) {
+    return (
+      <>
+        <div>Apartment was added successfully!</div>
+        <Link to="/">home</Link>
+      </>
+    );
   }
 
   return (

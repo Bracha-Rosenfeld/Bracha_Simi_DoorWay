@@ -3,15 +3,16 @@ const { getCoordinatesFromAddress } = require('../helpers/calculations');
 exports.getAllApartments = async (req, res) => {
     try {
         const isApproved = req.query.is_approved;
-        if(isApproved === 'true') {
-            const apartments = await queryAllApartments(true);
+        if(isApproved == 'true') {
+            const apartments = await queryAllApartments(1);
+            console.log(apartments);
             if (!apartments || apartments.length === 0) {
                 return res.status(404).json({ error: 'No approved apartments found' });
             }
             return res.status(200).json(apartments);
         }
-        if(isApproved === 'false') {
-            const apartments = await queryAllApartments(false);
+        if(isApproved == 'false') {
+            const apartments = await queryAllApartments(0);
             if (!apartments || apartments.length === 0) {
                 return res.status(404).json({ error: 'No unapproved apartments found' });
             }

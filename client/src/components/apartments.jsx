@@ -9,7 +9,7 @@ export default function Apartments() {
   useEffect(() => {
     const fetchApartments = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/apartments', {
+        const response = await axios.get(`http://localhost:5000/apartments?is_approved=${true}`, {
           withCredentials: true,
         });
         setApartments(response.data);
