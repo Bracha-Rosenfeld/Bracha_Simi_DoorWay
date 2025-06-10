@@ -2,6 +2,23 @@ const {queryAllApartments,  queryApartmentById, postApartment ,putApartment, del
 const { getCoordinatesFromAddress } = require('../helpers/calculations');
 exports.getAllApartments = async (req, res) => {
     try {
+        const isApproved = req.query.is_approved;
+        if(isApproved == 'true') {
+            const apartments = await queryAllApartments(true);
+            console.log(apartments);
+            if (!apartments || apartments.length === 0) {
+                return res.status(404).json({ error: 'No approved apartments found' });
+            }
+            return res.status(200).json(apartments);
+        }
+        if(isApproved == 'false') {
+            const apartments = await queryAllApartments(false);
+            if (!apartments || apartments.length === 0) {
+                return res.status(404).json({ error: 'No unapproved apartments found' });
+            }
+            return res.status(200).json(apartments);
+        }
+        // If no query parameter is provided, return all apartments
         const apartments = await queryAllApartments();
         if (!apartments || apartments.length === 0) {
             return res.status(404).json({ error: 'No apartments found' });
@@ -26,6 +43,7 @@ exports.getApartmentById = async (req, res) => {
 }
 exports.createApartment = async (req, res) => {
     try {
+        console.log(req.body);
         const address = req.body.address;
         if (address === null || address === '') {
             return res.status(400).json({ error: 'Address is required' + req.body.address });
