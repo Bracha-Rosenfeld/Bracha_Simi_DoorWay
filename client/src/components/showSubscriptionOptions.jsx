@@ -11,23 +11,6 @@ const viewApartments = () => {
     const [amountToPay, setAmountToPay] = useState(null);
     const [showSubscriptionOptions, setShowSubscriptionOptions] = useState(false);
 
-    const manageViewApartments = async () => {
-        if (currentUser && currentUser.id != -1) {
-            console.log("currentUser:", currentUser.id);
-            const response = await fetch(`http://localhost:5000/usersRoles/${currentUser.id}`);
-            if (response.ok) {
-                const data = await response.json();
-                console.log('data:', data);
-
-                if (data.find(role => role === "viewer")) {
-                    navigate('/apartments');
-                }
-            }
-            setShowSubscriptionOptions(true);
-        }
-        else { navigate('/login') }
-    }
-
     const choosePlan = (amount) => {
         setAmountToPay(amount);
         setShowSubscriptionOptions(false);
@@ -56,8 +39,7 @@ const viewApartments = () => {
 
     return (
         <div>
-            <button onClick={manageViewApartments}>View Apartments</button>
-            {showSubscriptionOptions && (
+            
                 <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
                     <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
                         <h3>Monthly Plan</h3>
@@ -72,7 +54,6 @@ const viewApartments = () => {
                         <button onClick={() => choosePlan(150)}>Choose Bi-Monthly</button>
                     </div>
                 </div>
-            )}
 
             {/* Payment Section */}
             {showPayment && (

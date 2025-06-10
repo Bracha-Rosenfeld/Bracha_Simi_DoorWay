@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const PAYPAL_API = 'https://api-m.sandbox.paypal.com';
-const CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+const CLIENT_ID = process.env.VITE_PAYPAL_CLIENT_ID;
 const SECRET = process.env.PAYPAL_CLIENT_SECRET;
 
 async function getAccessToken() {
