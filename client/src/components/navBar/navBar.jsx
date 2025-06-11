@@ -6,9 +6,11 @@ import axios from 'axios';
 
 const NavBar = () => {
     const [homeNav, setHomeNav] = useState('/');
-    const { currentUser } = useCurrentUser();
+    const { currentUser, isLoadingUser } = useCurrentUser();
     const [error, setError] = useState(null);
     useEffect(() => {
+        if (isLoadingUser) return; // Wait for the user to load
+
         if (currentUser && currentUser.id !== -1) {
             const roles = axios.get(`http://localhost:5000/usersRoles/${currentUser.id}`, {
                 withCredentials: true
@@ -26,7 +28,7 @@ const NavBar = () => {
                 setError('Error fetching user roles:', error);
             });
         }
-    }, [ currentUser]);
+    }, [currentUser, isLoadingUser]);
     return (
         <div className={styles.wrapper}>
             {error && <p className={styles.error}>{error}</p>}
@@ -39,7 +41,7 @@ const NavBar = () => {
                     <li className={styles.navItem}><Link to="/deals" className={styles.navLink}>Deals</Link></li>
                     <li className={styles.navItem}><a href="#contact" className={styles.navLink}>Contact</a></li>
                     <li className={styles.navItem}><Link to="/login" className={styles.navLink}>👤</Link></li>
-                    <li className={styles.navItem}><Link to="/login" className={styles.navLink}>🛒</Link></li>
+                    <li className={styles.navItem}><Link to="/cart" className={styles.navLink}>🛒</Link></li>
 
                 </ul>
             </nav>

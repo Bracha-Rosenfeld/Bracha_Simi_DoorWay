@@ -1,45 +1,25 @@
-// import React, { createContext, useState, useContext } from 'react';
-
-// const UserContext = createContext();
-
-// export const UserProvider = ({ children }) => {
-//     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')) || { id: -1, username: '', email: '' });
-
-//     return (
-//         <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-//             {children}
-//         </UserContext.Provider>
-//     );
-// };
-
-// export const useCurrentUser = () => useContext(UserContext);
-import React, { createContext, useState, useContext, useEffect } from 'react';
+// userProvider.js
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState({ id: -1, username: '', email: '' });
+    const [currentUser, setCurrentUser] = useState(null); // נתחיל ב־null
+    const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-    // On mount, try to get the user from the cookie (via backend)
     useEffect(() => {
         fetch('http://localhost:5000/users/me', {
             method: 'GET',
-            credentials: 'include'
+            credentials: 'include',
         })
-            .then(res => {
-                if (res.ok) return res.json();
-                throw new Error('Not authenticated');
-            })
-            .then(user => {
-                setCurrentUser(user);
-            })
-            .catch(() => {
-                setCurrentUser({ id: -1, username: '', email: '' });
-            });
+            .then(res => res.ok ? res.json() : Promise.reject())
+            .then(user => setCurrentUser(user))
+            .catch(() => setCurrentUser({ id: -1, username: '', email: '' }))
+            .finally(() => setIsLoadingUser(false));
     }, []);
 
     return (
-        <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+        <UserContext.Provider value={{ currentUser, setCurrentUser, isLoadingUser }}>
             {children}
         </UserContext.Provider>
     );

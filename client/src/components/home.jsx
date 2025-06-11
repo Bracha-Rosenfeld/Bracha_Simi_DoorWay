@@ -9,10 +9,11 @@ import PublishApartments from './publishApartment';
 
 const home = () => {
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser } = useCurrentUser();
+  const { currentUser, setCurrentUser,isLoadingUser } = useCurrentUser();
   const [showSubscriptionOptions, setShowSubscriptionOptions] = useState(false);
 
   const manageViewApartments = async () => {
+    if (isLoadingUser) return; // Wait for the user to load
     if (currentUser && currentUser.id != -1) {
       console.log("currentUser:", currentUser.id);
       const response = await fetch(`http://localhost:5000/usersRoles/${currentUser.id}`);
@@ -30,6 +31,7 @@ const home = () => {
   }
 
   const managePublishApartments = async () => {
+    if (isLoadingUser) return; // Wait for the user to load
     if (currentUser && currentUser.id != -1) {
       navigate('/publish');
     }
