@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCurrentUser } from '../components/userProvider'
 import axios from 'axios';
 
 export default function publishApartment() {
-  const { currentUser } = useCurrentUser();
+  const { currentUser, isLoadingUser } = useCurrentUser();
   const [wasAdded, setWasAdded] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    publisher_id: currentUser.id,
+    publisher_id: null,
+    //publisher_id:'',
     address: '',
     price: '',
     type: 'rent',
@@ -19,6 +20,14 @@ export default function publishApartment() {
     details: '',
     is_approved: false
   });
+  useEffect(() => {
+    if (isLoadingUser) return;
+    if (currentUser && currentUser.id !== -1)
+      setFormData((prevData) => ({
+        ...prevData,
+        publisher_id: currentUser.id
+      }));
+  }, [currentUser, isLoadingUser])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +35,10 @@ export default function publishApartment() {
   };
 
   const handleSubmit = async (e) => {
+    console.log(formData);
+    console.log(formData.type);
+
+
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:5000/apartments', {

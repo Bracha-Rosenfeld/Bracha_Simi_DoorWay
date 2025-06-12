@@ -22,9 +22,9 @@ exports.getCoordinatesFromAddress = async (address) => {
   const latitude = parseFloat(firstResult.lat);
   const longitude = parseFloat(firstResult.lon);
 
-  // if (isNaN(latitude) || isNaN(longitude)) {
-  //   throw new Error("Invalid latitude or longitude format.");
-  // }
+  if (isNaN(latitude) || isNaN(longitude)) {
+    throw new Error("Invalid latitude or longitude format.");
+  }
 
   return [latitude, longitude];
 }

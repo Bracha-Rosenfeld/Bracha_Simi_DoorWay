@@ -30,12 +30,13 @@ exports.queryApartmentById = async (id) => {
 }
 exports.postApartment = async (latitude, longitude, city, { publisher_id, address, price, type, title, num_of_rooms, area, floor_number, details, is_approved }) => {
     try {
+        console.log('in postApartment', latitude,longitude,city, publisher_id, address, price, type, title, num_of_rooms, area, floor_number, details, is_approved);
+        
         const [result] = await db.query(
-            'INSERT INTO apartments (publisher_id, address, longitude, latitude,city, price, type, title, num_of_rooms, area, floor_number, details ,is_approved) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?,?)',
+            'INSERT INTO apartments (publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details ,is_approved) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?,?)',
             [publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details, is_approved]
 
         );
-        console.log(result);
 
         console.log('Apartment posted', result);
         return { id: result.insertId, publisher_id: publisher_id, };
