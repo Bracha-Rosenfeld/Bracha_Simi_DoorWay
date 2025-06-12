@@ -1,17 +1,17 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useCurrentUser } from './userProvider';
 const apartmentDetails = ({ apt }) => {
   const [error, setError] = useState('');
   const [favorites, setFavorites] = useState([]);
   const { currentUser, isLoadingUser } = useCurrentUser();
-  const[isInCart, setIsInCart] = useState(false);
+  const [isInCart, setIsInCart] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const cart = await axios.get(`http://localhost:5000/users/${currentUser.id}/cart`);
         setFavorites(cart.data);
-        setIsInCart(cart.data.some(item => item.apartment_id === apt.id));
+        setIsInCart(cart.data.some(item => item.id === apt.id));
       } catch (err) {
         setError(err.response?.data?.error || 'Error fetching data');
       }
@@ -30,7 +30,7 @@ const apartmentDetails = ({ apt }) => {
         apartment_id: apt.id,
       });
       if (response.status === 200) {
-        console.log('Apartment added to favorites successfully!');
+        setIsInCart(true);
       }
 
 

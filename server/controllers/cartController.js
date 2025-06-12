@@ -25,7 +25,7 @@ exports.createFavorite = async (req, res) => {
     if (!favorite) {
       return res.status(400).json({ error: 'Favorite cannot be created' });
     }
-    res.status(201).json(favorite);
+    res.status(200).json(favorite);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

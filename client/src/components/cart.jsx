@@ -31,10 +31,10 @@ const Cart = () => {
         try {
             await axios.delete(`http://localhost:5000/users/${currentUser.id}/cart/${apartmentId}`);
             setFavorites((prev) =>
-                prev.filter((item) => item.apartment_id !== apartmentId)
+                prev.filter((item) => item.id !== apartmentId)
             );
         } catch (err) {
-            alert(err.response?.data?.error || 'Error removing favorite');
+            setError(err.response?.data?.error || 'Error removing from cart');
         }
     };
 
@@ -49,12 +49,12 @@ const Cart = () => {
                 <ul>
                     {favorites.map((item) => (
                         <li key={item.apartment_id}>
-                            <div> Apartment ID: {item.apartment_id}{' '}</div>
+                            <div> Apartment ID: {item.id}{' '}</div>
                             <div>{item.title}{' '}</div>
                             <div> Price: {item.price}{' '}</div>
                             <div> Address: {item.address}{' '}</div>
                             <div> Type: {item.type}{' '}</div>
-                            <button onClick={() => handleRemove(item.apartment_id)}>
+                            <button onClick={() => handleRemove(item.id)}>
                                 Remove
                             </button>
                         </li>

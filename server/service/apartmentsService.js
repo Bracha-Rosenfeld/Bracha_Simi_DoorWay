@@ -19,6 +19,17 @@ exports.queryAllApartments = async (is_approved) => {
     }
 }
 
+exports.queryApartmentsByIds = async (ids) => {
+    if (!Array.isArray(ids) || ids.length === 0) return [];
+
+    const placeholders = ids.map(() => '?').join(', ');
+    try {
+        const [rows] = await db.query(`SELECT * FROM apartments WHERE id IN (${placeholders})`, ids);
+        return rows;
+    } catch (err) {
+        throw new Error('Error fetching apartments by IDs: ' + err.message);
+    }
+}
 
 exports.queryApartmentById = async (id) => {
     try {
