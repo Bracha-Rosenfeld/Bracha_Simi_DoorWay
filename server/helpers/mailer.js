@@ -1,23 +1,27 @@
-// mailer.js
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
-    user: "YOUR_EMAIL@gmail.com", // כתובת המייל שממנה נשלח
-    pass: "YOUR_APP_PASSWORD",    // סיסמת אפליקציה (ולא הסיסמה הרגילה!)
+    user: process.env.APP_EMAIL,
+    pass: process.env.EMAIL_APP_PASSWORD,
   },
 });
 
-function sendApprovalEmail(toEmail, apartmentTitle) {
+exports.sendApprovalEmail = async (toEmail, apartmentTitle) => {
   const mailOptions = {
-    from: "YOUR_EMAIL@gmail.com",
+    from: process.env.APP_EMAIL,
     to: toEmail,
-    subject: "האישור לפרסום הדירה שלך התקבל!",
-    text: `שלום! הדירה שלך "${apartmentTitle}" אושרה לפרסום באתר. תודה על השימוש!`,
+    subject: "your apartment has been approved",
+    text: `Hello, Your apartment titled "${apartmentTitle}" has been approved!`,
   };
 
-  return transporter.sendMail(mailOptions);
-}
-
-module.exports = sendApprovalEmail;
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to send approval email: " + error.message);
+  }
+};

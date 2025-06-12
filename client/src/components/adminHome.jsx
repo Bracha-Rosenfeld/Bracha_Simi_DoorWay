@@ -19,8 +19,10 @@ const adminHome = () => {
 
     const approveApartment = async (apt) => {
         try {
-            await axios.put(`http://localhost:5000/apartments/${apt.id}`, { price: apt.price, title: apt.title, details: apt.details, is_approved: 1 });
-            setApartments((prev) => prev.filter((a) => a.id !== apt.id));
+            const response = await axios.put(`http://localhost:5000/apartments/${apt.id}/approve`, { price: apt.price, title: apt.title, details: apt.details, is_approved: 1 });
+            if (response.status === 200) {
+                setApartments((prev) => prev.filter((a) => a.id !== apt.id));
+            }
         } catch (error) {
             setError('Error approving apartment:', error);
         }
