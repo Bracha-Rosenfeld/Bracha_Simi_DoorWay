@@ -9,9 +9,11 @@ import { useCurrentUser } from './userProvider'
 
 const deals = () => {
   const [showPublishState, setPublishState] = useState(false);
-  const { currentUser, setCurrentUser } = useCurrentUser();
+  const { currentUser, setCurrentUser, isLoadingUser } = useCurrentUser();
   const navigate = useNavigate();
   const choosePublish = () => {
+    if (isLoadingUser) return;// Wait for the user to load
+
     if (currentUser && currentUser.id != -1) {
       setPublishState(true);
     }

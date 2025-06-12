@@ -12,6 +12,7 @@ import MyAccount from '../components/myAccount';
 import UserDetails from '../components/userDetails/userDetails';
 import AdminHome from '../components/adminHome';
 import NotFound from '../components/notFound';
+import Cart from './cart';
 
 const mainApp = () => {
     return (
@@ -27,6 +28,7 @@ const mainApp = () => {
                     <Route path='/myAccount' element={<MyAccount />} />
                     <Route path="/apartments" element={<Apartments />} />
                     <Route path="/publish" element={<PublishApartment />} />
+                    <Route path="/cart" element={<Cart />} />
                     <Route path='/adminHome' element={<AdminHome/>} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

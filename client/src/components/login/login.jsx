@@ -11,17 +11,20 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [alertDiv, setAlert] = useState('');
     const navigate = useNavigate();
-    const { currentUser, setCurrentUser } = useCurrentUser();
+
+    const { currentUser, setCurrentUser, isLoadingUser } = useCurrentUser();
     const KEY = CryptoJS.enc.Utf8.parse('1234567890123456');
     const IV = CryptoJS.enc.Utf8.parse('6543210987654321');
     const [error, setError] = useState(null);
 
     // Check if already logged in via cookie, only in the first load and not every time the currentUser changes.
     useEffect(() => {
+        if (isLoadingUser) return; // Wait for the user to load
+
         if (currentUser && currentUser.id !== -1) {
             navigate('/myAccount');
         }
-    }, [ navigate]);
+    }, [navigate, currentUser, isLoadingUser]);
 
     //update the text in alert div.
     const manageMassages = (message) => {
@@ -81,14 +84,14 @@ export default function Login() {
                         if (response.data.includes('admin')) {
                             navigate('/adminHome');
                         } else {
-                            navigate('/myAccount');
+                            navigate('/');
                         }
                     } else {
-                        navigate('/myAccount');
+                        navigate('/login');
                     }
                 }).catch((error) => {
                     setError('Error fetching user roles:', error);
-                    navigate('/myAccount'); // Fallback to myAccount if roles fetch fails
+                    navigate('/'); // Fallback to myAccount if roles fetch fails
                 });
             }
         });

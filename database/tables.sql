@@ -51,6 +51,15 @@ CREATE TABLE IF NOT EXISTS apartments(
     FOREIGN KEY (publisher_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS carts (
+  user_id INT,
+  apartment_id INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, apartment_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (apartment_id) REFERENCES apartments(id)
+);
+
 CREATE TABLE IF NOT EXISTS images(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     apartment_id INT,
