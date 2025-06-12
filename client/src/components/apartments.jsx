@@ -5,6 +5,18 @@ export default function Apartments() {
   const [apartments, setApartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [cityFilter, setCityFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
+  const [cities, setCities] = useState([]);
+  const [types, setTypes] = useState(['rent', 'sale']);
+  useEffect(() => {
+    const fetchFilters = async () => {
+
+      setCities([...new Set(apartments.map((apt) => apt.city))]);
+    };
+
+    fetchFilters();
+  }, [apartments]);
 
   useEffect(() => {
     const fetchApartments = async () => {
@@ -23,6 +35,13 @@ export default function Apartments() {
     fetchApartments();
   }, []);
 
+  const filteredApartments = apartments.filter((apt) => {
+    return (
+      (cityFilter === '' || apt.city === cityFilter) &&
+      (typeFilter === '' || apt.type === typeFilter)
+    );
+  });
+
   if (loading) return <div>Loading apartments...</div>;
   if (error) return <div>{error}</div>;
 
@@ -31,12 +50,40 @@ export default function Apartments() {
   }
 
   return (
-    <div >
-      {apartments.map((apt) => (
-        <div key={apt.id} >
-          <ApartmentDetails apt={apt} />
-        </div>
-      ))}
+    <div>
+      {/* ⭐️ **הוספה: ממשק סינון לפי עיר וסוג** */}
+      <div style={{ marginBottom: '1rem' }}>
+        <label>
+          Filter by city:
+          <select value={cityFilter} onChange={(e) => setCityFilter(e.target.value)}>
+            <option value="">All</option>
+            {cities.map((city) => (
+              <option key={city} value={city}>{city}</option>
+            ))}
+          </select>
+        </label>
+
+        <label style={{ marginLeft: '1rem' }}>
+          Filter by type:
+          <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+            <option value="">All</option>
+            {types.map((type) => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      {/* ⭐️ **החלפה: שימוש בדירות המסוננות** */}
+      {filteredApartments.length === 0 ? (
+        <div>No apartments found.</div>
+      ) : (
+        filteredApartments.map((apt) => (
+          <div key={apt.id}>
+            <ApartmentDetails apt={apt} />
+          </div>
+        ))
+      )}
     </div>
   );
 }

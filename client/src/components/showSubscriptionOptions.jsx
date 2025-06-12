@@ -19,6 +19,8 @@ const viewApartments = () => {
 
     const addUserRole = async () => {
         try {
+            const expiryDate = amountToPay=== 80 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+            const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
             const response = await fetch(`http://localhost:5000/usersRoles/${currentUser.id}`, {
                 method: 'POST',
                 headers: {
@@ -26,6 +28,7 @@ const viewApartments = () => {
                 },
                 body: JSON.stringify({
                     role_name: "viewer",
+                    expiry_date: expiry_d,
                 }),
             });
             if (!response.ok) {

@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS user_roles (
   user_id INT,
   role_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  expiry_date DATE NULL,
   PRIMARY KEY (user_id, role_id),
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (role_id) REFERENCES roles(id)
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS passwords (
 );
 
 CREATE TABLE IF NOT EXISTS apartments(
-	id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     publisher_id INT,
     address VARCHAR(255),
     longitude DOUBLE,
@@ -61,20 +62,44 @@ CREATE TABLE IF NOT EXISTS carts (
 );
 
 CREATE TABLE IF NOT EXISTS images(
-	id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     apartment_id INT,
     image_url VARCHAR(255),
     FOREIGN KEY (apartment_id) REFERENCES apartments(id)
 );
+
 INSERT INTO roles (role_name) VALUES ('admin'); 
 INSERT INTO roles (role_name) VALUES ('publisher');
 INSERT INTO roles (role_name) VALUES ('viewer');
+
+DELIMITER $$
+CREATE EVENT delete_expired_user_roles
+ON SCHEDULE EVERY 1 DAY
+STARTS TIMESTAMP(CURRENT_DATE + INTERVAL 0 HOUR)
+DO
+  DELETE FROM user_roles WHERE expiry_date IS NOT NULL AND expiry_date < NOW();
+&&
+DELIMITER ;
+-- insert one expired user role of viewer ti check if the evet works.
+-- INSERT INTO user_roles (user_id, role_id, created_at, expiry_date)
+-- VALUES (2, 3, '2025-03-12 19:34:30', '2025-04-12');
+
+-- Running the event manually, one-time, immediately
+-- SET SQL_SAFE_UPDATES = 0;
+-- DELETE FROM user_roles  
+-- WHERE expiry_date IS NOT NULL 
+--   AND expiry_date < NOW()
+--   AND user_id IS NOT NULL;
+-- SET SQL_SAFE_UPDATES = 1;
+
+  
 SELECT * FROM users;
 SELECT * FROM user_roles;
 SELECT * FROM roles;
 SELECT * FROM apartments;
 --  DROP TABLE passwords;
 --  DROP TABLE user_roles;
+-- DROP TABLE carts;
 --  DROP TABLE images;
 -- DROP TABLE apartments;
 --  DROP TABLE users;
