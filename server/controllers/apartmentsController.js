@@ -1,9 +1,9 @@
-const {queryAllApartments,  queryApartmentById, postApartment ,putApartment, deleteApartment} = require('../service/apartmentsService');
-const { getCoordinatesFromAddress } = require('../helpers/calculations');
+const { queryAllApartments, queryApartmentById, postApartment, putApartment, deleteApartment } = require('../service/apartmentsService');
+const { getCoordinatesFromAddress, getCityFromCoordinates } = require('../helpers/calculations');
 exports.getAllApartments = async (req, res) => {
     try {
         const isApproved = req.query.is_approved;
-        if(isApproved == 'true') {
+        if (isApproved == 'true') {
             const apartments = await queryAllApartments(true);
             console.log(apartments);
             if (!apartments || apartments.length === 0) {
@@ -11,7 +11,7 @@ exports.getAllApartments = async (req, res) => {
             }
             return res.status(200).json(apartments);
         }
-        if(isApproved == 'false') {
+        if (isApproved == 'false') {
             const apartments = await queryAllApartments(false);
             if (!apartments || apartments.length === 0) {
                 return res.status(404).json({ error: 'No unapproved apartments found' });
@@ -38,7 +38,7 @@ exports.getApartmentById = async (req, res) => {
         }
         res.status(200).json(apartment);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error.'+error.message });
+        res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 }
 exports.createApartment = async (req, res) => {
@@ -49,16 +49,24 @@ exports.createApartment = async (req, res) => {
             return res.status(400).json({ error: 'Address is required' + req.body.address });
         }
         const [latitude, longitude] = await getCoordinatesFromAddress(address);
-        if (isNaN(latitude) || isNaN(longitude)) {
-            return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
-        }
-        const apartment = await postApartment(latitude,longitude,req.body);
+        // if (isNaN(latitude) || isNaN(longitude)) {
+        //     return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
+        // }
+        console.log(latitude,longitude);
+        //console.log("city:", city);
+        const city = await getCityFromCoordinates(latitude, longitude);
+        // if (isNaN(city)) {
+        //     return res.status(400).json({ error: 'Invalid address coordinates' })
+        // }
+        console.log("city:", city);
+
+        const apartment = await postApartment(latitude, longitude, city, req.body);
         if (!apartment || apartment.length === 0) {
             return res.status(404).json({ error: 'Apartment cannot be posted' });
         }
         res.status(200).json(apartment);
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error.'+error.message + req.body });
+        res.status(500).json({ error: 'Internal server error.' + error.message + req.body.details });
     }
 }
 exports.updateApartment = async (req, res) => {
@@ -70,18 +78,18 @@ exports.updateApartment = async (req, res) => {
         }
         res.status(200).json('apartment' + id + ' updated');
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error.'+error.message });
+        res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 }
 exports.removeApartment = async (req, res) => {
     try {
-        const id = req.params.id;        
+        const id = req.params.id;
         const isDelete = await deleteApartment(id);
         if (!isDelete) {
             return res.status(404).json({ error: 'Appartment with id:' + user.id + ' not found' });
         }
         res.status(200).json('apartment ' + id + ' deleted');
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error.'+error.message });
+        res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 }

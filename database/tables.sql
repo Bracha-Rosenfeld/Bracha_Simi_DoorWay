@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS apartments(
     address VARCHAR(255),
     longitude DOUBLE,
     latitude DOUBLE,
+    city VARCHAR (255),
     price LONG,
     type ENUM('rent', 'sale'),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
