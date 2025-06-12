@@ -1,7 +1,7 @@
 const { queryAllApartments, queryApartmentById, postApartment, putApartment, deleteApartment } = require('../service/apartmentsService');
 const { queryUserById } = require('../service/usersService');
 const { getCoordinatesFromAddress, getCityFromCoordinates } = require('../helpers/calculations');
-const { sendApprovalEmail } = require('../helpers/mailer');
+const { sendNewApartmentEmail, sendApprovalEmail } = require('../helpers/mailer');
 exports.getAllApartments = async (req, res) => {
     try {
         const isApproved = req.query.is_approved;
@@ -60,6 +60,18 @@ exports.createApartment = async (req, res) => {
         if (!apartment || apartment.length === 0) {
             return res.status(404).json({ error: 'Apartment cannot be posted' });
         }
+        const publisher = await queryUserById(apartment.publisher_id);
+        if (!publisher || publisher.length === 0) {
+            return res.status(404).json({ error: 'Publisher with id:' + apartment.publisher_id + ' not found' });
+        }
+
+        const emailSent = await sendNewApartmentEmail(publisher.email, publisher.username, apartment.title);
+        console.log('emailSent', emailSent);
+        if (!emailSent) {
+            console.log('Failed to send approval email');
+        } else {
+            console.log('Approval email sent successfully');
+        }
         res.status(200).json(apartment);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message });
@@ -84,7 +96,7 @@ exports.updateApartment = async (req, res) => {
             }
 
             // Send approval email
-            const emailSent = await sendApprovalEmail(publisher.email, apartment.title);
+            const emailSent = await sendApprovalEmail(publisher.email,publisher.username, apartment.title, apartment.type);
             console.log('emailSent', emailSent);
             if (!emailSent) {
                 console.log('Failed to send approval email');

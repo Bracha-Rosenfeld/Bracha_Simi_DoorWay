@@ -46,7 +46,7 @@ exports.postApartment = async (latitude, longitude, city, { publisher_id, addres
             [publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details, is_approved]
 
         );
-        return { id: result.insertId, publisher_id: publisher_id, };
+        return { id: result.insertId, publisher_id: publisher_id, title: title };
 
     } catch (err) {
         throw new Error('Error posting apartment: ' + err.message);
