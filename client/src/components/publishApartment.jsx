@@ -37,7 +37,7 @@ export default function publishApartment() {
         body: JSON.stringify(formData)
       });
       if (!response.ok) {
-        setError('Failed to add apartment');
+        throw new Error('Failed to add apartment');
       }
       setFormData({
         address: '',
