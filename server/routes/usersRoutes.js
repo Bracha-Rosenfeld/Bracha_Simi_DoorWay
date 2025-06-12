@@ -1,14 +1,3 @@
-// const express = require('express');
-// const { getAllUsers, getUserById, createUser, updateUser, removeUser ,manageLogin } = require('../controllers/usersController');
-// const { validateSignup, validateLogin } = require('../helpers/validations');
-// const router = express.Router();
-// router.get('/', getAllUsers);
-// router.get('/:id', getUserById);
-// router.post('/', validateSignup, createUser);
-// router.post('/login', validateLogin, manageLogin);
-// router.put('/:id', updateUser);
-// router.delete('/:id', removeUser);
-// module.exports = router;
 const express = require('express');
 const { getAllUsers, getUserById, createUser, updateUser, removeUser, manageLogin, manageLogout,getCurrentUser } = require('../controllers/usersController');
 const { validateSignup, validateLogin } = require('../helpers/validations');

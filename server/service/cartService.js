@@ -1,15 +1,19 @@
 const db = require('../../database/connections');
+const { queryApartmentsByIds } = require('./apartmentsService');
 exports.queryAllFavorites = async (userId) => {
     try {
-        const [rows] = await db.query('SELECT * FROM carts WHERE user_id = ?', [userId]);
-        if (rows.length === 0) {
-            throw new Error('No favorites found for user with ID: ' + userId);
+        const [cartRows] = await db.query('SELECT * FROM carts WHERE user_id = ?', [userId]);
+        if (cartRows.length === 0) {
+            return [];
         }
-        return rows;
+        const apartmentIds = cartRows.map(row => row.apartment_id);
+        const apartments = await queryApartmentsByIds(apartmentIds);
+        return apartments;
     } catch (err) {
-        throw new Error('Error fetching carts: ' + err.message);
+        throw new Error('Error fetching cart with apartment details: ' + err.message);
     }
 }
+
 exports.queryFavoriteById = async (userId, apartmentId) => {
     try {
         const [rows] = await db.query('SELECT * FROM carts WHERE user_id = ? and apartment_id = ?', [userId, apartmentId]);
@@ -38,7 +42,7 @@ exports.deleteFavorite = async (userId, apartmentId) => {
         if (result.affectedRows === 0) {
             throw new Error('No favorite found with ID: ' + apartmentId);
         }
-       return result.affectedRows > 0;
+        return result.affectedRows > 0;
     } catch (err) {
         throw new Error('Error deleting favorite with ID: ' + id + ' ' + err.message);
     }
