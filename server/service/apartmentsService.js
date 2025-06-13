@@ -1,3 +1,4 @@
+const e = require('express');
 const db = require('../../database/connections')
 
 exports.queryAllApartments = async (is_approved) => {
@@ -16,6 +17,17 @@ exports.queryAllApartments = async (is_approved) => {
         } catch (err) {
             throw new Error('Error fetching all apartments: ' + err.message);
         }
+    }
+}
+exports.queryAllUsersApartments = async (publisher_id) => {
+    if (!publisher_id) {
+        throw new Error('Publisher ID is required');
+    }
+    try {
+        const [rows] = await db.query('SELECT * FROM apartments WHERE publisher_id = ?', [publisher_id]);
+        return rows;
+    } catch (err) {
+        throw new Error('Error fetching user apartments: ' + err.message);
     }
 }
 
