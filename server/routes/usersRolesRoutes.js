@@ -1,9 +1,8 @@
 const express = require('express');
-const { getAllUserRoles, getUserRoleById, getUserRoleByUserId,createUserRole, removeUserRole } = require('../controllers/usersRolesController');
-const router = express.Router();
+const { getAllUserRoles, getUserRoleByRoleName, createUserRole, removeUserRole } = require('../controllers/usersRolesController');
+const router = express.Router({ mergeParams: true });
 router.get('/', getAllUserRoles);
-//router.get('/:id', getUserRoleById);
-router.get('/:userId', getUserRoleByUserId);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+router.get('/:roleName', getUserRoleByRoleName);
 router.post('/', createUserRole);
-router.delete('/:id/:userId', removeUserRole);
+router.delete('/:roleName', removeUserRole);
 module.exports = router;

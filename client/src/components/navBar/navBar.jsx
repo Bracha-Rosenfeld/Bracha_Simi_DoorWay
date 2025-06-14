@@ -12,7 +12,7 @@ const NavBar = () => {
         if (isLoadingUser) return; // Wait for the user to load
 
         if (currentUser && currentUser.id !== -1) {
-            const roles = axios.get(`http://localhost:5000/usersRoles/${currentUser.id}`, {
+            const roles = axios.get(`http://localhost:5000/users/${currentUser.id}/roles`, {
                 withCredentials: true
             }).then((response) => {
                 if (response.data && response.data.length > 0) {

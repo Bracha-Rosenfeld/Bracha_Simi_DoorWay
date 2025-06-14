@@ -1,29 +1,13 @@
 const db = require('../../database/connections');
-exports.queryAllUserRoles = async () => {
+const { queryUserRoleId, queryUserRoleName } = require('../helpers/helpers')
+exports.queryAllUserRoles = async (id) => {
     try {
-        const [rows] = await db.query('SELECT * FROM user_roles');
-        return rows;
-    } catch (err) {
-        throw new Error('Error fetching user roles: ' + err.message);
-    }
-}
-// exports.queryUserRoleById = async (id) => {
-//     try {
-//         const [rows] = await db.query('SELECT * FROM user_roles WHERE id = ?', [id]);
-//         return rows.length > 0 ? rows[0] : null;
-//     } catch (err) {
-//         throw new Error('Error fetching user role with ID: ' + id + ' ' + err.message);
-//     }
-// }
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-exports.queryUserRoleByUserId = async (userId) => {
-    try{
-        const [rows] = await db.query('SELECT * FROM user_roles WHERE user_id = ?', [userId]);
+        const [rows] = await db.query('SELECT * FROM user_roles WHERE user_id = ?', [id]);
         const rolesNamesList = [];
         for (const role of rows) {
-            const [roleName] = await db.query('SELECT * FROM roles WHERE id = ?', [role.role_id]);
-            if (roleName && roleName.length > 0) {
-                rolesNamesList.push(roleName[0].role_name);
+            const [roleName] = await queryUserRoleName(role.role_id);
+            if (roleName) {
+                rolesNamesList.push(roleName.role_name);
             }
         }
         if (!rolesNamesList) {
@@ -31,37 +15,47 @@ exports.queryUserRoleByUserId = async (userId) => {
         }
         return rolesNamesList;
     } catch (err) {
+        throw new Error('Error fetching user roles: ' + err.message);
+    }
+}
+exports.queryUserRoleByRoleName = async (userId, roleName) => {
+    try {
+        const role_id = await queryUserRoleId(roleName);
+        const [rows] = await db.query('SELECT * FROM user_roles WHERE user_id = ? and role_id = ?', [userId, role_id]);
+        return rows;
+
+    } catch (err) {
         throw new Error('Error fetching user role: ' + err.message);
 
     }
 }
-exports.postUserRole = async ( user_id, role_id ) => {
+exports.postUserRole = async (userId, roleName) => {
     try {
+        const roleId = await queryUserRoleId(roleName);
         const [result] = await db.query(
             'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
-            [user_id, role_id]
+            [userId, roleId]
         );
-        return { user_id: user_id, role_id: role_id };
+        return { user_id: userId, role_id: roleId };
     } catch (err) {
         throw new Error('Error posting user role: ' + err.message);
     }
 }
-exports.deleteUserRole = async (id,userId) => {
+exports.deleteUserRole = async (userId, roleName) => {
     try {
-        const [result] = await db.query('DELETE FROM user_roles WHERE user_id = ? and role_id = ?', [userId,id]);
+        const roleId = await queryUserRoleId(roleName);
+        const [result] = await db.query('DELETE FROM user_roles WHERE user_id = ? and role_id = ?', [userId, roleId]);
         return result.affectedRows > 0;
     } catch (err) {
-        throw new Error('Error deleting user role with ID: ' + id + ' ' + err.message);
+        throw new Error('Error deleting user role: ' + roleName + ' for user with ID: ' + userId + ' ' + err.message);
     }
 }
-exports.queryUserRoleId = async (roleName) => {
+
+exports.deleteAllUserRole = async (userId) => {
     try {
-        const [rows] = await db.query('SELECT * FROM roles WHERE role_name = ?', [roleName]);
-        if (rows.length === 0) {
-            throw new Error('No roles found for role name: ' + roleName);
-        }
-        return rows[0].id;
+        const [result] = await db.query('DELETE FROM user_roles WHERE user_id = ?', [userId]);
+        return result.affectedRows > 0;
     } catch (err) {
-        throw new Error('Error fetching role: ' + err.message);
+        throw new Error('Error deleting user roles: for user with ID: ' + userId + ' ' + err.message);
     }
 }

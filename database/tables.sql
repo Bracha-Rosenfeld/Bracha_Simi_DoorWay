@@ -96,6 +96,7 @@ DELIMITER ;
 SELECT * FROM users;
 SELECT * FROM user_roles;
 SELECT * FROM roles;
+SELECT * FROM passwords ;
 SELECT * FROM apartments;
 --  DROP TABLE passwords;
 --  DROP TABLE user_roles;
