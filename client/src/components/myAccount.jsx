@@ -1,7 +1,7 @@
 import React from 'react'
 import { useCurrentUser, UserProvider } from './userProvider'
 import { Navigate, useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import LogoutButton from './logoutButton';
 import UsersDetails from './usersDetails';
 import UsersApartments from './usersApartments';
@@ -9,14 +9,23 @@ import UsersApartments from './usersApartments';
 
 const myAccount = () => {
     const navigate = useNavigate();
-    const { currentUser } = useCurrentUser();
+    const { currentUser ,isLoadingUser} = useCurrentUser();
     const [userData, setUserData] = useState(null);
     const [showDetails, setShowDetails] = useState(false);
     const [usersApartments, setUsersApartments] = useState(null);
     const [showApartments, setShowApartments] = useState(false);
     const [originalData, setOriginalData] = useState(null);
+    const [error, setError] = useState(null);
 
+    useEffect(() => {
+        if (isLoadingUser) return;// Wait for the user to load
 
+        if (currentUser && currentUser.id !== -1) { } else {
+            setError('User not logged in');
+            navigate('/login');
+
+        }
+    }, [currentUser, isLoadingUser]);
 
     const showUserDetails = async () => {
         try {
@@ -29,7 +38,7 @@ const myAccount = () => {
                     setShowDetails(true);
                 }
                 else {
-                    console.error("Failed to fetch user data");
+                    setError("Failed to fetch user data");
                 }
             }
             // else {
@@ -37,7 +46,7 @@ const myAccount = () => {
             // }
         }
         catch (err) {
-            console.error("Error:", err);
+            setError("Error:", err);
         }
     }
 
@@ -51,7 +60,7 @@ const myAccount = () => {
                     setShowApartments(true);
                 }
                 else {
-                    console.error("Failed to fetch user apartments");
+                    setError("Failed to fetch user apartments");
                 }
             }
             // else {
@@ -59,11 +68,12 @@ const myAccount = () => {
             // }
         }
         catch (err) {
-            console.error("Error:", err);
+            setError("Error:", err);
         }
     }
 
 
+    if (error) return <div>Error: {error}</div>;
     return (
         <>
             <h2>My Account</h2>

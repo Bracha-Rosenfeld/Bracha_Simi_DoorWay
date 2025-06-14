@@ -1,45 +1,54 @@
 import React, { useState } from 'react'
 
-const usersApartments = ({ usersApartments, setUsersApartments }) => {
+const UsersApartments = ({ usersApartments, setUsersApartments }) => {
     const [editingAptId, setEditingAptId] = useState(null);
-    const [editedPrice, setEditedPrice] = useState('');
-    const [originalPrice, setOriginalPrice] = useState('');
-    const handleEditPrice = (apt) => {
+    const [editedData, setEditedData] = useState({ price: '', details: '' });
+    const [originalData, setOriginalData] = useState({ price: '', details: '' });
+
+    const handleEdit = (apt) => {
         setEditingAptId(apt.id);
-        setEditedPrice(apt.price);
-        setOriginalPrice(apt.price);
+        setEditedData({ tilte: apt.title ,price: apt.price, details: apt.details, is_approved: 1});
+        setOriginalData({tilte: apt.title, price: apt.price, details: apt.details, is_approved: 1 });
     };
 
-    const handlePriceChange = (e) => {
-        setEditedPrice(e.target.value);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditedData(prev => ({ ...prev, [name]: value }));
     };
 
-    const savePriceChange = async (aptId) => {
+    const saveChanges = async (aptId) => {
         try {
             const response = await fetch(`http://localhost:5000/apartments/${aptId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ price: editedPrice }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editedData),
             });
             if (response.ok) {
-                // Update local state
                 setUsersApartments(prev =>
                     prev.map(apt =>
-                        apt.id === aptId ? { ...apt, price: editedPrice } : apt
+                        apt.id === aptId ? { ...apt, ...editedData } : apt
                     )
                 );
                 setEditingAptId(null);
-                setEditedPrice('');
-                setOriginalPrice('');
+                setEditedData({ price: '', details: '' });
+                setOriginalData({ price: '', details: '' });
             } else {
-                console.error("Error updating apartment price:", response.statusText);
+                console.error("Error updating apartment:", response.statusText);
             }
         } catch (err) {
             console.error("Error:", err);
         }
     };
+
+    const cancelChanges = () => {
+        setEditedData(originalData);
+        setEditingAptId(null);
+    };
+
+    const hasChanges =
+        editedData.price !== String(originalData.price) ||
+        editedData.details !== originalData.details;
+
     return (
         <div>
             <h3>My Apartments</h3>
@@ -47,39 +56,55 @@ const usersApartments = ({ usersApartments, setUsersApartments }) => {
                 <ul>
                     {usersApartments.map((apt) => (
                         <li key={apt.id}>
-                            <div><strong>{apt.title} </strong> </div>
-                            <div>
-                                <strong>Price: </strong>
-                                {editingAptId === apt.id ? (
-                                    <>
+                            <div><strong>{apt.title}</strong></div>
+
+                            {editingAptId === apt.id ? (
+                                <>
+                                    <div>
+                                        <strong>Price: </strong>
                                         <input
                                             type="number"
-                                            value={editedPrice}
-                                            onChange={handlePriceChange}
+                                            name="price"
+                                            value={editedData.price}
+                                            onChange={handleChange}
                                             min="0"
                                         />
-                                        {editedPrice !== String(originalPrice) && (
-                                            <button onClick={() => savePriceChange(apt.id)}>
-                                                Save
-                                            </button>
-                                        )}
-                                    </>
-                                ) : (
-                                    <>
-                                        {apt.price}
-                                        <button style={{ marginLeft: '10px' }} onClick={() => handleEditPrice(apt)}>
-                                            Edit Price
-                                        </button>
-                                    </>
-                                )}
-                            </div>
+                                    </div>
+                                    <div>
+                                        <strong>Details: </strong>
+                                        <input
+                                            type="text"
+                                            name="details"
+                                            value={editedData.details}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    {hasChanges && (
+                                        <>
+                                            <button onClick={() => saveChanges(apt.id)}>Save</button>
+                                            <button onClick={cancelChanges}>Cancel</button>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <div>
+                                        <strong>Price: </strong>{apt.price}
+                                    </div>
+                                    <div>
+                                        <strong>Details: </strong>{apt.details}
+                                    </div>
+                                    <button onClick={() => handleEdit(apt)}>Edit</button>
+                                </>
+                            )}
                         </li>
                     ))}
                 </ul>
             ) : (
                 <p>No apartments found.</p>
             )}
-        </div>)
-}
+        </div>
+    );
+};
 
-export default usersApartments; 
+export default UsersApartments;
