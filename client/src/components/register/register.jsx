@@ -122,7 +122,8 @@ export default function Register() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ token: credential })
+        //body: JSON.stringify({ token: credential })
+        body: JSON.stringify({ idToken: credential })
       });
       if (!res.ok) throw new Error('Google signup failed');
       const user = await res.json();
@@ -142,7 +143,7 @@ export default function Register() {
         text="signup_with"
         onSuccess={handleGoogleSuccess}
         onError={() => manageMassages('Google registration failed')}
-        //useOneTap
+      //useOneTap
       />
 
       <div className={styles.divider}>or create account with email</div>

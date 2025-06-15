@@ -16,23 +16,44 @@ const ExtendSubscription = () => {
     setShowPayment(true);
   };
 
+  // const addUserRole = async () => {
+  //   try {
+  //     const expiryDate = amountToPay === 70
+  //       ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+  //       : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+  //     const expiry_d = expiryDate.toISOString().split('T')[0];
+  //     const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ role_name: "viewer", expiry_date: expiry_d }),
+  //     });
+  //     if (!response.ok) throw new Error('Failed to extend viewer role');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   const addUserRole = async () => {
     try {
-      const expiryDate = amountToPay === 70
-        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-        : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-      const expiry_d = expiryDate.toISOString().split('T')[0];
+      const expiryDate = amountToPay === 70 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+      const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
       const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role_name: "viewer", expiry_date: expiry_d }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          role_name: "viewer",
+          expiry_date: expiry_d,
+        }),
       });
-      if (!response.ok) throw new Error('Failed to extend viewer role');
+      if (!response.ok) {
+        throw new Error('Failed to Extend viewer role');
+      }
+      // Optionally handle success here
     } catch (error) {
       console.error(error);
     }
-  };
-
+  }
   return (
     <>
       <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
@@ -49,17 +70,17 @@ const ExtendSubscription = () => {
           <button onClick={() => chooseExtend(120)}>Extend Bi-Monthly</button>
         </div>
         {/* Payment Section */}
-            {showPayment && (
-                <SubscriptionPayment
-                    amount={amountToPay}
-                    onSuccess={() => {
-                        setShowPayment(false);
-                        addUserRole();
-                        navigate('/apartments');
-                    }}
-                    onCancel={() => setShowPayment(false)}
-                />
-            )}
+        {showPayment && (
+          <SubscriptionPayment
+            amount={amountToPay}
+            onSuccess={() => {
+              setShowPayment(false);
+              addUserRole();
+              navigate('/apartments');
+            }}
+            onCancel={() => setShowPayment(false)}
+          />
+        )}
       </div>
     </>
   );

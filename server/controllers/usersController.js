@@ -62,7 +62,7 @@ exports.updateUser = async (req, res) => {
         const id = req.params.id;
         const address = req.body.address;
         let latitude, longitude;
-        if (address !== null || address !== '') {
+        if (address) {
             [latitude, longitude] = await getCoordinatesFromAddress(address);
             if (isNaN(latitude) || isNaN(longitude)) {
                 return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
@@ -72,11 +72,19 @@ exports.updateUser = async (req, res) => {
         if (!isUpdate) {
             return res.status(404).json({ error: 'User with id:' + id + ' not found' });
         }
-        res.status(200).json('user' + id + ' updated');
+        const updatedUser = await queryUserById(id);
+        if (!updatedUser || updatedUser.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        return res.status(200).json(updatedUser);
+
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error.' + error.message });
+        console.error('updateUser error:', error);
+        return res
+            .status(500)
+            .json({ error: 'Internal server error. ' + error.message });
     }
-}
+};
 
 exports.removeUser = async (req, res) => {
     try {
