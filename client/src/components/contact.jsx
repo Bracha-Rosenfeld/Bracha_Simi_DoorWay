@@ -8,7 +8,7 @@ const Contact = () => {
     const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     return (
-        <div id="contact" style={{ padding: '2rem', maxWidth: '600px', margin: 'auto', fontFamily: 'Arial, sans-serif' }}>
+        <div id="contact" >
             <h2 style={{ marginBottom: '1rem' }}>Contact Us</h2>
             <p><strong>Phone:</strong> 03-1234567</p>
             <p>
@@ -18,7 +18,7 @@ const Contact = () => {
                 </a>
             </p>
             <p><strong>Working Hours:</strong> Sunday–Thursday, 9:00 AM – 5:00 PM</p>
-            <p><strong>Office Address:</strong> 12 Example Street, Tel Aviv</p>
+            <p><strong>Office Address:</strong> Zolti 14 Street, Ramat Shlomo, Jerusalem, Israel</p>
         </div>
     );
 };
