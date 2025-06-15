@@ -1,14 +1,30 @@
-import React, { useState } from 'react'
-
-const UsersApartments = ({ usersApartments, setUsersApartments }) => {
+import React, { useState, useEffect } from 'react'
+import { useCurrentUser } from './userProvider';
+import axios from 'axios';
+const UsersApartments = () => {
+    const { currentUser, isLoadingUser } = useCurrentUser();
+    const [usersApartments, setUsersApartments] = useState([]);
     const [editingAptId, setEditingAptId] = useState(null);
     const [editedData, setEditedData] = useState({ price: '', details: '' });
     const [originalData, setOriginalData] = useState({ price: '', details: '' });
-
+    useEffect(() => {
+        if (isLoadingUser) return;
+        if (currentUser && currentUser.id !== -1) {
+            axios.get(`http://localhost:5000/apartments`, {
+                params: { publisher_id: currentUser.id }
+            }).then(response => {
+                setUsersApartments(response.data);
+            }).catch(() => {
+                setUsersApartments([]);
+            });
+        } else {
+            setUsersApartments([]);
+        }
+    }, [currentUser, isLoadingUser]);
     const handleEdit = (apt) => {
         setEditingAptId(apt.id);
-        setEditedData({ tilte: apt.title ,price: apt.price, details: apt.details, is_approved: 1});
-        setOriginalData({tilte: apt.title, price: apt.price, details: apt.details, is_approved: 1 });
+        setEditedData({ title: apt.title, price: apt.price, details: apt.details, is_approved: 1 });
+        setOriginalData({ title: apt.title, price: apt.price, details: apt.details, is_approved: 1 });
     };
 
     const handleChange = (e) => {
@@ -18,12 +34,8 @@ const UsersApartments = ({ usersApartments, setUsersApartments }) => {
 
     const saveChanges = async (aptId) => {
         try {
-            const response = await fetch(`http://localhost:5000/apartments/${aptId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(editedData),
-            });
-            if (response.ok) {
+            const response = await axios.put(`http://localhost:5000/apartments/${aptId}`, editedData);
+             if (response.status==200) {
                 setUsersApartments(prev =>
                     prev.map(apt =>
                         apt.id === aptId ? { ...apt, ...editedData } : apt

@@ -1,9 +1,26 @@
-import React ,{useState}from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom';
+import { useCurrentUser } from './userProvider';
+import axios from 'axios';
 
-const usersDetails = ({userData, setUserData, originalData, setOriginalData}) => {
+
+const usersDetails = () => {
+    const { currentUser, isLoadingUser } = useCurrentUser();
+    const [userData, setUserData] = useState({ username: '', email: '', phone: '', address: '' })
+    const [originalData, setOriginalData] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [isChanged, setIsChanged] = useState(false);
-
+    useEffect(() => {
+        if (isLoadingUser) return;
+        if (currentUser && currentUser.id != -1) {
+            axios.get(`http://localhost:5000/users/${currentUser.id}`)
+                .then(res => {
+                    setUserData(res.data);
+                    setOriginalData(res.data);
+                })
+                .catch(() => setError('Failed to fetch user data'));
+        }
+    }, [currentUser, isLoadingUser]);
     const handleInputChange = (field, value) => {
         setUserData(prev => {
             const updated = { ...prev, [field]: value };
