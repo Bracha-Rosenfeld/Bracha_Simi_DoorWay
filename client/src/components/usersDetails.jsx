@@ -10,6 +10,7 @@ const usersDetails = () => {
     const [originalData, setOriginalData] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [isChanged, setIsChanged] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (isLoadingUser) return;

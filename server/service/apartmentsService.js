@@ -52,20 +52,20 @@ exports.queryApartmentById = async (id) => {
     }
 }
 
-exports.postApartment = async (latitude, longitude, city, { publisher_id, address, price, type, title, num_of_rooms, area, floor_number, details, is_approved }) => {
-    
+exports.postApartment = async (latitude, longitude, city, { publisher_id, address, price, type, title, num_of_rooms, area, floor_number, details, is_approved, image_url }) => {
+
     try {
         const [result] = await db.query(
-            'INSERT INTO apartments (publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details ,is_approved) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?,?)',
-            [publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details, is_approved]
+            'INSERT INTO apartments (publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details ,is_approved, image_url) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?,?,?)',
+            [publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details, is_approved, image_url]
 
         );
-        console.log( "result ",result);
-        
+        console.log("result ", result);
+
         return { id: result.insertId, publisher_id: publisher_id, title: title };
 
     } catch (err) {
-        console.log('Error posting apartment: ' + err.message);        
+        console.log('Error posting apartment: ' + err.message);
         throw new Error('Error posting apartment: ' + err.message);
     }
 }

@@ -5,6 +5,8 @@ const userRoutes = require('./routes/usersRoutes');
 const apartmentsRoutes = require('./routes/apartmentsRoutes');
 const usersRoles = require('./routes/usersRolesRoutes');
 const paypalRoutes = require('./routes/paypalRouter');
+const path = require('path');
+const uploadRoutes = require('./routes/uploadRoutes');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 require('./cronJob');
@@ -17,6 +19,9 @@ app.use(cors({
   credentials: true
 }));
 app.use(cookieParser());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/upload', uploadRoutes);
+
 
 var PORT = process.env.PORT || 5000;
 app.use('/users', userRoutes);
