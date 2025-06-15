@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useCurrentUser } from '../userProvider';
 import CryptoJS from 'crypto-js';
 import styles from './register.module.css'
+import { GoogleLogin } from '@react-oauth/google';
 
 // Sign Up Form
 export default function Register() {
@@ -115,12 +116,36 @@ export default function Register() {
       }
     });
   }
-
+  const handleGoogleSuccess = async ({ credential }) => {
+    try {
+      const res = await fetch('http://localhost:5000/users/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ token: credential })
+      });
+      if (!res.ok) throw new Error('Google signup failed');
+      const user = await res.json();
+      setCurrentUser({ id: user.id, username: user.username, email: user.email });
+      navigate('/');
+    } catch (e) {
+      setError(e.message);
+    }
+  };
   if (error) return <p>Error: {error}</p>;
 
   return (
     <>
       <h3 className={styles.title}>New Account</h3>
+      <GoogleLogin
+        width="280"
+        text="signup_with"
+        onSuccess={handleGoogleSuccess}
+        onError={() => manageMassages('Google registration failed')}
+        //useOneTap
+      />
+
+      <div className={styles.divider}>or create account with email</div>
       <div className={styles.steps}><strong>1</strong> / 2 STEPS</div>
       <form className={styles.container} onSubmit={handleRegisterSubmit}>
         <input className={styles.input} type="email" placeholder="email" onChange={(e) => { setEmail(e.target.value) }} required />

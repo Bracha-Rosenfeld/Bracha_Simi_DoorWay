@@ -56,11 +56,17 @@ exports.createApartment = async (req, res) => {
         // if (isNaN(city)) {
         //     return res.status(400).json({ error: 'Invalid address coordinates' })
         // }
+        console.log("city: ", city, " req.body: ", req.body);
+
         const apartment = await postApartment(latitude, longitude, city, req.body);
+        console.log("apartment: ",apartment);
+        
         if (!apartment || apartment.length === 0) {
             return res.status(404).json({ error: 'Apartment cannot be posted' });
         }
         const publisher = await queryUserById(apartment.publisher_id);
+        console.log("publisher: ",publisher);
+        
         if (!publisher || publisher.length === 0) {
             return res.status(404).json({ error: 'Publisher with id:' + apartment.publisher_id + ' not found' });
         }
@@ -96,7 +102,7 @@ exports.updateApartment = async (req, res) => {
             }
 
             // Send approval email
-            const emailSent = await sendApprovalEmail(publisher.email,publisher.username, apartment.title, apartment.type);
+            const emailSent = await sendApprovalEmail(publisher.email, publisher.username, apartment.title, apartment.type);
             console.log('emailSent', emailSent);
             if (!emailSent) {
                 console.log('Failed to send approval email');

@@ -39,16 +39,21 @@ exports.queryApartmentById = async (id) => {
         throw new Error('Error fetching apartment with ID: ' + id + ' ' + err.message);
     }
 }
+
 exports.postApartment = async (latitude, longitude, city, { publisher_id, address, price, type, title, num_of_rooms, area, floor_number, details, is_approved }) => {
+    
     try {
         const [result] = await db.query(
             'INSERT INTO apartments (publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details ,is_approved) VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?,?)',
             [publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details, is_approved]
 
         );
+        console.log( "result ",result);
+        
         return { id: result.insertId, publisher_id: publisher_id, title: title };
 
     } catch (err) {
+        console.log('Error posting apartment: ' + err.message);        
         throw new Error('Error posting apartment: ' + err.message);
     }
 }

@@ -4,6 +4,8 @@ import { useCurrentUser } from '../userProvider';
 import { useNavigate, Link } from 'react-router-dom'
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';
+
 
 //Login Form
 export default function Login() {
@@ -103,6 +105,30 @@ export default function Login() {
         <div className={styles.loginForm}>
             <div id="container" className={styles.container}>
                 <h3 className={styles.title}>Login</h3>
+                {/* ---- Google Sign‑In ---- */}
+                <GoogleLogin
+                    width="240"
+                    onSuccess={cred => {
+                        fetch('http://localhost:5000/users/google', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({ idToken: cred.credential })
+                        })
+                            .then(res => res.json())
+                            .then(user => {
+                                if (user && user.id) {
+                                    setCurrentUser({ id: user.id, username: user.username, email: user.email });
+                                    navigate('/');
+                                } else {
+                                    manageMassages('Google login failed');
+                                }
+                            })
+                            .catch(() => manageMassages('Google login failed'));
+                    }}
+                    onError={() => manageMassages('Google login failed')}
+                />
+
                 <form onSubmit={handleLoginSubmit} className={styles.form}>
                     <input className={styles.input} type="text" placeholder="email" required onChange={(e) => { setEmail(e.target.value) }} />
                     <input className={styles.input} type="password" placeholder="password" required onChange={(e) => { setPassword(e.target.value) }} />

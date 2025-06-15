@@ -12,6 +12,8 @@ exports.queryAllUsers = async () => {
 exports.queryUserById = async (id) => {
     try {
         const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+        console.log("queryUserById ",rows[0]);
+        
         return rows[0];
     } catch (err) {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
@@ -23,10 +25,16 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
             'INSERT INTO users (username, email, phone, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
             [username, email, phone, address, latitude, longitude]
         );
-        await db.query(
-            'INSERT INTO passwords (user_id,password) VALUES (?,?)',
-            [result.insertId, password]
-        );
+        // await db.query(
+        //     'INSERT INTO passwords (user_id,password) VALUES (?,?)',
+        //     [result.insertId, password]
+        // );
+        if (password) {
+            await db.query(
+                'INSERT INTO passwords (user_id,password) VALUES (?,?)',
+                [result.insertId, password]
+            );
+        }
         await db.query(
             'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
             [result.insertId, role_id]
