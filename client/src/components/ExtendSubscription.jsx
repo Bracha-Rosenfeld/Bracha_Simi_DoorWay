@@ -40,13 +40,13 @@ const ExtendSubscription = () => {
           <h3>Extend Monthly Plan</h3>
           <p>Extend viewer access for one month.</p>
           <p><strong>Price:</strong> $70</p>
-          <button onClick={() => chooseExtend(80)}>Extend Monthly</button>
+          <button onClick={() => chooseExtend(70)}>Extend Monthly</button>
         </div>
         <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
           <h3>Extend Bi-Monthly Plan</h3>
           <p>Extend for two months at a discount.</p>
           <p><strong>Price:</strong> $120</p>
-          <button onClick={() => chooseExtend(150)}>Extend Bi-Monthly</button>
+          <button onClick={() => chooseExtend(120)}>Extend Bi-Monthly</button>
         </div>
         {/* Payment Section */}
             {showPayment && (
