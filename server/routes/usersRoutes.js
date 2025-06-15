@@ -1,9 +1,11 @@
 const express = require('express');
 const { getAllUsers, getUserById, createUser, updateUser, removeUser, manageLogin, manageLogout,getCurrentUser, googleAuth  } = require('../controllers/usersController');
 const { validateSignup, validateLogin } = require('../helpers/validations');
+const rolesController = require('./usersRolesRoutes');
 const cartController = require('./cartRoutes');
 const router = express.Router();
 router.use('/:userId/cart', cartController); // Mounting favorites routes under /favorites
+router.use('/:userId/roles', rolesController)
 router.get('/', getAllUsers);
 router.get('/me', getCurrentUser); // New endpoint to get current user from token
 router.get('/:id', getUserById);

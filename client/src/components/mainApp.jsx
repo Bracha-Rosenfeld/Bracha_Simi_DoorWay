@@ -9,6 +9,8 @@ import Register from '../components/register/register';
 import Apartments from '../components/apartments';
 import PublishApartment from './publishApartment'
 import MyAccount from '../components/myAccount';
+import UsersDetails from '../components/usersDetails';
+import UsersApartments from '../components/usersApartments';
 import UserDetails from '../components/userDetails/userDetails';
 import AdminHome from '../components/adminHome';
 import NotFound from '../components/notFound';
@@ -25,11 +27,14 @@ const mainApp = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/userDetails" element={<UserDetails />} />
-                    <Route path='/myAccount' element={<MyAccount />} />
+                    <Route path="/myAccount" element={<MyAccount />}>
+                        <Route path="details" element={<UsersDetails />} />
+                        <Route path="apartments" element={<UsersApartments />} />
+                    </Route>
                     <Route path="/apartments" element={<Apartments />} />
                     <Route path="/publish" element={<PublishApartment />} />
                     <Route path="/cart" element={<Cart />} />
-                    <Route path='/adminHome' element={<AdminHome/>} />
+                    <Route path='/adminHome' element={<AdminHome />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Layout>

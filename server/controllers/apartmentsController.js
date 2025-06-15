@@ -1,10 +1,11 @@
-const { queryAllApartments, queryApartmentById, postApartment, putApartment, deleteApartment } = require('../service/apartmentsService');
+const { queryAllApartments, queryAllUsersApartments, queryApartmentById, postApartment, putApartment, deleteApartment } = require('../service/apartmentsService');
 const { queryUserById } = require('../service/usersService');
 const { getCoordinatesFromAddress, getCityFromCoordinates } = require('../helpers/calculations');
 const { sendNewApartmentEmail, sendApprovalEmail } = require('../helpers/mailer');
 exports.getAllApartments = async (req, res) => {
     try {
         const isApproved = req.query.is_approved;
+        const publisherId = req.query.publisher_id;
         if (isApproved == 'true') {
             const apartments = await queryAllApartments(true);
             if (!apartments || apartments.length === 0) {
@@ -18,6 +19,13 @@ exports.getAllApartments = async (req, res) => {
                 return res.status(404).json({ error: 'No unapproved apartments found' });
             }
             return res.status(200).json(apartments);
+        }
+        if (publisherId) {
+            const usersApartments = await queryAllUsersApartments(parseInt(publisherId));
+            if (!usersApartments || usersApartments.length === 0) {
+                return res.status(404).json({ error: 'No apartments found for publisher with id:' + publisherId });
+            }
+            return res.status(200).json(usersApartments);
         }
         // If no query parameter is provided, return all apartments
         const apartments = await queryAllApartments();

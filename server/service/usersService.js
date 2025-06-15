@@ -1,4 +1,5 @@
 const db = require('../../database/connections')
+const { queryAllUserRoles, postUserRole, deleteAllUserRole } = require('./usersRolesService')
 
 exports.queryAllUsers = async () => {
     try {
@@ -19,12 +20,18 @@ exports.queryUserById = async (id) => {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
     }
 }
-exports.postUser = async ({ username, email, phone, address, password }, latitude, longitude, role_id) => {
+exports.postUser = async ({ username, email, phone, address, password }, latitude, longitude, roleName) => {
     try {
         const [result] = await db.query(
             'INSERT INTO users (username, email, phone, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
             [username, email, phone, address, latitude, longitude]
         );
+        await db.query(
+            'INSERT INTO passwords (user_id,password) VALUES (?,?)',
+            [result.insertId, password]
+        );
+        const roleResult = await postUserRole(result.insertId, roleName);
+        return { id: result.insertId, username: username, email: email, role_id: roleResult.role_id };
         // await db.query(
         //     'INSERT INTO passwords (user_id,password) VALUES (?,?)',
         //     [result.insertId, password]
@@ -35,13 +42,15 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
                 [result.insertId, password]
             );
         }
-        await db.query(
-            'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
-            [result.insertId, role_id]
-        );
+        // await db.query(
+        //     'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
+        //     [result.insertId, role_id]
+        // );
 
         return { id: result.insertId, username: username, email: email, role_id: role_id };
     } catch (err) {
+        console.log(err);
+
         throw new Error('Error posting user: ' + err.message);
     }
 }
@@ -59,12 +68,17 @@ exports.putUser = async (id, { username, email, phone, address }, latitude, long
 }
 exports.deleteUser = async (id) => {
     try {
+        const userRoles = await queryAllUserRoles(id);
+        const role = userRoles[0];
+        if (role && role === 'admin') {
+            throw new Error('Cannot delete ' + role + ' user');
+        }
         const [res1] = await db.query('DELETE FROM passwords WHERE user_id = ?', [id]);
         if (res1.affectedRows === 0) {
             throw new Error('No password found for user with ID: ' + id);
         }
-        const [res2] = await db.query('DELETE FROM user_roles WHERE user_id = ?', [id]);
-        if (res2.affectedRows === 0) {
+        const rolesWereDeleted = await deleteAllUserRole(id);
+        if (!rolesWereDeleted) {
             throw new Error('No roles found for user with ID: ' + id);
         }
         const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
@@ -89,30 +103,5 @@ exports.queryUserPassword = async (userId) => {
         return rows.length > 0 ? rows[0] : null;
     } catch (err) {
         throw new Error('Error fetching user password: ' + err.message);
-    }
-}
-
-exports.queryUserRoleName = async (userId) => {
-    try {
-        const [rows] = await db.query('SELECT * FROM user_roles WHERE user_id = ?', [userId]);
-        const [role] = await db.query('SELECT * FROM roles WHERE id = ?', [rows[0].role_id]);
-        if (!role) {
-            throw new Error('Role not found for user with ID: ' + userId);
-        }
-        return role;
-    } catch (err) {
-        throw new Error('Error fetching user role: ' + err.message);
-    }
-}
-
-exports.queryUserRoleId = async (roleName) => {
-    try {
-        const [rows] = await db.query('SELECT * FROM roles WHERE role_name = ?', [roleName]);
-        if (rows.length === 0) {
-            throw new Error('No roles found for role name: ' + roleName);
-        }
-        return rows[0].id;
-    } catch (err) {
-        throw new Error('Error fetching role: ' + err.message);
     }
 }

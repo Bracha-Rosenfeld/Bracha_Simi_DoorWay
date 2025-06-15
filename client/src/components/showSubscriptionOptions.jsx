@@ -21,7 +21,7 @@ const viewApartments = () => {
         try {
             const expiryDate = amountToPay=== 80 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
             const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
-            const response = await fetch(`http://localhost:5000/usersRoles/${currentUser.id}`, {
+            const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

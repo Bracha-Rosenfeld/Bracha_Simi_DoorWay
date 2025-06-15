@@ -44,8 +44,7 @@ exports.createUser = async (req, res) => {
             return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
         }
         const userRoleName = req.body.role_name;
-        const userRoleId = await queryUserRoleId(userRoleName);
-        const user = await postUser(req.body, latitude, longitude, userRoleId);
+        const user = await postUser(req.body, latitude, longitude, userRoleName);
         if (!user || user.length === 0) {
             return res.status(404).json({ error: 'User with username:' + user.username + ' cannot be created' });
         }
@@ -81,17 +80,12 @@ exports.updateUser = async (req, res) => {
 
 exports.removeUser = async (req, res) => {
     try {
-        const id = req.params.id;
-        const roleArray = await queryUserRoleName(id);
-        const role = roleArray[0];
-        if (role && role.role_name === 'admin') {
-            return res.status(403).json({ error: 'Cannot delete ' + role.role_name + ' user' });
-        }
+        const id = req.params.id;    
         const isDelete = await deleteUser(id);
         if (!isDelete) {
             return res.status(404).json({ error: 'User with id:' + id + ' not found' });
         }
-        res.status(200).json('user' + id + ' deleted' + role.role_name);
+        res.status(200).json('user' + id + ' deleted');
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }

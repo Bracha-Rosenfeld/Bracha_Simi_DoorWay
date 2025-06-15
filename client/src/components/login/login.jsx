@@ -79,7 +79,7 @@ export default function Login() {
                     email: exists.user.email,
                 }
                 setCurrentUser(currentUser);
-                const roles = axios.get(`http://localhost:5000/usersRoles/${exists.user.id}`, {
+                const roles = axios.get(`http://localhost:5000/users/${exists.user.id}/roles`, {
                     withCredentials: true
                 }).then((response) => {
                     if (response.data && response.data.length > 0) {

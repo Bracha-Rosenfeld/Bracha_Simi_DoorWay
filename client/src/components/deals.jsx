@@ -24,7 +24,7 @@ const deals = () => {
     <>
       <ViewApartments></ViewApartments>
       <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
-        <h3>Publish</h3>
+        <h3>Publish - For Free!</h3>
         <p>Publish your apartment for sale or rent so that all our clients get to see it</p>
         <p><strong>Price:</strong> No fee </p>
         <button onClick={() => choosePublish()}>Choose to Publish</button>

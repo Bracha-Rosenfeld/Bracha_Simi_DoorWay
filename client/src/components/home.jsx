@@ -16,7 +16,7 @@ const home = () => {
     if (isLoadingUser) return; // Wait for the user to load
     if (currentUser && currentUser.id != -1) {
       console.log("currentUser:", currentUser.id);
-      const response = await fetch(`http://localhost:5000/usersRoles/${currentUser.id}`);
+      const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`);
       if (response.ok) {
         const data = await response.json();
         console.log('data:', data);

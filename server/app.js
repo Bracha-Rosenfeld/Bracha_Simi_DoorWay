@@ -7,6 +7,8 @@ const usersRoles = require('./routes/usersRolesRoutes');
 const paypalRoutes = require('./routes/paypalRouter');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+require('./cronJob');
+
 const app = express();
 
 app.use(express.json());

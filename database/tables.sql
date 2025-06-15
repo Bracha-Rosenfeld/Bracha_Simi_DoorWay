@@ -72,14 +72,14 @@ INSERT INTO roles (role_name) VALUES ('admin');
 INSERT INTO roles (role_name) VALUES ('publisher');
 INSERT INTO roles (role_name) VALUES ('viewer');
 
-DELIMITER $$
-CREATE EVENT delete_expired_user_roles
-ON SCHEDULE EVERY 1 DAY
-STARTS TIMESTAMP(CURRENT_DATE + INTERVAL 0 HOUR)
-DO
-  DELETE FROM user_roles WHERE expiry_date IS NOT NULL AND expiry_date < NOW();
-&&
-DELIMITER ;
+-- DELIMITER $$
+-- CREATE EVENT delete_expired_user_roles
+-- ON SCHEDULE EVERY 1 DAY
+-- STARTS TIMESTAMP(CURRENT_DATE + INTERVAL 0 HOUR)
+-- DO
+--   DELETE FROM user_roles WHERE expiry_date IS NOT NULL AND expiry_date < NOW();
+-- &&
+-- DELIMITER ;
 -- insert one expired user role of viewer ti check if the evet works.
 -- INSERT INTO user_roles (user_id, role_id, created_at, expiry_date)
 -- VALUES (2, 3, '2025-03-12 19:34:30', '2025-04-12');
@@ -96,6 +96,7 @@ DELIMITER ;
 SELECT * FROM users;
 SELECT * FROM user_roles;
 SELECT * FROM roles;
+SELECT * FROM passwords ;
 SELECT * FROM apartments;
 --  DROP TABLE passwords;
 --  DROP TABLE user_roles;
