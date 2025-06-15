@@ -1,8 +1,12 @@
 const { queryAllUsers, queryUserByEmail, queryUserById, postUser, queryUserPassword, putUser, deleteUser, queryUserRoleName, queryUserRoleId } = require('../service/usersService');
 const { getCoordinatesFromAddress } = require('../helpers/calculations');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+
 
 const JWT_SECRET = process.env.JWT_SECRET || 'Bracha_and_Simi_The_Doorway100%';
+const VITE_GOOGLE_CLIENT_ID = process.env.VITE_GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(VITE_GOOGLE_CLIENT_ID);
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -108,9 +112,9 @@ exports.manageLogin = async (req, res) => {
 }
 
 exports.manageLogout = (req, res) => {
-  res.clearCookie('token', { httpOnly: true, sameSite: 'lax' });
-  res.status(200).json({ message: 'Logged out' });
-  
+    res.clearCookie('token', { httpOnly: true, sameSite: 'lax' });
+    res.status(200).json({ message: 'Logged out' });
+
 }
 // New endpoint to get current user from token
 exports.getCurrentUser = (req, res) => {
@@ -125,3 +129,47 @@ exports.getCurrentUser = (req, res) => {
         res.status(401).json({ error: 'Invalid token' });
     }
 }
+exports.googleAuth = async (req, res) => {
+    try {
+        const idToken = req.body.idToken || req.body.token;
+
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: VITE_GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+
+        let user = await queryUserByEmail(payload.email);
+
+        if (!user) {
+            const roleId = await queryUserRoleId('publisher');
+            user = await postUser(
+                {
+                    username: payload.name,
+                    email: payload.email,
+                    phone: null,
+                    address: null,
+                    password: null,     // סיסמה ריקה – משתמש Google
+                },
+                null, null, roleId
+            );
+        }
+
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                role_id: user.role_id,
+            },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
+        res.status(200).json({ ...user, token });
+    } catch (err) {
+        console.error(err);
+        res.status(401).json({ error: 'Google authentication failed' });
+    }
+};

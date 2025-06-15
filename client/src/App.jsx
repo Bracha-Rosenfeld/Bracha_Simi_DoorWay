@@ -2,7 +2,9 @@ import React from 'react'
 import MainApp from './components/MainApp.jsx'
 import { UserProvider } from './components/userProvider';
 import './App.css'
-import { PayPalScriptProvider,PayPalButtons  } from "@paypal/react-paypal-js";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 
 function App() {
@@ -12,9 +14,12 @@ function App() {
       currency: "USD",
       intent: "capture"
     }}>
-      <UserProvider>
-        <MainApp />
-      </UserProvider>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+
+        <UserProvider>
+          <MainApp />
+        </UserProvider>
+      </GoogleOAuthProvider>
     </PayPalScriptProvider>
 
   )

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllUsers, getUserById, createUser, updateUser, removeUser, manageLogin, manageLogout,getCurrentUser } = require('../controllers/usersController');
+const { getAllUsers, getUserById, createUser, updateUser, removeUser, manageLogin, manageLogout,getCurrentUser, googleAuth  } = require('../controllers/usersController');
 const { validateSignup, validateLogin } = require('../helpers/validations');
 const rolesController = require('./usersRolesRoutes');
 const cartController = require('./cartRoutes');
@@ -14,6 +14,7 @@ router.post('/login', validateLogin, manageLogin);
 router.post('/logout', manageLogout);
 router.put('/:id', updateUser);
 router.delete('/:id', removeUser);
+router.post('/google',googleAuth );
 
 
 module.exports = router;

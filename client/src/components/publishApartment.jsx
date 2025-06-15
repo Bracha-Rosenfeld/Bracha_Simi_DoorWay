@@ -41,6 +41,7 @@ export default function publishApartment() {
 
     e.preventDefault();
     try {
+      debugger
       const response = await fetch('http://localhost:5000/apartments', {
         method: 'POST',
         headers: {
