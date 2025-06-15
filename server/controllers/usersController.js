@@ -62,7 +62,7 @@ exports.updateUser = async (req, res) => {
         const id = req.params.id;
         const address = req.body.address;
         let latitude, longitude;
-        if (address !== null || address !== '') {
+        if (address) {
             [latitude, longitude] = await getCoordinatesFromAddress(address);
             if (isNaN(latitude) || isNaN(longitude)) {
                 return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
@@ -72,15 +72,23 @@ exports.updateUser = async (req, res) => {
         if (!isUpdate) {
             return res.status(404).json({ error: 'User with id:' + id + ' not found' });
         }
-        res.status(200).json('user' + id + ' updated');
+        const updatedUser = await queryUserById(id);
+        if (!updatedUser || updatedUser.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        return res.status(200).json(updatedUser);
+
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error.' + error.message });
+        console.error('updateUser error:', error);
+        return res
+            .status(500)
+            .json({ error: 'Internal server error. ' + error.message });
     }
-}
+};
 
 exports.removeUser = async (req, res) => {
     try {
-        const id = req.params.id;    
+        const id = req.params.id;
         const isDelete = await deleteUser(id);
         if (!isDelete) {
             return res.status(404).json({ error: 'User with id:' + id + ' not found' });
@@ -142,7 +150,7 @@ exports.googleAuth = async (req, res) => {
         let user = await queryUserByEmail(payload.email);
 
         if (!user) {
-            const roleId = await queryUserRoleId('publisher');
+            //const roleId = await queryUserRoleId('publisher');
             user = await postUser(
                 {
                     username: payload.name,
@@ -151,7 +159,7 @@ exports.googleAuth = async (req, res) => {
                     address: null,
                     password: null,     // סיסמה ריקה – משתמש Google
                 },
-                null, null, roleId
+                null, null, 'publisher'
             );
         }
 
@@ -169,7 +177,7 @@ exports.googleAuth = async (req, res) => {
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
         res.status(200).json({ ...user, token });
     } catch (err) {
-        console.error(err);
-        res.status(401).json({ error: 'Google authentication failed' });
+        console.error('googleAuth error:', err);
+        return res.status(500).json({ error: 'Internal server error', detail: err.message });
     }
 };

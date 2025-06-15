@@ -5,12 +5,13 @@ import axios from 'axios';
 
 
 const usersDetails = () => {
-    const { currentUser, isLoadingUser } = useCurrentUser();
+    const { currentUser, setCurrentUser, isLoadingUser } = useCurrentUser();
     const [userData, setUserData] = useState({ username: '', email: '', phone: '', address: '' })
     const [originalData, setOriginalData] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState('');
+
     useEffect(() => {
         if (isLoadingUser) return;
         if (currentUser && currentUser.id != -1) {
@@ -47,7 +48,15 @@ const usersDetails = () => {
             })
             if (response.ok) {
                 const updated = await response.json();
+                setUserData(updated);
                 setOriginalData(updated); // update original
+                setCurrentUser(prev => ({
+                    ...prev,
+                    username: updated.username,
+                    email: updated.email,
+                    phone: updated.phone,
+                    address: updated.address
+                }));
                 setIsEditing(false);
                 setIsChanged(false);
             }
@@ -56,7 +65,7 @@ const usersDetails = () => {
             }
 
         } catch (err) {
-            console.error("Error:", err.massage);
+            console.error('saveChanges error:', err);
         }
     }
 

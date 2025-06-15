@@ -80,6 +80,7 @@ export default function publishApartment() {
         is_approved: false,
         image_url: ''
       });
+    setWasAdded(true);
     } catch (error) {
       setError('An error occurred while adding the apartment' + error.message);
     }
