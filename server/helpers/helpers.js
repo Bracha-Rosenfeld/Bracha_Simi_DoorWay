@@ -22,3 +22,12 @@ exports.queryUserRoleName = async (roleId) => {
     }
 
 }
+//can't be in cartService because it causes a circular dependency between cartService and apartmentService.
+exports.deleteAllFavoritesByAptId = async (apartmentId) => {
+    try {
+        const [result] = await db.query('DELETE FROM carts WHERE apartment_id = ?', [apartmentId]);
+        return result.affectedRows > 0;
+    } catch (err) {
+        throw new Error('Error deleting favorite with ID: ' + id + ' ' + err.message);
+    }
+}

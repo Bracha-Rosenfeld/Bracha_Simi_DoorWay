@@ -1,5 +1,7 @@
-const e = require('express');
+const path = require('path');
+const { deleteFile } = require('./uploadService'); // נניח שזה הנתיב הנכון
 const db = require('../../database/connections')
+const { deleteAllFavoritesByAptId } = require('../helpers/helpers')
 
 exports.queryAllApartments = async (is_approved) => {
     if (typeof is_approved !== 'undefined') {
@@ -60,8 +62,6 @@ exports.postApartment = async (latitude, longitude, city, { publisher_id, addres
             [publisher_id, address, longitude, latitude, city, price, type, title, num_of_rooms, area, floor_number, details, is_approved, image_url]
 
         );
-        console.log("result ", result);
-
         return { id: result.insertId, publisher_id: publisher_id, title: title };
 
     } catch (err) {
@@ -82,12 +82,23 @@ exports.putApartment = async (id, { price, title, details, is_approved }) => {
     }
 }
 
-exports.deleteApartment = async (id) => {
+exports.deleteApartment = async (apartmentId) => {
     try {
-        const [result1] = await db.query('DELETE FROM images WHERE id = ?', [id]);
-        const [result2] = await db.query('DELETE FROM apartments WHERE id = ?', [id]);
-        return result2.affectedRows > 0;
+        const isInCart = await deleteAllFavoritesByAptId(apartmentId);
+        const [rows] = await db.query('SELECT image_url FROM apartments WHERE id = ?', [apartmentId]);
+        if (rows.length === 0) {
+            throw new Error('Apartment not found');
+        }
+        const imageUrl = rows[0].image_url;
+        if (imageUrl) {
+            let relativePath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl;
+            const imagePath = path.resolve(__dirname, '..', relativePath);
+            await deleteFile(imagePath);
+        }
+        const [result] = await db.query('DELETE FROM apartments WHERE id = ?', [apartmentId]);
+        return result.affectedRows > 0;
+
     } catch (err) {
         throw new Error('Error deleting apartment: ' + err.message);
     }
-}
+};

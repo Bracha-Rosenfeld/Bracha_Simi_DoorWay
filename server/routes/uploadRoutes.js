@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-const upload = require('../service/uploadService');
+const { upload } = require('../service/uploadService');
 const { uploadImage } = require('../controllers/uploadController');
 
 // route: POST /api/upload

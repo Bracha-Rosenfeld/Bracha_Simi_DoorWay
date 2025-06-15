@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS apartments(
     floor_number INT,
     details TEXT,
     is_approved BOOLEAN DEFAULT FALSE,
+	image_url VARCHAR(255),
     FOREIGN KEY (publisher_id) REFERENCES users(id)
 );
 
@@ -61,12 +62,12 @@ CREATE TABLE IF NOT EXISTS carts (
   FOREIGN KEY (apartment_id) REFERENCES apartments(id)
 );
 
-CREATE TABLE IF NOT EXISTS images(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    apartment_id INT,
-    image_url VARCHAR(255),
-    FOREIGN KEY (apartment_id) REFERENCES apartments(id)
-);
+-- CREATE TABLE IF NOT EXISTS images(
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     apartment_id INT,
+--     image_url VARCHAR(255),
+--     FOREIGN KEY (apartment_id) REFERENCES apartments(id)
+-- );
 
 INSERT INTO roles (role_name) VALUES ('admin'); 
 INSERT INTO roles (role_name) VALUES ('publisher');
@@ -82,7 +83,7 @@ INSERT INTO roles (role_name) VALUES ('viewer');
 -- DELIMITER ;
 -- insert one expired user role of viewer ti check if the evet works.
 -- INSERT INTO user_roles (user_id, role_id, created_at, expiry_date)
--- VALUES (2, 3, '2025-03-12 19:34:30', '2025-04-12');
+-- VALUES (1, 3, '2025-03-12 19:34:30', '2025-06-15');
 
 -- Running the event manually, one-time, immediately
 -- SET SQL_SAFE_UPDATES = 0;
@@ -101,7 +102,7 @@ SELECT * FROM apartments;
 --  DROP TABLE passwords;
 --  DROP TABLE user_roles;
 -- DROP TABLE carts;
---  DROP TABLE images;
+ DROP TABLE images;
 -- DROP TABLE apartments;
 --  DROP TABLE users;
 -- DROP TABLE roles;
