@@ -3,7 +3,7 @@ exports.getCoordinatesFromAddress = async (address) => {
   const url = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${encodeURIComponent(address)}&format=json`;
 
   const response = await fetch(url);
-  if (!response.ok) {
+    if (!response.ok) {    
     throw new Error("Invalid address or API error. " + address);
   }
 

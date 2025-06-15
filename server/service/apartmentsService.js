@@ -3,10 +3,10 @@ const { deleteFile } = require('./uploadService'); // נניח שזה הנתיב
 const db = require('../../database/connections')
 const { deleteAllFavoritesByAptId } = require('../helpers/helpers')
 
-exports.queryAllApartments = async (is_approved) => {
+exports.queryAllApartments = async (is_approved, limit, offset) => {
     if (typeof is_approved !== 'undefined') {
         try {
-            const [rows] = await db.query('SELECT * FROM apartments WHERE is_approved = ?', [is_approved]);
+            const [rows] = await db.query('SELECT * FROM apartments WHERE is_approved = ? ORDER BY id DESC  LIMIT ? OFFSET ?', [is_approved, limit, offset]);
             return rows;
         } catch (err) {
             throw new Error('Error fetching apartments: ' + err.message);
@@ -14,7 +14,7 @@ exports.queryAllApartments = async (is_approved) => {
     } else {
         try {
             console.log('Fetching all apartments');
-            const [rows] = await db.query('SELECT * FROM apartments');
+            const [rows] = await db.query('SELECT * FROM apartments ORDER BY id DESC  LIMIT ? OFFSET ?',[limit, offset]);
             return rows;
         } catch (err) {
             throw new Error('Error fetching all apartments: ' + err.message);

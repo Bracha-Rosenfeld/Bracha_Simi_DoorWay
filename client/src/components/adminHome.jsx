@@ -8,18 +8,34 @@ const adminHome = () => {
     const [apartments, setApartments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const LIMIT = 10;
+
     const navigate = useNavigate();
 
     const fetchUnapprovedApartments = async () => {
+        if (loading || !hasMore) return;
+
+        setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:5000/apartments?is_approved=${false}`);
-            setApartments(response.data);
+            const response = await axios.get(`http://localhost:5000/apartments?is_approved=false&limit=${LIMIT}&offset=${offset}`, {
+                withCredentials: true
+            });
+
+            const data = response.data;
+            if (data.length < LIMIT) setHasMore(false);
+
+            setApartments(prev => [...prev, ...data]);
+            setOffset(prev => prev + LIMIT);
         } catch (error) {
-            setError('Error fetching unapproved apartments:', error);
+            console.error("Error fetching unapproved apartments:", error);
+            setError('Error fetching unapproved apartments');
         } finally {
             setLoading(false);
         }
     };
+
 
     const approveApartment = async (apt) => {
         try {
@@ -55,11 +71,26 @@ const adminHome = () => {
         }
     }, [currentUser, isLoadingUser]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (
+                window.innerHeight + document.documentElement.scrollTop + 100 >=
+                document.documentElement.offsetHeight
+            ) {
+                fetchUnapprovedApartments();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [offset, loading, hasMore]);
+
     if (error) return <div>{error}</div>;
 
     return (
         <div>
             <h2>Not Approved Apartments</h2>
+            {loading && <p>Loading more apartments...</p>}
             {apartments.length === 0 ? (
                 <p>currently no apartments to approve!</p>
             ) : (

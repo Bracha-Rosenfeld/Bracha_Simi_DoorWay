@@ -6,15 +6,17 @@ exports.getAllApartments = async (req, res) => {
     try {
         const isApproved = req.query.is_approved;
         const publisherId = req.query.publisher_id;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = parseInt(req.query.offset) || 0;
         if (isApproved == 'true') {
-            const apartments = await queryAllApartments(true);
+            const apartments = await queryAllApartments(true, limit, offset);
             if (!apartments || apartments.length === 0) {
                 return res.status(404).json({ error: 'No approved apartments found' });
             }
             return res.status(200).json(apartments);
         }
         if (isApproved == 'false') {
-            const apartments = await queryAllApartments(false);
+            const apartments = await queryAllApartments(false, limit, offset);
             if (!apartments || apartments.length === 0) {
                 return res.status(404).json({ error: 'No unapproved apartments found' });
             }
@@ -28,7 +30,7 @@ exports.getAllApartments = async (req, res) => {
             return res.status(200).json(usersApartments);
         }
         // If no query parameter is provided, return all apartments
-        const apartments = await queryAllApartments();
+        const apartments = await queryAllApartments(limit, offset);
         if (!apartments || apartments.length === 0) {
             return res.status(404).json({ error: 'No apartments found' });
         }
@@ -55,8 +57,9 @@ exports.createApartment = async (req, res) => {
         const address = req.body.address;
         if (address === null || address === '') {
             return res.status(400).json({ error: 'Address is required' + req.body.address });
-        }
+        }      
         const [latitude, longitude] = await getCoordinatesFromAddress(address);
+       
         if (isNaN(latitude) || isNaN(longitude)) {
             return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
         }
@@ -64,17 +67,15 @@ exports.createApartment = async (req, res) => {
         // if (isNaN(city)) {
         //     return res.status(400).json({ error: 'Invalid address coordinates' })
         // }
-        console.log("city: ", city, " req.body: ", req.body);
-
         const apartment = await postApartment(latitude, longitude, city, req.body);
-        console.log("apartment: ",apartment);
-        
+        console.log("apartment: ", apartment);
+
         if (!apartment || apartment.length === 0) {
             return res.status(404).json({ error: 'Apartment cannot be posted' });
         }
         const publisher = await queryUserById(apartment.publisher_id);
-        console.log("publisher: ",publisher);
-        
+        console.log("publisher: ", publisher);
+
         if (!publisher || publisher.length === 0) {
             return res.status(404).json({ error: 'Publisher with id:' + apartment.publisher_id + ' not found' });
         }

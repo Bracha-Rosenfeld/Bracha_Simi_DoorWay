@@ -3,13 +3,17 @@ import axios from 'axios';
 import AddToCartButton from './addToCartButton';
 import ApartmentDetails from './apartmentDetails';
 export default function Apartments() {
-  const [apartments, setApartments] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cityFilter, setCityFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [cities, setCities] = useState([]);
   const [types, setTypes] = useState(['rent', 'sale']);
+  const [apartments, setApartments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 10;
+
   useEffect(() => {
     const fetchFilters = async () => {
 
@@ -20,21 +24,40 @@ export default function Apartments() {
   }, [apartments]);
 
   useEffect(() => {
-    const fetchApartments = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/apartments?is_approved=${true}`, {
-          withCredentials: true,
-        });
-        setApartments(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to load apartments');
-        setLoading(false);
+    fetchApartments();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 100 >=
+        document.documentElement.offsetHeight
+      ) {
+        fetchApartments();
       }
     };
 
-    fetchApartments();
-  }, []);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [offset, loading, hasMore]);
+
+  const fetchApartments = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/apartments?is_approved=${true}&limit=${LIMIT}&offset=${offset}`, {
+        withCredentials: true,
+      });
+      const data = response.data;
+      if (data.length < LIMIT) setHasMore(false);
+      setApartments(prev => [...prev, ...data]);
+      setOffset(prev => prev + LIMIT);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to load apartments');
+      setLoading(false);
+    }
+  };
 
   const filteredApartments = apartments.filter((apt) => {
     return (
