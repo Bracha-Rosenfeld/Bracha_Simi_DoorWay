@@ -34,7 +34,7 @@ const adminHome = () => {
 
     useEffect(() => {
         if (isLoadingUser) return;
-        if (currentUser && currentUser.id != 1) {
+        if (currentUser && currentUser.id != -1) {
             const roles = axios.get(`http://localhost:5000/users/${currentUser.id}/roles`, {
                 withCredentials: true
             }).then((response) => {
