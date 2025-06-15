@@ -48,6 +48,18 @@ const ExtendSubscription = () => {
           <p><strong>Price:</strong> $120</p>
           <button onClick={() => chooseExtend(150)}>Extend Bi-Monthly</button>
         </div>
+        {/* Payment Section */}
+            {showPayment && (
+                <SubscriptionPayment
+                    amount={amountToPay}
+                    onSuccess={() => {
+                        setShowPayment(false);
+                        addUserRole();
+                        navigate('/apartments');
+                    }}
+                    onCancel={() => setShowPayment(false)}
+                />
+            )}
       </div>
     </>
   );
