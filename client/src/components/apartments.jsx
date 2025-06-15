@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AddToCartButton from './addToCartButton';
 import ApartmentDetails from './apartmentDetails';
 export default function Apartments() {
   const [apartments, setApartments] = useState([]);
@@ -81,6 +82,7 @@ export default function Apartments() {
         filteredApartments.map((apt) => (
           <div key={apt.id}>
             <ApartmentDetails apt={apt} />
+            <AddToCartButton aptId={apt.id} />
           </div>
         ))
       )}
