@@ -1,4 +1,5 @@
 import React from 'react';
+import TawkTo from './tawkTo'
 
 const Contact = () => {
     const email = 'thedoorwayservice@gmail.com';
@@ -19,6 +20,7 @@ const Contact = () => {
             </p>
             <p><strong>Working Hours:</strong> Sunday–Thursday, 9:00 AM – 5:00 PM</p>
             <p><strong>Office Address:</strong> Zolti 14 Street, Ramat Shlomo, Jerusalem, Israel</p>
+            <TawkTo />
         </div>
     );
 };
