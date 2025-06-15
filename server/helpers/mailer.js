@@ -40,7 +40,7 @@ exports.sendResetPasswordEmail = async (toEmail, token) => {
     throw new Error("Failed to send reset password email: " + error.message);
   }
 };
-exports.sendNewApartmentEmail = async (toEmail, username,apartmentTitle) => {
+exports.sendNewApartmentEmail = async (toEmail, username, apartmentTitle) => {
   const mailOptions = {
     from: process.env.APP_EMAIL,
     to: toEmail,
@@ -68,7 +68,7 @@ The DoorWay Team
   }
 };
 
-exports.sendApprovalEmail = async (toEmail,username ,apartmentTitle,type) => {
+exports.sendApprovalEmail = async (toEmail, username, apartmentTitle, type) => {
   const mailOptions = {
     from: process.env.APP_EMAIL,
     to: toEmail,
@@ -77,7 +77,7 @@ exports.sendApprovalEmail = async (toEmail,username ,apartmentTitle,type) => {
 
 Great news! Your apartment listing titled "${apartmentTitle}" has been reviewed and successfully approved.
 
-It is now live and visible to potential ${type=='rent'? 'reters' : 'buyers'} on our platform.
+It is now live and visible to potential ${type == 'rent' ? 'reters' : 'buyers'} on our platform.
 
 Thank you for choosing to list your apartment with us.  
 We wish you the best of luck in finding the perfect tenant!
@@ -96,3 +96,28 @@ The DoorWay Team
     throw new Error("Failed to send approval email: " + error.message);
   }
 };
+exports.sendExpiryEmail = async (toEmail, username, expiry_date) => {
+  const mailOptions = {
+    from: process.env.APP_EMAIL,
+    to: toEmail,
+    subject: "your apartment has been approved",
+    text: `Dear ${username},
+
+We hope you enjoyed using our service!
+
+We noticed that your subscription expired on ${expiry_date}.
+As a result, your access to viewing listings has been temporarily suspended.
+
+If you'd like to continue exploring available apartments, please renew your subscription through your account page.
+
+Thank you for being with us,
+    The DoorWay Team
+      `,
+  };
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to send approval email: " + error.message);
+  }
+}
