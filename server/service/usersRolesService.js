@@ -41,6 +41,21 @@ exports.postUserRole = async (userId, roleName) => {
         throw new Error('Error posting user role: ' + err.message);
     }
 }
+exports.putUserRoleExpiryDate = async (userId, roleName, numOfDaysToAdd) => {
+    try {
+        const roleId = await queryUserRoleId(roleName);
+        const [result] = await db.query(
+            `UPDATE user_roles 
+         SET expiry_date = DATE_ADD(expiry_date, INTERVAL ? DAY) 
+         WHERE user_id = ? AND role_id = ?`,
+            [numOfDaysToAdd, userId, roleId]
+        );
+        return result.affectedRows > 0;
+    } catch (err) {
+        throw new Error('Error updating user role expiry: ' + roleName + ' for user with ID: ' + userId + ' ' + err.message);
+    }
+
+}
 exports.deleteUserRole = async (userId, roleName) => {
     try {
         const roleId = await queryUserRoleId(roleName);

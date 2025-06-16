@@ -1,4 +1,4 @@
-const { queryAllUserRoles, queryUserRoleByRoleName, postUserRole, deleteUserRole } = require('../service/usersRolesService');
+const { queryAllUserRoles, queryUserRoleByRoleName, postUserRole, putUserRoleExpiryDate, deleteUserRole } = require('../service/usersRolesService');
 exports.getAllUserRoles = async (req, res) => {
     try {
         const id = req.params.userId;
@@ -37,6 +37,23 @@ exports.createUserRole = async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' + error.message + req.body });
     }
 };
+exports.updateRoleExpiryDate = async (req, res) => {
+    const userId = req.params.userId;
+    const roleName = req.params.roleName;
+    const numOfDaysToAdd = req.body.num_of_days;
+    if (!roleName || !userId) {
+        return res.status(400).json({ error: 'User role name and user id are required' });
+    }
+    try {
+        const isUpdated = await putUserRoleExpiryDate(userId, roleName, numOfDaysToAdd);
+        if (!isUpdated) {
+            return res.status(404).json({ error: 'User role:' + roleName + ' not found for user wth id ' + userId });
+        }
+        res.status(200).json('User role : ' + roleName + ' for user with id: ' + userId + ' has been updted');
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error.' + error.message });
+    }
+}
 exports.removeUserRole = async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -46,7 +63,7 @@ exports.removeUserRole = async (req, res) => {
         }
         const isRemoved = await deleteUserRole(userId, roleName);
         if (!isRemoved) {
-            return res.status(404).json({ error: 'User role:' + roleName + ' not found for user wth id ' + userId  });
+            return res.status(404).json({ error: 'User role:' + roleName + ' not found for user wth id ' + userId });
         }
         res.status(200).json('User role : ' + roleName + ' for user with id: ' + userId + ' has been removed');
     } catch (error) {
