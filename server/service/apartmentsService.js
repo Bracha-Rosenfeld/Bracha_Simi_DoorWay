@@ -3,23 +3,51 @@ const { deleteFile } = require('./uploadService'); // נניח שזה הנתיב
 const db = require('../../database/connections')
 const { deleteAllFavoritesByAptId } = require('../helpers/helpers')
 
+// exports.queryAllApartments = async (is_approved, limit, offset) => {
+//     if (typeof is_approved !== 'undefined') {
+//         try {
+//             const [rows] = await db.query('SELECT * FROM apartments WHERE is_approved = ? ORDER BY id DESC  LIMIT ? OFFSET ?', [is_approved, limit, offset]);
+//             return rows;
+//         } catch (err) {
+//             throw new Error('Error fetching apartments: ' + err.message);
+//         }
+//     } else {
+//         try {
+//             const [rows] = await db.query('SELECT * FROM apartments ORDER BY id DESC  LIMIT ? OFFSET ?',[limit, offset]);
+//             return rows;
+//         } catch (err) {
+//             throw new Error('Error fetching all apartments: ' + err.message);
+//         }
+//     }
+// }
 exports.queryAllApartments = async (is_approved, limit, offset) => {
-    if (typeof is_approved !== 'undefined') {
-        try {
-            const [rows] = await db.query('SELECT * FROM apartments WHERE is_approved = ? ORDER BY id DESC  LIMIT ? OFFSET ?', [is_approved, limit, offset]);
-            return rows;
-        } catch (err) {
-            throw new Error('Error fetching apartments: ' + err.message);
+    const baseQuery = `
+        SELECT a.*, u.phone AS owner_phone
+        FROM apartments a
+        JOIN users u ON a.publisher_id = u.id
+    `;
+
+    try {
+        let rows;
+        if (typeof is_approved !== 'undefined') {
+            const [result] = await db.query(
+                `${baseQuery} WHERE a.is_approved = ? ORDER BY a.id DESC LIMIT ? OFFSET ?`,
+                [is_approved, limit, offset]
+            );
+            rows = result;
+        } else {
+            const [result] = await db.query(
+                `${baseQuery} ORDER BY a.id DESC LIMIT ? OFFSET ?`,
+                [limit, offset]
+            );
+            rows = result;
         }
-    } else {
-        try {
-            const [rows] = await db.query('SELECT * FROM apartments ORDER BY id DESC  LIMIT ? OFFSET ?',[limit, offset]);
-            return rows;
-        } catch (err) {
-            throw new Error('Error fetching all apartments: ' + err.message);
-        }
+        return rows;
+    } catch (err) {
+        throw new Error('Error fetching apartments: ' + err.message);
     }
-}
+};
+
 exports.queryAllUsersApartments = async (publisher_id) => {
     if (!publisher_id) {
         throw new Error('Publisher ID is required');
@@ -32,26 +60,43 @@ exports.queryAllUsersApartments = async (publisher_id) => {
     }
 }
 
+// exports.queryApartmentsByIds = async (ids) => {
+//     if (!Array.isArray(ids) || ids.length === 0) return [];
+
+//     const placeholders = ids.map(() => '?').join(', ');
+//     try {
+//         const [rows] = await db.query(`SELECT * FROM apartments WHERE id IN (${placeholders})`, ids);
+//         return rows;
+//     } catch (err) {
+//         throw new Error('Error fetching apartments by IDs: ' + err.message);
+//     }
+// }
 exports.queryApartmentsByIds = async (ids) => {
     if (!Array.isArray(ids) || ids.length === 0) return [];
 
     const placeholders = ids.map(() => '?').join(', ');
     try {
-        const [rows] = await db.query(`SELECT * FROM apartments WHERE id IN (${placeholders})`, ids);
+        const [rows] = await db.query(
+          `SELECT a.*, u.phone AS owner_phone
+           FROM apartments a
+           JOIN users u ON a.publisher_id = u.id
+           WHERE a.id IN (${placeholders})`,
+          ids
+        );
         return rows;
     } catch (err) {
         throw new Error('Error fetching apartments by IDs: ' + err.message);
     }
 }
 
-exports.queryApartmentById = async (id) => {
-    try {
-        const [rows] = await db.query('SELECT * FROM apartments WHERE id = ?', [id]);
-        return rows[0];
-    } catch (err) {
-        throw new Error('Error fetching apartment with ID: ' + id + ' ' + err.message);
-    }
-}
+// exports.queryApartmentById = async (id) => {
+//     try {
+//         const [rows] = await db.query('SELECT a.*,u.phone AS owner_phone FROM apartments a JOIN users u ON a.publisher_id = u.id WHERE id = ?', [id]);
+//         return rows[0];
+//     } catch (err) {
+//         throw new Error('Error fetching apartment with ID: ' + id + ' ' + err.message);
+//     }
+// }
 
 exports.postApartment = async (latitude, longitude, city, { publisher_id, address, price, type, title, num_of_rooms, area, floor_number, details, is_approved, image_url }) => {
 

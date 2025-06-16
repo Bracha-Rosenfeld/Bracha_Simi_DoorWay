@@ -6,7 +6,10 @@ const apartmentDetails = ({ apt }) => {
  if (error) {
     return <div>Error: {error}</div>;
   }
-
+  useEffect(() => {
+  console.log('apt data:', apt);   // ודאי שיש בו owner_phone
+}, [apt]);
+console.log("apt.phone: ",apt.phone)
   return (
     <div style={{ border: '1px solid gray', margin: '10px', padding: '10px' }}>
       <h2><strong>{apt.title}</strong> </h2>
@@ -17,6 +20,9 @@ const apartmentDetails = ({ apt }) => {
       <p><strong>floor:</strong> {apt.floor_number}</p>
       <p> <strong>{apt.type == 'rent' ? 'for rent' : 'for sale'}</strong> </p>
       <p><strong>description:</strong> {apt.details}</p>
+      <p><strong>Contact Owner: </strong>{apt.owner_phone}</p>
+      {/* console.log(); */}
+      
       {apt.image_url && (
         <img
           src={`http://localhost:5000${apt.image_url}`}
