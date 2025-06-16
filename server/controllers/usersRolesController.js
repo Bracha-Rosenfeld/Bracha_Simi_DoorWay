@@ -35,8 +35,8 @@ exports.createUserRole = async (req, res) => {
         if (!userRole || userRole.length === 0) {
             return res.status(404).json({ error: 'User role cannot be created' });
         }
-        if (roleName === 'viewer') {          
-            const viewer = await queryUserById(userId);            
+        if (roleName === 'viewer') {
+            const viewer = await queryUserById(userId);
             const emailSent = await sendSubsciptionEmail(viewer.email, viewer.username, expiryDate);
             if (!emailSent) {
                 console.log('Failed to send approval email');
@@ -63,7 +63,7 @@ exports.updateRoleExpiryDate = async (req, res) => {
         }
         const viewer = await queryUserById(userId);
         const userRole = await queryUserRoleByRoleName(userId, roleName);
-        const emailSent = await sendExtandSubsciptionEmail(viewer.email, viewer.username, numOfDaysToAdd, userRole.expiry_date);
+        const emailSent = await sendExtandSubsciptionEmail(viewer.email, viewer.username, numOfDaysToAdd, userRole[0].expiry_date);
         if (!emailSent) {
             console.log('Failed to send approval email');
         } else {
