@@ -23,6 +23,7 @@ const usersDetails = () => {
                 .catch(() => setError('Failed to fetch user data'));
         }
     }, [currentUser, isLoadingUser]);
+    
     const handleInputChange = (field, value) => {
         setUserData(prev => {
             const updated = { ...prev, [field]: value };

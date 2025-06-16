@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import styles from '../login/login.module.css';
 import { useCurrentUser } from '../userProvider';
 import { useNavigate, Link } from 'react-router-dom'
@@ -18,16 +18,6 @@ export default function Login() {
     const KEY = CryptoJS.enc.Utf8.parse('1234567890123456');
     const IV = CryptoJS.enc.Utf8.parse('6543210987654321');
     const [error, setError] = useState(null);
-
-    // Check if already logged in via cookie, only in the first load and not every time the currentUser changes.
-    useEffect(() => {
-        if (isLoadingUser) return; // Wait for the user to load
-
-        if (currentUser && currentUser.id !== -1) {
-            navigate('/myAccount');
-        }
-    }, [navigate, currentUser, isLoadingUser]);
-
     //update the text in alert div.
     const manageMassages = (message) => {
         setAlert(message);
@@ -79,22 +69,7 @@ export default function Login() {
                     email: exists.user.email,
                 }
                 setCurrentUser(currentUser);
-                const roles = axios.get(`http://localhost:5000/users/${exists.user.id}/roles`, {
-                    withCredentials: true
-                }).then((response) => {
-                    if (response.data && response.data.length > 0) {
-                        if (response.data.includes('admin')) {
-                            navigate('/adminHome');
-                        } else {
-                            navigate('/');
-                        }
-                    } else {
-                        navigate('/login');
-                    }
-                }).catch((error) => {
-                    setError('Error fetching user roles:', error);
-                    navigate('/'); // Fallback to myAccount if roles fetch fails
-                });
+                navigate('/')
             }
         });
     }

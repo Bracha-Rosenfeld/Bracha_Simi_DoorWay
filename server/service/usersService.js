@@ -36,12 +36,12 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
         //     'INSERT INTO passwords (user_id,password) VALUES (?,?)',
         //     [result.insertId, password]
         // );
-        if (password) {
-            await db.query(
-                'INSERT INTO passwords (user_id,password) VALUES (?,?)',
-                [result.insertId, password]
-            );
-        }
+        // if (password) {
+        //     await db.query(
+        //         'INSERT INTO passwords (user_id,password) VALUES (?,?)',
+        //         [result.insertId, password]
+        //     );
+        // }
         // await db.query(
         //     'INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)',
         //     [result.insertId, role_id]
