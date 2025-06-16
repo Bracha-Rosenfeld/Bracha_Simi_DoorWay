@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useCurrentUser } from './userProvider';
+import ApartmentDetails from './apartmentDetails';
 import axios from 'axios';
 
 const Cart = () => {
@@ -49,11 +50,7 @@ const Cart = () => {
                 <ul>
                     {favorites.map((item) => (
                         <li key={item.apartment_id}>
-                            <div> Apartment ID: {item.id}{' '}</div>
-                            <div>{item.title}{' '}</div>
-                            <div> Price: {item.price}{' '}</div>
-                            <div> Address: {item.address}{' '}</div>
-                            <div> Type: {item.type}{' '}</div>
+                            <ApartmentDetails apt={item} />
                             <button onClick={() => handleRemove(item.id)}>
                                 Remove
                             </button>

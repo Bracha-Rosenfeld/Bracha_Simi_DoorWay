@@ -49,6 +49,8 @@ export default function Apartments() {
         withCredentials: true,
       });
       const data = response.data;
+      console.log("data: ",data);
+      
       if (data.length < LIMIT) setHasMore(false);
       setApartments(prev => [...prev, ...data]);
       setOffset(prev => prev + LIMIT);

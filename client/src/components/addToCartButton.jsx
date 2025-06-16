@@ -12,7 +12,7 @@ const addToCartButton = ({aptId}) => {
             try {
                 const cart = await axios.get(`http://localhost:5000/users/${currentUser.id}/cart`);
                 setFavorites(cart.data);
-                setIsInCart(cart.data.some(item => item.id === apt.id));
+                setIsInCart(cart.data.some(item => item.id === aptId));
             } catch (err) {
                 setError(err.response?.data?.error || 'Error fetching data');
             }
