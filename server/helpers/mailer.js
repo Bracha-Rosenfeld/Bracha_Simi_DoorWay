@@ -53,6 +53,9 @@ We have successfully received the details of your apartment titled "${apartmentT
 
 You will receive a confirmation email as soon as your apartment is approved and published.
 
+**Please remember:**  
+Once your apartment is sold or rented out, kindly log in to your account and delete the listing to help keep our platform up to date for other users.
+
 If you have any questions or need to make changes, feel free to contact us at ${process.env.APP_EMAIL}.
 
 Best regards,  
@@ -100,7 +103,7 @@ exports.sendExpiryEmail = async (toEmail, username, expiry_date) => {
   const mailOptions = {
     from: process.env.APP_EMAIL,
     to: toEmail,
-    subject: "your apartment has been approved",
+    subject: "Subscription Expired",
     text: `Dear ${username},
 
 We hope you enjoyed using our service!
@@ -121,3 +124,26 @@ Thank you for being with us,
     throw new Error("Failed to send approval email: " + error.message);
   }
 }
+
+exports.sendApartmentDeletedEmail = async (toEmail, username, apartmentTitle) => {
+  const mailOptions = {
+    from: process.env.APP_EMAIL,
+    to: toEmail,
+    subject: "Your apartment listing has been deleted",
+    text: `Dear ${username},
+
+We wanted to let you know that your apartment listing titled "${apartmentTitle}" has been successfully deleted from our platform.
+
+If this was a mistake or you have any questions, please contact us at ${process.env.APP_EMAIL}.
+
+Best regards,  
+The DoorWay Team
+`,
+  };
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to send apartment deleted email: " + error.message);
+  }
+};
