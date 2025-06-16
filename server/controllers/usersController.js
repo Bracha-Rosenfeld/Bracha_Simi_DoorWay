@@ -182,7 +182,6 @@ exports.getCurrentUser = async (req, res) => {
         const user = await queryUserById(decoded.id);
         if (!user) return res.status(404).json({ error: 'User not found' });
         res.status(200).json(Array.isArray(user) ? user[0] : user);
-        //res.status(200).json(decoded);
     } catch (err) {
         res.status(401).json({ error: 'Invalid token' });
     }

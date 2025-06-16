@@ -35,7 +35,7 @@ const UsersApartments = () => {
     const saveChanges = async (aptId) => {
         try {
             const response = await axios.put(`http://localhost:5000/apartments/${aptId}`, editedData);
-             if (response.status==200) {
+            if (response.status == 200) {
                 setUsersApartments(prev =>
                     prev.map(apt =>
                         apt.id === aptId ? { ...apt, ...editedData } : apt
@@ -51,6 +51,19 @@ const UsersApartments = () => {
             console.error("Error:", err);
         }
     };
+
+    const handleDelete = async (apt) => {
+        try {
+            const confirmed = window.confirm("Are you sure you want to delete this apartment?");
+            if (!confirmed) return;
+            const response = await axios.delete(`http://localhost:5000/apartments/${apt.id}`);
+            if (response.status === 200) {
+                setUsersApartments(prev => prev.filter(a => a.id !== apt.id));
+            }
+        } catch (err) {
+            console.error("Error deleting apartment:", err);
+        }
+    }
 
     const cancelChanges = () => {
         setEditedData(originalData);
@@ -107,6 +120,7 @@ const UsersApartments = () => {
                                         <strong>Details: </strong>{apt.details}
                                     </div>
                                     <button onClick={() => handleEdit(apt)}>Edit</button>
+                                    <button onClick={() => handleDelete(apt)}>Delete</button>
                                 </>
                             )}
                         </li>
