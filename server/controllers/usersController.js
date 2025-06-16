@@ -48,10 +48,26 @@ exports.createUser = async (req, res) => {
         if (!user || user.length === 0) {
             return res.status(404).json({ error: 'User with username:' + user.username + ' cannot be created' });
         }
+        const fullUser = await queryUserById(user.id);
+
         // Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign(
+            {
+                id: fullUser.id,
+                email: fullUser.email,
+                username: fullUser.username,
+                phone: fullUser.phone,
+                address: fullUser.address,
+            },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
-        res.status(200).json({ ...user, token });
+        return res.status(200).json({ ...fullUser, token });
+        //const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+        //res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
+        //res.status(200).json({ ...user, token });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message + req.body });
     }
@@ -126,10 +142,25 @@ exports.manageLogin = async (req, res) => {
         if (!userPassword || userPassword.password !== password) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
+        const fullUser = await queryUserById(user.id);
         // Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign(
+            {
+                id: fullUser.id,
+                email: fullUser.email,
+                username: fullUser.username,
+                phone: fullUser.phone,
+                address: fullUser.address,
+            },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
-        res.status(200).json({ ...user, token });
+        return res.status(200).json({ ...fullUser, token });
+        // const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+        // res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
+        // res.status(200).json({ ...user, token });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
@@ -181,19 +212,35 @@ exports.googleAuth = async (req, res) => {
                 null, null, 'publisher'
             );
         }
+        const fullUser = await queryUserById(user.id);
 
         const token = jwt.sign(
             {
-                id: user.id,
-                email: user.email,
-                username: user.username,
+                id: fullUser.id,
+                email: fullUser.email,
+                username: fullUser.username,
+                phone: fullUser.phone,
+                address: fullUser.address,
             },
             JWT_SECRET,
             { expiresIn: '7d' }
         );
 
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
-        res.status(200).json({ ...user, token });
+        return res.status(200).json({ ...fullUser, token });
+        // const token = jwt.sign(
+        //     {
+        //         id: user.id,
+        //         email: user.email,
+        //         username: user.username,
+        //     },
+        //     JWT_SECRET,
+        //     { expiresIn: '7d' }
+        // );
+
+        // res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
+        // res.status(200).json({ ...user, token });
+
     } catch (err) {
         console.error('googleAuth error:', err);
         return res.status(500).json({ error: 'Internal server error', detail: err.message });

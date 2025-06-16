@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import styles from '../login/login.module.css';
 import { useCurrentUser } from '../userProvider';
 import { useNavigate, Link } from 'react-router-dom'
@@ -56,19 +56,13 @@ export default function Login() {
         }
     };
 
-    //if the user is valid - navigate to home page.
     const handleLoginSubmit = (event) => {
         event.preventDefault()
-        checkUserExists(email, password).then((exists) => {
-            if (!exists.ok) {
+        checkUserExists(email, password).then(({ ok, user }) => {
+            if (!ok) {
                 manageMassages('user name or password incorrect, try again');
             } else {
-                let currentUser = {
-                    id: exists.user.id,
-                    username: exists.user.username,
-                    email: exists.user.email,
-                }
-                setCurrentUser(currentUser);
+                setCurrentUser(user);
                 navigate('/')
             }
         });
@@ -92,8 +86,8 @@ export default function Login() {
                         })
                             .then(res => res.json())
                             .then(user => {
-                                if (user && user.id) {
-                                    setCurrentUser({ id: user.id, username: user.username, email: user.email });
+                                if (user && user.id) {             
+                                    setCurrentUser(user);
                                     navigate('/');
                                 } else {
                                     manageMassages('Google login failed');
