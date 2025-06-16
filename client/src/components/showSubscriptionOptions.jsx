@@ -4,7 +4,7 @@ import NavBar from './navBar/navBar';
 import React, { useState, useEffect } from 'react';
 import SubscriptionPayment from './SubscriptionPayment';
 
-const viewApartments = () => {
+const viewApartments = ({ setUserRole }) => {
     const navigate = useNavigate();
     const { currentUser, setCurrentUser } = useCurrentUser();
     const [showPayment, setShowPayment] = useState(false);
@@ -16,7 +16,7 @@ const viewApartments = () => {
         setShowSubscriptionOptions(false);
         setShowPayment(true);
     };
-   
+
     const addUserRole = async () => {
         try {
             const expiryDate = amountToPay === 80 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
@@ -62,9 +62,10 @@ const viewApartments = () => {
             {showPayment && (
                 <SubscriptionPayment
                     amount={amountToPay}
-                    onSuccess={() => {
+                    onSuccess={async () => {
                         setShowPayment(false);
                         addUserRole();
+                        setUserRole('viewer');
                         navigate('/apartments');
                     }}
                     onCancel={() => setShowPayment(false)}

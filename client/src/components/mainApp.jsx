@@ -22,8 +22,7 @@ import axios from 'axios';
 const mainApp = () => {
     const { currentUser, isLoadingUser } = useCurrentUser();
     const [userRole, setUserRole] = useState(null);
-
-    useEffect(() => {
+    const fetchCurrentUserRole = async (params) => {
         if (isLoadingUser) return;
         if (currentUser && currentUser.id != -1) {
             const roles = axios.get(`http://localhost:5000/users/${currentUser.id}/roles`, {
@@ -48,7 +47,17 @@ const mainApp = () => {
         else {
             setUserRole(null);
         }
+
+    }
+
+    useEffect(() => {
+        fetchCurrentUserRole();
     }, [currentUser, isLoadingUser]);
+
+    useEffect(() => {
+        fetchCurrentUserRole();
+    }, [])
+    
     return (
         <BrowserRouter>
             <Layout>
@@ -65,7 +74,7 @@ const mainApp = () => {
                     </Route>
                     <Route path="/apartments" element={(currentUser && currentUser.id !== -1) ? userRole === 'viewer' ? <Apartments /> : <Navigate to={'/subsciptionOptions'} /> : <Navigate to={'/login'} />} />
                     <Route path="/publish" element={(currentUser == null || currentUser.id == -1) ? <Navigate to={'/login'} /> : <PublishApartment />} />
-                    <Route path='/subsciptionOptions' element={<ShowSubscriptionOptions />} />
+                    <Route path='/subsciptionOptions' element={<ShowSubscriptionOptions setUserRole={setUserRole} />} />
                     <Route path="/cart" element={userRole ? <Cart /> : <Navigate to={'/login'} />} />
                     <Route path='/adminHome' element={userRole === 'admin' ? <AdminHome /> : <Navigate to={'/'} />} />
                     <Route path="*" element={<NotFound />} />
