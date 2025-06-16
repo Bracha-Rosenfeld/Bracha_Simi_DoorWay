@@ -29,14 +29,14 @@ exports.queryUserRoleByRoleName = async (userId, roleName) => {
 
     }
 }
-exports.postUserRole = async (userId, roleName,expiryDate) => {
+exports.postUserRole = async (userId, roleName, expiryDate) => {
     try {
         const roleId = await queryUserRoleId(roleName);
         const [result] = await db.query(
             'INSERT INTO user_roles (user_id, role_id,expiry_date) VALUES (?,?, ?)',
-            [userId, roleId,expiryDate]
+            [userId, roleId, expiryDate]
         );
-        return { user_id: userId, role_id: roleId,expiryDate };
+        return { user_id: userId, role_id: roleId, expiryDate: expiryDate };
     } catch (err) {
         throw new Error('Error posting user role: ' + err.message);
     }
