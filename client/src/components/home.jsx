@@ -15,7 +15,7 @@ const home = () => {
 
   useEffect(() => {
     if (!isLoadingUser && currentUser && currentUser.id !== -1) {
-      if (!currentUser.address || !currentUser.phone) {
+      if (currentUser.address===null || currentUser.phone===null) {
         setShouldCompleteProfile(true);
       } else {
         setShouldCompleteProfile(false);
