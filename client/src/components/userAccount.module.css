@@ -1,0 +1,433 @@
+/* userAccount.module.css - Modern sleek styling for user account components */
+
+/* Main container */
+.accountContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+/* Page title */
+.pageTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.pageTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  border-radius: 2px;
+}
+
+/* Navigation */
+.accountNav {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.navButton {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  padding: 0;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.navButton:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+}
+
+.navButton a {
+  display: block;
+  padding: 1rem 2rem;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.navButton a:hover {
+  color: white;
+}
+
+/* User Details Component */
+.userDetailsCard {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+  border: 1px solid #f1f2f6;
+}
+
+.userDetailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.userDetailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.userDetailLabel {
+  font-weight: 600;
+  color: #636e72;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+.userDetailValue {
+  color: #2d3436;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #e74c3c;
+}
+
+.userInput {
+  padding: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #2d3436;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.userInput:focus {
+  outline: none;
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.userInput:hover {
+  border-color: #fab1a0;
+}
+
+/* User Apartments Component */
+.apartmentsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.apartmentItem {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f2f6;
+  transition: all 0.3s ease;
+}
+
+.apartmentItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(231, 76, 60, 0.15);
+}
+
+.apartmentItemTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f1f2f6;
+}
+
+.apartmentEditForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.apartmentFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.apartmentFormLabel {
+  font-weight: 600;
+  color: #636e72;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+.apartmentInput {
+  padding: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #2d3436;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.apartmentInput:focus {
+  outline: none;
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.apartmentTextarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.apartmentDisplay {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.apartmentDisplayItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #e74c3c;
+}
+
+.apartmentDisplayLabel {
+  font-weight: 600;
+  color: #636e72;
+}
+
+.apartmentDisplayValue {
+  color: #2d3436;
+  font-weight: 500;
+}
+
+/* Buttons */
+.primaryButton {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+}
+
+.primaryButton:disabled {
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.secondaryButton {
+  background: transparent;
+  color: #636e72;
+  border: 2px solid #636e72;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.secondaryButton:hover {
+  background: #636e72;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 110, 114, 0.3);
+}
+
+.dangerButton {
+  background: linear-gradient(135deg, #e17055, #d63031);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.dangerButton:hover {
+  background: linear-gradient(135deg, #d63031, #c0392b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(214, 48, 49, 0.3);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 1rem;
+}
+
+/* Error and empty states */
+.errorMessage {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: #636e72;
+  font-size: 1.1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.emptyStateIcon {
+  font-size: 3rem;
+  color: #fab1a0;
+  margin-bottom: 1rem;
+}
+
+/* Logout button specific styling */
+.logoutButton {
+  background: linear-gradient(135deg, #636e72, #2d3436);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+
+.logoutButton:hover {
+  background: linear-gradient(135deg, #2d3436, #636e72);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(45, 52, 54, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .accountContainer {
+    padding: 1rem;
+  }
+  
+  .pageTitle {
+    font-size: 2rem;
+  }
+  
+  .accountNav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .navButton {
+    width: 100%;
+  }
+  
+  .userDetailsGrid,
+  .apartmentEditForm,
+  .apartmentDisplay {
+    grid-template-columns: 1fr;
+  }
+  
+  .apartmentItem {
+    padding: 1.5rem;
+  }
+  
+  .primaryButton,
+  .secondaryButton,
+  .dangerButton {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .buttonGroup {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .userDetailsCard,
+  .apartmentItem {
+    padding: 1rem;
+  }
+  
+  .pageTitle {
+    font-size: 1.8rem;
+  }
+  
+  .apartmentItemTitle {
+    font-size: 1.1rem;
+  }
+}
