@@ -23,7 +23,11 @@ const usersDetails = () => {
                 .catch(() => setError('Failed to fetch user data'));
         }
     }, [currentUser, isLoadingUser]);
-    
+
+    useEffect(() => {
+        console.log('Current user after refresh:', currentUser);
+    }, [currentUser]);
+
     const handleInputChange = (field, value) => {
         setUserData(prev => {
             const updated = { ...prev, [field]: value };
@@ -48,16 +52,18 @@ const usersDetails = () => {
                 body: JSON.stringify({ username: userData.username, email: userData.email, phone: userData.phone, address: userData.address }),
             })
             if (response.ok) {
-                const updated = await response.json();
+                //const updated = await response.json();
+                const { user: updated, token } = await response.json();
                 setUserData(updated);
                 setOriginalData(updated); // update original
-                setCurrentUser(prev => ({
-                    ...prev,
-                    username: updated.username,
-                    email: updated.email,
-                    phone: updated.phone,
-                    address: updated.address
-                }));
+                // setCurrentUser(prev => ({
+                //     ...prev,
+                //     username: updated.username,
+                //     email: updated.email,
+                //     phone: updated.phone,
+                //     address: updated.address
+                // }));
+                setCurrentUser(updated)
                 setIsEditing(false);
                 setIsChanged(false);
             }
