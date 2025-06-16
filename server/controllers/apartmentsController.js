@@ -10,23 +10,14 @@ exports.getAllApartments = async (req, res) => {
         const offset = parseInt(req.query.offset) || 0;
         if (isApproved == 'true') {
             const apartments = await queryAllApartments(true, limit, offset);
-            if (!apartments || apartments.length === 0) {
-                return res.status(404).json({ error: 'No approved apartments found' });
-            }
             return res.status(200).json(apartments);
         }
         if (isApproved == 'false') {
             const apartments = await queryAllApartments(false, limit, offset);
-            if (!apartments || apartments.length === 0) {
-                return res.status(404).json({ error: 'No unapproved apartments found' });
-            }
             return res.status(200).json(apartments);
         }
         if (publisherId) {
             const usersApartments = await queryAllUsersApartments(parseInt(publisherId));
-            if (!usersApartments || usersApartments.length === 0) {
-                return res.status(404).json({ error: 'No apartments found for publisher with id:' + publisherId });
-            }
             return res.status(200).json(usersApartments);
         }
         // If no query parameter is provided, return all apartments
