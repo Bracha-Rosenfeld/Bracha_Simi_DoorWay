@@ -60,10 +60,10 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const address = req.body.address;
+        //const address = req.body.address;
         let latitude, longitude;
-        if (address) {
-            [latitude, longitude] = await getCoordinatesFromAddress(address);
+        if (req.body.address) {
+            [latitude, longitude] = await getCoordinatesFromAddress(req.body.address);
             if (isNaN(latitude) || isNaN(longitude)) {
                 return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
             }
@@ -76,7 +76,26 @@ exports.updateUser = async (req, res) => {
         if (!updatedUser || updatedUser.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
-        return res.status(200).json(updatedUser);
+        const token = jwt.sign(
+            {
+                id: updatedUser.id,
+                email: updatedUser.email,
+                username: updatedUser.username,
+                role_id: updatedUser.role_id,
+                phone: updatedUser.phone,
+                address: updatedUser.address,
+            },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'lax',
+        });
+        console.log("send back to front: ", { user: updatedUser, token });
+
+        return res.status(200).json({ user: updatedUser, token })
 
     } catch (error) {
         console.error('updateUser error:', error);
@@ -125,14 +144,19 @@ exports.manageLogout = (req, res) => {
 
 }
 // New endpoint to get current user from token
-exports.getCurrentUser = (req, res) => {
+exports.getCurrentUser = async (req, res) => {
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({ error: 'No token provided' });
     }
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        res.status(200).json(decoded);
+        const user = await queryUserById(decoded.id);
+        console.log("user!!!!!!", user);
+
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        res.status(200).json(Array.isArray(user) ? user[0] : user);
+        //res.status(200).json(decoded);
     } catch (err) {
         res.status(401).json({ error: 'Invalid token' });
     }
