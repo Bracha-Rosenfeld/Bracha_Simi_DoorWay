@@ -49,7 +49,7 @@ exports.createUser = async (req, res) => {
             return res.status(404).json({ error: 'User with username:' + user.username + ' cannot be created' });
         }
         // Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email, username: user.username, role_id: user.role_id }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
         res.status(200).json({ ...user, token });
     } catch (error) {
@@ -81,7 +81,6 @@ exports.updateUser = async (req, res) => {
                 id: updatedUser.id,
                 email: updatedUser.email,
                 username: updatedUser.username,
-                role_id: updatedUser.role_id,
                 phone: updatedUser.phone,
                 address: updatedUser.address,
             },
@@ -130,7 +129,7 @@ exports.manageLogin = async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         // Generate JWT token
-        const token = jwt.sign({ id: user.id, email: user.email, username: user.username, role_id: user.role_id }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
         res.status(200).json({ ...user, token });
     } catch (error) {
@@ -192,7 +191,6 @@ exports.googleAuth = async (req, res) => {
                 id: user.id,
                 email: user.email,
                 username: user.username,
-                role_id: user.role_id,
             },
             JWT_SECRET,
             { expiresIn: '7d' }
