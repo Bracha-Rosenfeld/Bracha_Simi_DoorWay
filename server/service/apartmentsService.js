@@ -1,7 +1,8 @@
 const path = require('path');
 const { deleteFile } = require('./uploadService'); // נניח שזה הנתיב הנכון
 const db = require('../../database/connections')
-const { deleteAllFavoritesByAptId } = require('../helpers/helpers')
+const { deleteAllFavoritesByAptId } = require('../helpers/helpers');
+const { log } = require('console');
 
 exports.queryAllApartments = async (is_approved, limit, offset) => {
     if (typeof is_approved !== 'undefined') {
@@ -13,7 +14,7 @@ exports.queryAllApartments = async (is_approved, limit, offset) => {
         }
     } else {
         try {
-            const [rows] = await db.query('SELECT * FROM apartments ORDER BY id DESC  LIMIT ? OFFSET ?',[limit, offset]);
+            const [rows] = await db.query('SELECT * FROM apartments ORDER BY id DESC  LIMIT ? OFFSET ?', [limit, offset]);
             return rows;
         } catch (err) {
             throw new Error('Error fetching all apartments: ' + err.message);
@@ -100,3 +101,36 @@ exports.deleteApartment = async (apartmentId) => {
         throw new Error('Error deleting apartment: ' + err.message);
     }
 };
+exports.deleteAllUsersApartments = async (userId) => {
+    try {
+        console.log('in deleteAllUsersApartments ');
+        const [apartmentsIds] = await db.query('SELECT id FROM apartments WHERE publisher_id = ?', [userId]);
+        console.log('apartmentsIds', apartmentsIds);
+        if (apartmentsIds && apartmentsIds.length > 0) {
+            for (const apartmentId of apartmentsIds) {
+                const isInCart = await deleteAllFavoritesByAptId(apartmentId.id);
+                console.log('isInCart', isInCart);
+            }
+        }
+        const [img_urls] = await db.query('SELECT image_url FROM apartments WHERE publisher_id = ?', [userId]);
+        if (img_urls.length === 0) {
+            for (const url of img_urls) {
+                console.log('url.image_url', url.image_url);
+                const relativePath = url.image_url.startsWith('/') ? url.image_url.slice(1) : url.image_url;
+                console.log('relativePath', relativePath);
+
+                const imagePath = path.resolve(__dirname, '..', relativePath);
+                console.log('imagePath', imagePath);
+                await deleteFile(imagePath);
+                console.log('imgae was deleted!');
+            }
+        }
+        console.log('deleting apartments!');
+        const result = await db.query('DELETE FROM apartments WHERE publisher_id = ?', [userId]);
+        console.log('result', result);
+        return result.affectedRows > 0;
+
+    } catch (err) {
+        throw new Error('Error deleting apartment: ' + err.message);
+    }
+}

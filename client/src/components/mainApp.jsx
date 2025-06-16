@@ -14,6 +14,7 @@ import UsersDetails from '../components/usersDetails';
 import UsersApartments from '../components/usersApartments';
 import UserDetails from '../components/userDetails/userDetails';
 import AdminHome from '../components/adminHome';
+import AllUsers from './allUsers';
 import NotFound from '../components/notFound';
 import Cart from './cart';
 import { useCurrentUser } from './userProvider';
@@ -57,13 +58,14 @@ const mainApp = () => {
     useEffect(() => {
         fetchCurrentUserRole();
     }, [])
-    
+
     return (
         <BrowserRouter>
             <Layout userRole={userRole}>
                 <Routes>
                     <Route path="/" element={userRole === 'admin' ? <Navigate to={'/adminHome'} /> : <Home />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/allusers" element={userRole === 'admin' ? <AllUsers  /> : <Navigate to={'/'} />} />
                     <Route path="/deals" element={<Deals />} />
                     <Route path="/login" element={userRole == null ? <Login /> : <Navigate to={'/myAccount'} />} />
                     <Route path="/register" element={userRole == null ? <Register /> : <Navigate to={'/'} />} />
@@ -72,7 +74,7 @@ const mainApp = () => {
                         <Route path="details" element={<UsersDetails />} />
                         <Route path="apartments" element={<UsersApartments />} />
                     </Route>
-                    <Route path="/apartments" element={(currentUser && currentUser.id !== -1) ? (userRole === 'viewer' || userRole =='admin') ? <Apartments /> : <Navigate to={'/subsciptionOptions'} /> : <Navigate to={'/login'} />} />
+                    <Route path="/apartments" element={(currentUser && currentUser.id !== -1) ? (userRole === 'viewer' || userRole == 'admin') ? <Apartments /> : <Navigate to={'/subsciptionOptions'} /> : <Navigate to={'/login'} />} />
                     <Route path="/publish" element={(currentUser == null || currentUser.id == -1) ? <Navigate to={'/login'} /> : <PublishApartment />} />
                     <Route path='/subsciptionOptions' element={<ShowSubscriptionOptions setUserRole={setUserRole} />} />
                     <Route path="/cart" element={userRole ? <Cart /> : <Navigate to={'/login'} />} />

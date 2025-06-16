@@ -1,6 +1,7 @@
 const db = require('../../database/connections')
 const { queryAllUserRoles, postUserRole, deleteAllUserRole } = require('./usersRolesService')
-
+const { deleteAllUsersApartments } = require('./apartmentsService')
+const { deleteAllFavorite } = require('./cartService')
 exports.queryAllUsers = async () => {
     try {
         const [rows] = await db.query('SELECT * FROM users');
@@ -12,7 +13,7 @@ exports.queryAllUsers = async () => {
 
 exports.queryUserById = async (id) => {
     try {
-        const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);      
+        const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
         return rows[0];
     } catch (err) {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
@@ -29,7 +30,7 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
             [result.insertId, password]
         );
         const roleResult = await postUserRole(result.insertId, roleName);
-        return { id: result.insertId, username: username, email: email};
+        return { id: result.insertId, username: username, email: email };
     } catch (err) {
         throw new Error('Error posting user: ' + err.message);
     }
@@ -48,19 +49,35 @@ exports.putUser = async (id, { username, email, phone, address }, latitude, long
 }
 exports.deleteUser = async (id) => {
     try {
+        console.log('in delete user!');
+        //check if the user us admin.
         const userRoles = await queryAllUserRoles(id);
         const role = userRoles[0];
         if (role && role === 'admin') {
             throw new Error('Cannot delete ' + role + ' user');
         }
+        //delete the user's password.
         const [res1] = await db.query('DELETE FROM passwords WHERE user_id = ?', [id]);
-        if (res1.affectedRows === 0) {
-            throw new Error('No password found for user with ID: ' + id);
-        }
+        // if (res1.affectedRows === 0) {
+        //     console.log('No password found for user with ID: ' + id);
+
+        //     throw new Error('No password found for user with ID: ' + id);
+        // }
+        //delete the user's roles.
         const rolesWereDeleted = await deleteAllUserRole(id);
-        if (!rolesWereDeleted) {
-            throw new Error('No roles found for user with ID: ' + id);
-        }
+        console.log('rolesWereDeleted', rolesWereDeleted);
+        
+        // if (!rolesWereDeleted) {
+        //     console.log('No roles found for user with ID: ' + id);
+        //     throw new Error('No roles found for user with ID: ' + id);
+        // }
+        //delet the user's cart.
+        const cartWasDeleted = await deleteAllFavorite(id);
+        console.log('cartWasDeleted', cartWasDeleted);
+        //delete the user's apartments
+        const apaertmentsWereDeleted = await deleteAllUsersApartments(id);
+        console.log('apaertmentsWereDeleted', apaertmentsWereDeleted);
+        //delete the user!
         const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
         return result.affectedRows > 0;
     } catch (err) {
