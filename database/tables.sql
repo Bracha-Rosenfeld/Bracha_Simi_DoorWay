@@ -62,12 +62,6 @@ CREATE TABLE IF NOT EXISTS carts (
   FOREIGN KEY (apartment_id) REFERENCES apartments(id)
 );
 
--- CREATE TABLE IF NOT EXISTS images(
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     apartment_id INT,
---     image_url VARCHAR(255),
---     FOREIGN KEY (apartment_id) REFERENCES apartments(id)
--- );
 
 INSERT INTO roles (role_name) VALUES ('admin'); 
 INSERT INTO roles (role_name) VALUES ('publisher');
@@ -99,6 +93,8 @@ SELECT * FROM user_roles;
 SELECT * FROM roles;
 SELECT * FROM passwords ;
 SELECT * FROM apartments;
+
+
 --  DROP TABLE passwords;
 --  DROP TABLE user_roles;
 -- DROP TABLE carts;

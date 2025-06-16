@@ -28,7 +28,8 @@ exports.createUserRole = async (req, res) => {
     try {
         const userId = req.params.userId;
         const roleName = req.body.role_name;
-        const userRole = await postUserRole(userId, roleName);
+        const expiryDate=req.body.expiry_date;
+        const userRole = await postUserRole(userId, roleName,expiryDate);
         if (!userRole || userRole.length === 0) {
             return res.status(404).json({ error: 'User role cannot be created' });
         }

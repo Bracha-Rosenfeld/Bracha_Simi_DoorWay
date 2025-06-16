@@ -16,40 +16,25 @@ const ExtendSubscription = () => {
     setShowPayment(true);
   };
 
-  // const addUserRole = async () => {
-  //   try {
-  //     const expiryDate = amountToPay === 70
-  //       ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-  //       : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-  //     const expiry_d = expiryDate.toISOString().split('T')[0];
-  //     const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ role_name: "viewer", expiry_date: expiry_d }),
-  //     });
-  //     if (!response.ok) throw new Error('Failed to extend viewer role');
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   const addUserRole = async () => {
     try {
-      const expiryDate = amountToPay === 70 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-      const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
-      const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`, {
-        method: 'POST',
+      // const expiryDate = amountToPay === 70 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+      // const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+      const numOfDays = amountToPay === 70 ? 30 : 60;
+      const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles/viewer`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          role_name: "viewer",
-          expiry_date: expiry_d,
+          num_of_days: numOfDays
+          // expiry_date: expiry_d,
         }),
       });
       if (!response.ok) {
         throw new Error('Failed to Extend viewer role');
       }
-      // Optionally handle success here
+    
     } catch (error) {
       console.error(error);
     }
