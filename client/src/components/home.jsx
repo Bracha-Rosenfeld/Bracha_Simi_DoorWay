@@ -1,21 +1,16 @@
 import { useCurrentUser } from './userProvider'
-import { Navigate, useNavigate, Link } from 'react-router-dom';
-import NavBar from './navBar/navBar';
-import React, { useState,useEffect } from 'react';
-import SubscriptionPayment from './SubscriptionPayment';
-import ViewApartments from './showSubscriptionOptions';
-import PublishApartments from './publishApartment';
+import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 
 const home = () => {
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser, isLoadingUser } = useCurrentUser();
-  const [showSubscriptionOptions, setShowSubscriptionOptions] = useState(false);
+  const { currentUser, isLoadingUser } = useCurrentUser();
   const [shouldCompleteProfile, setShouldCompleteProfile] = useState(false);
 
   useEffect(() => {
     if (!isLoadingUser && currentUser && currentUser.id !== -1) {
-      if (currentUser.address===null || currentUser.phone===null) {
+      if (currentUser.address === null || currentUser.phone === null) {
         setShouldCompleteProfile(true);
       } else {
         setShouldCompleteProfile(false);
@@ -25,29 +20,11 @@ const home = () => {
 
 
   const manageViewApartments = async () => {
-    if (isLoadingUser) return; // Wait for the user to load
-    if (currentUser && currentUser.id != -1) {
-      //console.log("currentUser:", currentUser.id);
-      const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`);
-      if (response.ok) {
-        const data = await response.json();
-        //console.log('data:', data);
-        if (data.find(role => role === "viewer")) {
-          navigate('/apartments');
-        }
-      }
-      setShowSubscriptionOptions(true);
-    }
-    else { navigate('/login') }
+    navigate('/apartments');
   }
 
   const managePublishApartments = async () => {
-    if (isLoadingUser) return; // Wait for the user to load
-    if (currentUser && currentUser.id != -1) {
-      navigate('/publish');
-    }
-    else
-      navigate('/login')
+    navigate('/publish');
   }
 
   return (
@@ -61,9 +38,6 @@ const home = () => {
       )}
       <button onClick={manageViewApartments}>View Apartments</button>
       <button onClick={managePublishApartments}>Publish Apartment</button>
-      {showSubscriptionOptions && (
-        <ViewApartments />
-      )}
     </>
   );
 };

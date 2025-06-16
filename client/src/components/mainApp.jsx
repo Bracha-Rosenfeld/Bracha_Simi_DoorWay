@@ -7,6 +7,7 @@ import Deals from '../components/deals';
 import Login from '../components/login/login';
 import Register from '../components/register/register';
 import Apartments from '../components/apartments';
+import ShowSubscriptionOptions from './showSubscriptionOptions'
 import PublishApartment from './publishApartment'
 import MyAccount from '../components/myAccount';
 import UsersDetails from '../components/usersDetails';
@@ -62,8 +63,9 @@ const mainApp = () => {
                         <Route path="details" element={<UsersDetails />} />
                         <Route path="apartments" element={<UsersApartments />} />
                     </Route>
-                    <Route path="/apartments" element={<Apartments />} />
-                    <Route path="/publish" element={<PublishApartment />} />
+                    <Route path="/apartments" element={userRole === 'viewer' ? <Apartments /> : <Navigate to={'/subsciptionOptions'} />} />
+                    <Route path="/publish" element={(currentUser == null || currentUser.id == -1) ? <Navigate to={'/login'} /> : <PublishApartment />} />
+                    <Route path='/subsciptionOptions' element={<ShowSubscriptionOptions />} />
                     <Route path="/cart" element={userRole ? <Cart /> : <Navigate to={'/login'} />} />
                     <Route path='/adminHome' element={userRole === 'admin' ? <AdminHome /> : <Navigate to={'/'} />} />
                     <Route path="*" element={<NotFound />} />
