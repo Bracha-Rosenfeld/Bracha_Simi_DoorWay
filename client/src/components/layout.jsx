@@ -2,12 +2,12 @@ import React from 'react'
 import NavBar from './navBar/navBar';
 import Contact from './contact';
 
-const layout = ({ children }) => {
+const layout = ({ userRole,children }) => {
     return (
         <>
-            <NavBar />
+            <NavBar userRole={userRole}/>
             <main>{children}</main>
-            <Contact/>
+            <Contact userRole={userRole}/>
         </>
     )
 }

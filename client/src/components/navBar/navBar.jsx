@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './NavBar.module.css';
 
-const NavBar = () => {
+const NavBar = ({ userRole }) => {
     return (
         <div className={styles.wrapper}>
             <nav className={styles.navbar}>
@@ -10,12 +10,12 @@ const NavBar = () => {
                     <Link to={'/'}><img src="/doorway_logo_custom.svg" alt="Doorway Logo" className="logo" /></Link>
                 </h2>
                 <ul className={styles.navList}>
+                    {userRole == 'admin' && <li className={styles.navItem}><Link to="/adminHome" className={styles.navLink}>Unopproved Apartments</Link></li>}
                     <li className={styles.navItem}><Link to="/about" className={styles.navLink}>About</Link></li>
-                    <li className={styles.navItem}><Link to="/deals" className={styles.navLink}>Deals</Link></li>
+                    <li className={styles.navItem}><Link to={userRole == 'admin' ? '/apartments' : '/deals'} className={styles.navLink}>{userRole == 'admin' ? 'Apartments' : 'Deals'}</Link></li>
                     <li className={styles.navItem}><a href="#contact" className={styles.navLink}>Contact</a></li>
                     <li className={styles.navItem}><Link to="/login" className={styles.navLink}>👤</Link></li>
                     <li className={styles.navItem}><Link to="/cart" className={styles.navLink}>🛒</Link></li>
-
                 </ul>
             </nav>
         </div>

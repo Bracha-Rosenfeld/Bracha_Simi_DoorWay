@@ -60,7 +60,7 @@ const mainApp = () => {
     
     return (
         <BrowserRouter>
-            <Layout>
+            <Layout userRole={userRole}>
                 <Routes>
                     <Route path="/" element={userRole === 'admin' ? <Navigate to={'/adminHome'} /> : <Home />} />
                     <Route path="/about" element={<About />} />
@@ -72,7 +72,7 @@ const mainApp = () => {
                         <Route path="details" element={<UsersDetails />} />
                         <Route path="apartments" element={<UsersApartments />} />
                     </Route>
-                    <Route path="/apartments" element={(currentUser && currentUser.id !== -1) ? userRole === 'viewer' ? <Apartments /> : <Navigate to={'/subsciptionOptions'} /> : <Navigate to={'/login'} />} />
+                    <Route path="/apartments" element={(currentUser && currentUser.id !== -1) ? (userRole === 'viewer' || userRole =='admin') ? <Apartments /> : <Navigate to={'/subsciptionOptions'} /> : <Navigate to={'/login'} />} />
                     <Route path="/publish" element={(currentUser == null || currentUser.id == -1) ? <Navigate to={'/login'} /> : <PublishApartment />} />
                     <Route path='/subsciptionOptions' element={<ShowSubscriptionOptions setUserRole={setUserRole} />} />
                     <Route path="/cart" element={userRole ? <Cart /> : <Navigate to={'/login'} />} />
