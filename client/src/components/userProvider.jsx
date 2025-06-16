@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
             .then(res => res.ok ? res.json() : Promise.reject())
             .then(user => setCurrentUser(user))
             .catch(() => setCurrentUser({
-                id: -1, username: '', email: '', phone: null, address: null
+                id: -1, username: '', email: '', phone: null || '', address: null||''
             }))
             .finally(() => setIsLoadingUser(false));
     }, []);
