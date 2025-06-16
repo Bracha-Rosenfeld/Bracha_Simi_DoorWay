@@ -12,9 +12,7 @@ exports.queryAllUsers = async () => {
 
 exports.queryUserById = async (id) => {
     try {
-        const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
-        console.log("queryUserById ",rows[0]);
-        
+        const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);      
         return rows[0];
     } catch (err) {
         throw new Error('Error fetching user with ID: ' + id + ' ' + err.message);
@@ -33,8 +31,6 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
         const roleResult = await postUserRole(result.insertId, roleName);
         return { id: result.insertId, username: username, email: email};
     } catch (err) {
-        console.log(err);
-
         throw new Error('Error posting user: ' + err.message);
     }
 }

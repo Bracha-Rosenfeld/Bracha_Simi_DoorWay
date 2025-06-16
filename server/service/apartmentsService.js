@@ -13,7 +13,6 @@ exports.queryAllApartments = async (is_approved, limit, offset) => {
         }
     } else {
         try {
-            console.log('Fetching all apartments');
             const [rows] = await db.query('SELECT * FROM apartments ORDER BY id DESC  LIMIT ? OFFSET ?',[limit, offset]);
             return rows;
         } catch (err) {
@@ -65,7 +64,6 @@ exports.postApartment = async (latitude, longitude, city, { publisher_id, addres
         return { id: result.insertId, publisher_id: publisher_id, title: title };
 
     } catch (err) {
-        console.log('Error posting apartment: ' + err.message);
         throw new Error('Error posting apartment: ' + err.message);
     }
 }

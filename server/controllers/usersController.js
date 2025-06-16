@@ -92,8 +92,6 @@ exports.updateUser = async (req, res) => {
             httpOnly: true,
             sameSite: 'lax',
         });
-        console.log("send back to front: ", { user: updatedUser, token });
-
         return res.status(200).json({ user: updatedUser, token })
 
     } catch (error) {
@@ -151,8 +149,6 @@ exports.getCurrentUser = async (req, res) => {
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         const user = await queryUserById(decoded.id);
-        console.log("user!!!!!!", user);
-
         if (!user) return res.status(404).json({ error: 'User not found' });
         res.status(200).json(Array.isArray(user) ? user[0] : user);
         //res.status(200).json(decoded);
