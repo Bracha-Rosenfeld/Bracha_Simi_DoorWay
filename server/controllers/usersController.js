@@ -108,8 +108,6 @@ exports.updateUser = async (req, res) => {
             httpOnly: true,
             sameSite: 'lax',
         });
-        console.log("send back to front: ", { user: updatedUser, token });
-
         return res.status(200).json({ user: updatedUser, token })
 
     } catch (error) {

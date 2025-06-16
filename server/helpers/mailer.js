@@ -10,36 +10,36 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.sendVerificationEmail = async (toEmail, token) => {
-  const mailOptions = {
-    from: process.env.APP_EMAIL,
-    to: toEmail,
-    subject: "Verify your email",
-    text: `Hello, please verify your email by clicking on the following link: http://localhost:5173/verify-email?token=${token}`,
-  };
+// exports.sendVerificationEmail = async (toEmail, token) => {
+//   const mailOptions = {
+//     from: process.env.APP_EMAIL,
+//     to: toEmail,
+//     subject: "Verify your email",
+//     text: `Hello, please verify your email by clicking on the following link: http://localhost:5173/verify-email?token=${token}`,
+//   };
 
-  try {
-    const result = await transporter.sendMail(mailOptions);
-    return result;
-  } catch (error) {
-    throw new Error("Failed to send verification email: " + error.message);
-  }
-}
-exports.sendResetPasswordEmail = async (toEmail, token) => {
-  const mailOptions = {
-    from: process.env.APP_EMAIL,
-    to: toEmail,
-    subject: "Reset your password",
-    text: `Hello, please reset your password by clicking on the following link: http://localhost:5173/reset-password?token=${token}`,
-  };
+//   try {
+//     const result = await transporter.sendMail(mailOptions);
+//     return result;
+//   } catch (error) {
+//     throw new Error("Failed to send verification email: " + error.message);
+//   }
+// }
+// exports.sendResetPasswordEmail = async (toEmail, token) => {
+//   const mailOptions = {
+//     from: process.env.APP_EMAIL,
+//     to: toEmail,
+//     subject: "Reset your password",
+//     text: `Hello, please reset your password by clicking on the following link: http://localhost:5173/reset-password?token=${token}`,
+//   };
 
-  try {
-    const result = await transporter.sendMail(mailOptions);
-    return result;
-  } catch (error) {
-    throw new Error("Failed to send reset password email: " + error.message);
-  }
-};
+//   try {
+//     const result = await transporter.sendMail(mailOptions);
+//     return result;
+//   } catch (error) {
+//     throw new Error("Failed to send reset password email: " + error.message);
+//   }
+// };
 exports.sendNewApartmentEmail = async (toEmail, username, apartmentTitle) => {
   const mailOptions = {
     from: process.env.APP_EMAIL,
@@ -99,11 +99,67 @@ The DoorWay Team
     throw new Error("Failed to send approval email: " + error.message);
   }
 };
+
+exports.sendSubsciptionEmail = async (toEmail, username, expiry_date) => {
+  const formattedDate = new Date(expiry_date).toLocaleDateString('en-GB').replace(/(\d{4})$/, d => d.slice(-2));
+  const mailOptions = {
+    from: process.env.APP_EMAIL,
+    to: toEmail,
+    subject: " Welcome to DoorWay – Your Subscription is Now Active!",
+    text: `Dear ${username},
+Welcome aboard!
+We're excited to let you know that your subscription has been successfully activated.
+
+You now have full access to browse, view, and explore all available apartment listings on our platform.
+
+Your subscription is valid until ${formattedDate}. We’ll remind you before it expires so you can continue enjoying uninterrupted access.
+
+If you have any questions or need help, feel free to reach out via your account page.
+
+Thank you for choosing DoorWay,
+– The DoorWay Team`,
+  };
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to send approval email: " + error.message);
+  }
+}
+exports.sendExtandSubsciptionEmail = async (toEmail, username, numOfDaysToAdd, expiry_date) => {
+  const formattedDate = new Date(expiry_date).toLocaleDateString('en-GB').replace(/(\d{4})$/, d => d.slice(-2));
+  const mailOptions = {
+    from: process.env.APP_EMAIL,
+    to: toEmail,
+    subject: "Your Subscription Has Been Extended!",
+    text: `Dear ${username},
+
+Good news! Your subscription has been successfully extended by ${numOfDaysToAdd} days.
+
+Your new expiry date is ${formattedDate}, giving you even more time to enjoy full access to our apartment listings and features.
+
+We’re glad to have you with us and hope you continue enjoying the service!
+
+Need anything? You can always manage your subscription from your account page.
+
+Best regards,
+The DoorWay Team
+
+`,
+  };
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to send approval email: " + error.message);
+  }
+}
+
 exports.sendExpiryEmail = async (toEmail, username, expiry_date) => {
   const mailOptions = {
     from: process.env.APP_EMAIL,
     to: toEmail,
-    subject: "Subscription Expired",
+    subject: "Your subscription to The Door Way has been expired!",
     text: `Dear ${username},
 
 We hope you enjoyed using our service!

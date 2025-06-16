@@ -33,7 +33,6 @@ exports.getCityFromCoordinates = async (latitude, longitude) => {
   const apiKey = process.env.API_KEY;
   //const url = `https://us1.locationiq.com/v1/reverse.php?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json`;
   const url = `https://us1.locationiq.com/v1/reverse.php?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&accept-language=en`;
-  // console.log("url", url);
 
   const response = await fetch(url);
   if (!response.ok) {
@@ -41,10 +40,6 @@ exports.getCityFromCoordinates = async (latitude, longitude) => {
   }
 
   const data = await response.json();
-  // console.log("data:", data);
-  // console.log("town:",data.address.town, "village:",data.address.village, "county:",data.address.county, "state:",data.address.state, "city:",data.address.city, "data.address:",data.address);
-  console.log("data:! ",data.address.city);
-
   if (!data.address || !data.address.city) {
     return (
       data.address.town ||
@@ -54,7 +49,5 @@ exports.getCityFromCoordinates = async (latitude, longitude) => {
       'Unknown'
     );
   }
-  console.log("data:",data.address.city);
-
   return data.address.city;
 };
