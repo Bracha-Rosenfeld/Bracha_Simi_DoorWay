@@ -16,24 +16,6 @@ export default function Register() {
   const KEY = CryptoJS.enc.Utf8.parse('1234567890123456');
   const IV = CryptoJS.enc.Utf8.parse('6543210987654321');
   const [error, setError] = useState(null);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
-
-  // Check if already logged in via cookie
-  useEffect(() => {
-    if (isLoadingUser) return;// Wait for the user to load
-
-    if (currentUser && currentUser.id !== -1) {
-      navigate('/');
-    }
-  }, [currentUser, isLoadingUser, navigate]);
-
-  useEffect(() => {
-    if (isFirstLoad) {
-      setCurrentUser({ id: -1, username: '', email: '' });
-      setIsFirstLoad(false);
-    }
-  }, [isFirstLoad, setCurrentUser]);
-
   const manageMassages = (message) => {
     setAlert(message);
   }

@@ -4,3 +4,6 @@
 
 # Node.js dependencies
 node_modules/
+
+#ignore the uploaded images
+server/uploads/

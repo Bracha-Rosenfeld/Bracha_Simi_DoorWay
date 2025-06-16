@@ -1,22 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useCurrentUser } from './userProvider';
-import { Navigate, useNavigate, Link, Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import LogoutButton from './logoutButton';
 
 const MyAccount = () => {
-    const navigate = useNavigate();
-    const { currentUser, isLoadingUser } = useCurrentUser();
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        if (isLoadingUser) return; // מחכה לטעינת המשתמש
-
-        if (!currentUser || currentUser.id === -1) {
-            setError('User not logged in');
-            navigate('/login');
-        }
-    }, [currentUser, isLoadingUser]);
-
     if (error) return <div>Error: {error}</div>;
 
     return (
