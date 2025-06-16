@@ -98,6 +98,7 @@ The DoorWay Team
 };
 
 exports.sendSubsciptionEmail = async (toEmail, username, expiry_date) => {
+  const formattedDate = new Date(expiry_date).toLocaleDateString('en-GB').replace(/(\d{4})$/, d => d.slice(-2));
   const mailOptions = {
     from: process.env.APP_EMAIL,
     to: toEmail,
@@ -108,7 +109,7 @@ We're excited to let you know that your subscription has been successfully activ
 
 You now have full access to browse, view, and explore all available apartment listings on our platform.
 
-Your subscription is valid until ${expiry_date}. We’ll remind you before it expires so you can continue enjoying uninterrupted access.
+Your subscription is valid until ${formattedDate}. We’ll remind you before it expires so you can continue enjoying uninterrupted access.
 
 If you have any questions or need help, feel free to reach out via your account page.
 
@@ -123,6 +124,7 @@ Thank you for choosing DoorWay,
   }
 }
 exports.sendExtandSubsciptionEmail = async (toEmail, username, numOfDaysToAdd, expiry_date) => {
+  const formattedDate = new Date(expiry_date).toLocaleDateString('en-GB').replace(/(\d{4})$/, d => d.slice(-2));
   const mailOptions = {
     from: process.env.APP_EMAIL,
     to: toEmail,
@@ -131,7 +133,7 @@ exports.sendExtandSubsciptionEmail = async (toEmail, username, numOfDaysToAdd, e
 
 Good news! Your subscription has been successfully extended by ${numOfDaysToAdd} days.
 
-Your new expiry date is ${expiry_date}, giving you even more time to enjoy full access to our apartment listings and features.
+Your new expiry date is ${formattedDate}, giving you even more time to enjoy full access to our apartment listings and features.
 
 We’re glad to have you with us and hope you continue enjoying the service!
 
