@@ -1,8 +1,85 @@
+// import { useNavigate } from 'react-router-dom';
+// import SubscriptionPayment from './SubscriptionPayment';
+// import PublishApartments from './publishApartment';
+// import { useCurrentUser } from './userProvider';
+// import React, { useState } from 'react';
+
+// const ExtendSubscription = () => {
+//   const [showPublishState, setPublishState] = useState(false);
+//   const [showPayment, setShowPayment] = useState(false);
+//   const [amountToPay, setAmountToPay] = useState(null);
+//   const { currentUser } = useCurrentUser();
+//   const navigate = useNavigate();
+
+//   const chooseExtend = (amount) => {
+//     setAmountToPay(amount);
+//     setShowPayment(true);
+//   };
+
+//   const addUserRole = async () => {
+//     try {
+//       // const expiryDate = amountToPay === 70 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+//       // const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+//       const numOfDays = amountToPay === 70 ? 30 : 60;
+//       const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles/viewer`, {
+//         method: 'PUT',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           num_of_days: numOfDays
+//           // expiry_date: expiry_d,
+//         }),
+//       });
+//       if (!response.ok) {
+//         throw new Error('Failed to Extend viewer role');
+//       }
+    
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   }
+//   return (
+//     <>
+//       <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
+//         <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
+//           <h3>Extend Monthly Plan</h3>
+//           <p>Extend viewer access for one month.</p>
+//           <p><strong>Price:</strong> $70</p>
+//           <button onClick={() => chooseExtend(70)}>Extend Monthly</button>
+//         </div>
+//         <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
+//           <h3>Extend Bi-Monthly Plan</h3>
+//           <p>Extend for two months at a discount.</p>
+//           <p><strong>Price:</strong> $120</p>
+//           <button onClick={() => chooseExtend(120)}>Extend Bi-Monthly</button>
+//         </div>
+//         {/* Payment Section */}
+//         {showPayment && (
+//           <SubscriptionPayment
+//             amount={amountToPay}
+//             onSuccess={() => {
+//               setShowPayment(false);
+//               addUserRole();
+//               navigate('/apartments');
+//             }}
+//             onCancel={() => setShowPayment(false)}
+//           />
+//         )}
+//       </div>
+//     </>
+//   );
+// };
+
+
+// export default ExtendSubscription
+
 import { useNavigate } from 'react-router-dom';
 import SubscriptionPayment from './SubscriptionPayment';
 import PublishApartments from './publishApartment';
 import { useCurrentUser } from './userProvider';
 import React, { useState } from 'react';
+import styles from './deals.module.css';
 
 const ExtendSubscription = () => {
   const [showPublishState, setPublishState] = useState(false);
@@ -18,8 +95,6 @@ const ExtendSubscription = () => {
 
   const addUserRole = async () => {
     try {
-      // const expiryDate = amountToPay === 70 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-      // const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
       const numOfDays = amountToPay === 70 ? 30 : 60;
       const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles/viewer`, {
         method: 'PUT',
@@ -28,48 +103,100 @@ const ExtendSubscription = () => {
         },
         body: JSON.stringify({
           num_of_days: numOfDays
-          // expiry_date: expiry_d,
         }),
       });
+      
       if (!response.ok) {
         throw new Error('Failed to Extend viewer role');
       }
-    
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
   return (
     <>
-      <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
-        <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
-          <h3>Extend Monthly Plan</h3>
-          <p>Extend viewer access for one month.</p>
-          <p><strong>Price:</strong> $70</p>
-          <button onClick={() => chooseExtend(70)}>Extend Monthly</button>
+      <div className={styles.sectionDivider}></div>
+      
+      <div className={styles.extendSection}>
+        <h2 className={styles.sectionTitle}>Extend Your Subscription</h2>
+        <p className={styles.sectionSubtitle}>
+          Already a member? Extend your current plan and save more
+        </p>
+        
+        <div className={styles.plansGrid}>
+          {/* Extend Monthly */}
+          <div className={styles.planCard}>
+            <div className={styles.planHeader}>
+              <h3 className={styles.planTitle}>Extend Monthly Plan</h3>
+              <p className={styles.planDescription}>
+                Extend your viewer access for one month at a special member rate
+              </p>
+            </div>
+            <div className={styles.planPrice}>
+              <span className={styles.priceAmount}>
+                <span className={styles.priceCurrency}>$</span>70
+              </span>
+              <span className={styles.pricePeriod}>/month</span>
+            </div>
+            <ul className={styles.planFeatures}>
+              <li>Member discount applied</li>
+              <li>Seamless continuation</li>
+              <li>No setup required</li>
+              <li>Instant activation</li>
+            </ul>
+            <button 
+              className={`${styles.planButton} ${styles.secondary}`} 
+              onClick={() => chooseExtend(70)}
+            >
+              Extend Monthly
+            </button>
+          </div>
+
+          {/* Extend Bi-Monthly */}
+          <div className={styles.planCard}>
+            <div className={styles.planHeader}>
+              <h3 className={styles.planTitle}>Extend Bi-Monthly Plan</h3>
+              <p className={styles.planDescription}>
+                Extend for two months at a member discount with continued premium access
+              </p>
+            </div>
+            <div className={styles.planPrice}>
+              <span className={styles.priceAmount}>
+                <span className={styles.priceCurrency}>$</span>120
+              </span>
+              <span className={styles.pricePeriod}>/2 months</span>
+            </div>
+            <ul className={styles.planFeatures}>
+              <li>Maximum member savings</li>
+              <li>Extended premium access</li>
+              <li>Priority renewal</li>
+              <li>Exclusive member benefits</li>
+            </ul>
+            <button 
+              className={`${styles.planButton} ${styles.primary}`} 
+              onClick={() => chooseExtend(120)}
+            >
+              Extend Bi-Monthly
+            </button>
+          </div>
         </div>
-        <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
-          <h3>Extend Bi-Monthly Plan</h3>
-          <p>Extend for two months at a discount.</p>
-          <p><strong>Price:</strong> $120</p>
-          <button onClick={() => chooseExtend(120)}>Extend Bi-Monthly</button>
-        </div>
-        {/* Payment Section */}
-        {showPayment && (
-          <SubscriptionPayment
-            amount={amountToPay}
-            onSuccess={() => {
-              setShowPayment(false);
-              addUserRole();
-              navigate('/apartments');
-            }}
-            onCancel={() => setShowPayment(false)}
-          />
-        )}
       </div>
+
+      {/* Payment Section */}
+      {showPayment && (
+        <SubscriptionPayment
+          amount={amountToPay}
+          onSuccess={() => {
+            setShowPayment(false);
+            addUserRole();
+            navigate('/apartments');
+          }}
+          onCancel={() => setShowPayment(false)}
+        />
+      )}
     </>
   );
 };
 
-
-export default ExtendSubscription
+export default ExtendSubscription;
