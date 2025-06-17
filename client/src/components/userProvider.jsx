@@ -1,4 +1,3 @@
-// userProvider.js
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 const UserContext = createContext();
