@@ -225,3 +225,28 @@ Thank you for your understanding,
   }
 }
 
+exports.sendApartmentRejectedEmail = async (toEmail, username, apartmentTitle, reason = '') => {
+  const mailOptions = {
+    from: process.env.APP_EMAIL,
+    to: toEmail,
+    subject: "Your apartment listing was rejected",
+    text: `Dear ${username},
+
+We regret to inform you that your apartment listing titled "${apartmentTitle}" was not approved and has been removed from our platform.
+
+If you believe this was a mistake or wish to resubmit your listing, please ensure it complies with our listing guidelines.
+
+Feel free to reach out to us at ${process.env.APP_EMAIL} with any questions.
+
+Best regards,  
+The DoorWay Team
+`,
+  };
+
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to send apartment rejected email: " + error.message);
+  }
+};

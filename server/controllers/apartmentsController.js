@@ -1,7 +1,7 @@
 const { queryAllApartments, queryAllUsersApartments, queryApartmentById, postApartment, putApartment, deleteApartment } = require('../service/apartmentsService');
 const { queryUserById } = require('../service/usersService');
 const { getCoordinatesFromAddress, getCityFromCoordinates } = require('../helpers/calculations');
-const { sendNewApartmentEmail, sendApprovalEmail, sendApartmentDeletedEmail } = require('../helpers/mailer');
+const { sendNewApartmentEmail, sendApprovalEmail, sendApartmentDeletedEmail, sendApartmentRejectedEmail } = require('../helpers/mailer');
 exports.getAllApartments = async (req, res) => {
     try {
         const isApproved = req.query.is_approved;
@@ -135,3 +135,30 @@ exports.removeApartment = async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 }
+
+exports.rejectApartment = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const apartment = await queryApartmentById(id);
+
+        if (!apartment) {
+            return res.status(404).json({ error: 'Apartment not found' });
+        }
+        const publisher = await queryUserById(apartment.publisher_id);
+
+        if (!publisher) {
+            return res.status(404).json({ error: 'Publisher not found' });
+        }
+
+        await sendApartmentRejectedEmail(publisher.email, publisher.username, apartment.title);
+        const deleted = await deleteApartment(id);
+        if (!deleted) {
+            throw new Error('Delete failed');
+        }
+        return res.status(200).json({ message: `Apartment ${id} rejected and deleted` });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error. ' + err.message });
+    }
+};

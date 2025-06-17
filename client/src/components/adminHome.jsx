@@ -47,7 +47,18 @@ const adminHome = () => {
             setError('Error approving apartment:', error);
         }
     };
-    
+    const rejectApartment = async (apt) => {
+        try {
+            await axios.delete(
+                `http://localhost:5000/apartments/${apt.id}/reject`,
+                { withCredentials: true } 
+            );
+            setApartments((prev) => prev.filter((a) => a.id !== apt.id));
+        } catch (err) {
+            setError('Error rejecting apartment: ' + err.message);
+        }
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             if (
@@ -75,6 +86,11 @@ const adminHome = () => {
                     <div key={apt.id} >
                         <ApartmentDetails apt={apt} />
                         <button onClick={() => approveApartment(apt)}>approve</button>
+                        <button onClick={() => rejectApartment(apt)}>
+                            {/* style={{ marginLeft: '0.5rem', background: '#cc0000', color: '#fff' }}> */}
+                            Reject
+                        </button>
+
                     </div>
                 ))
             )}
