@@ -6,7 +6,7 @@ import About from '../components/about/about';
 import Deals from '../components/deals';
 import Login from '../components/login/login';
 import Register from '../components/register/register';
-import Apartments from '../components/apartments';
+import Apartments from '../components/apartments/apartments';
 import ShowSubscriptionOptions from './showSubscriptionOptions'
 import PublishApartment from './publishApartment'
 import MyAccount from '../components/myAccount';

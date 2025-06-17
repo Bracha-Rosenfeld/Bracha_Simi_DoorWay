@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ApartmentDetails from './apartmentDetails';
+import ApartmentDetails from './apartments/apartmentDetails';
 import { useCurrentUser } from './userProvider';
 const adminHome = () => {
     const [apartments, setApartments] = useState([]);

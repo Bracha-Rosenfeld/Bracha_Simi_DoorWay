@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useCurrentUser } from './userProvider';
-import ApartmentDetails from './apartmentDetails';
+import ApartmentDetails from './apartments/apartmentDetails';
 import axios from 'axios';
 
 const Cart = () => {
