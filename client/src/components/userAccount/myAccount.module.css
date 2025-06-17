@@ -1033,7 +1033,7 @@
 
 .sidebar {
   width: 280px;
-  background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+  background: linear-gradient(180deg, #222 0%, #444 100%);
   padding: 0;
   position: sticky;
   top: 0;
@@ -1094,6 +1094,7 @@
   background: rgba(231, 76, 60, 0.1);
   border-left-color: #e74c3c;
   transform: translateX(5px);
+
 }
 
 .navButton.active {
@@ -1123,6 +1124,10 @@
 .navButton.active .navLink::before {
   transform: translateX(3px);
   opacity: 1;
+}
+
+.navButton:hover .navLink {
+  color: #c0392b;
 }
 
 .logoutButton {
@@ -1166,7 +1171,7 @@
 }
 
 .detailsTitle {
-  color: #2c3e50;
+  color: #222;
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 2rem;
@@ -1189,7 +1194,7 @@
 
 .fieldLabel {
   font-weight: 600;
-  color: #2c3e50;
+  color: #4e4e4e;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1199,12 +1204,13 @@
   padding: 1rem;
   background: #f8f9fa;
   border-radius: 8px;
-  color: #495057;
+  color: #5c5c5c;
   font-size: 1rem;
   border-left: 4px solid #e74c3c;
 }
 
 .fieldInput {
+  color: black;
   padding: 1rem;
   border: 2px solid #dee2e6;
   border-radius: 8px;
@@ -1245,7 +1251,7 @@
 }
 
 .primaryButton:disabled {
-  background: #95a5a6;
+  background: #9d9f9f;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -1254,8 +1260,8 @@
 .secondaryButton {
   padding: 0.75rem 2rem;
   background: transparent;
-  color: #6c757d;
-  border: 2px solid #6c757d;
+  color: #7e7e7e;
+  border: 2px solid #797979;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
@@ -1264,7 +1270,7 @@
 }
 
 .secondaryButton:hover {
-  background: #6c757d;
+  background: #7b7b7b;
   color: white;
   transform: translateY(-2px);
 }
@@ -1275,7 +1281,7 @@
 }
 
 .apartmentsTitle {
-  color: #2c3e50;
+  color: #4f4f4f;
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 2rem;
@@ -1309,7 +1315,7 @@
 .apartmentHeader {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #222;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #e9ecef;
@@ -1329,7 +1335,7 @@
 
 .apartmentLabel {
   font-weight: 600;
-  color: #495057;
+  color: #595a5b;
   min-width: 80px;
 }
 
@@ -1344,10 +1350,12 @@
 .apartmentInput {
   flex: 1;
   padding: 0.75rem;
-  border: 2px solid #dee2e6;
+  border: 2px solid #dedede;
   border-radius: 6px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  background: #fff;
+  color: #222;
 }
 
 .apartmentInput:focus {
@@ -1366,7 +1374,7 @@
 
 .editButton {
   padding: 0.5rem 1.5rem;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  background: linear-gradient(135deg, #989ea3 0%, #606060 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -1377,7 +1385,7 @@
 }
 
 .editButton:hover {
-  background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+  background: linear-gradient(135deg, #6c757d 0%, #343a40 100%);
   transform: translateY(-1px);
 }
 
@@ -1400,7 +1408,7 @@
 
 .saveButton {
   padding: 0.5rem 1.5rem;
-  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -1411,15 +1419,15 @@
 }
 
 .saveButton:hover {
-  background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
   transform: translateY(-1px);
 }
 
 .cancelButton {
   padding: 0.5rem 1.5rem;
   background: transparent;
-  color: #6c757d;
-  border: 1px solid #6c757d;
+  color: #7c7c7c;
+  border: 1px solid #7c7c7c;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
@@ -1428,13 +1436,13 @@
 }
 
 .cancelButton:hover {
-  background: #6c757d;
+  background: #7c7c7c;
   color: white;
 }
 
 .noApartments {
   text-align: center;
-  color: #6c757d;
+  color: #787878;
   font-size: 1.1rem;
   padding: 3rem;
   background: #f8f9fa;
@@ -1458,6 +1466,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1469,25 +1478,25 @@
   .accountContainer {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
     height: auto;
     position: relative;
   }
-  
+
   .mainContent {
     padding: 1rem;
   }
-  
+
   .contentCard {
     padding: 1.5rem;
   }
-  
+
   .actionButtons {
     flex-direction: column;
   }
-  
+
   .apartmentActions {
     flex-wrap: wrap;
   }

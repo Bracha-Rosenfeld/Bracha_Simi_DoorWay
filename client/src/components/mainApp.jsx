@@ -4,15 +4,15 @@ import Layout from './layout';
 import Home from '../components/home/home';
 import About from '../components/about/about';
 import Deals from '../components/deals/deals';
-import Login from '../components/login/login';
-import Register from '../components/register/register';
+import Login from './loginAndRegister/login';
+import Register from './loginAndRegister/register';
 import Apartments from '../components/apartments/apartments';
 import ShowSubscriptionOptions from './deals/showSubscriptionOptions'
 import PublishApartment from './publishApartment/publishApartment'
 import MyAccount from '../components/userAccount/myAccount';
 import UsersDetails from '../components/userAccount/usersDetails';
 import UsersApartments from '../components/userAccount/usersApartments';
-import UserDetails from '../components/userDetails/userDetails';
+import CompleteRegister from './loginAndRegister/completeRegister';
 import AdminHome from './adminHome/adminHome';
 import AllUsers from './allUsers/allUsers';
 import NotFound from '../components/notFound';
@@ -69,7 +69,7 @@ const mainApp = () => {
                     <Route path="/deals" element={<Deals />} />
                     <Route path="/login" element={userRole == null ? <Login /> : <Navigate to={'/myAccount'} />} />
                     <Route path="/register" element={userRole == null ? <Register /> : <Navigate to={'/'} />} />
-                    <Route path="/userDetails" element={currentUser == null ? <Navigate to={'/login'} /> : <UserDetails />} />
+                    <Route path="/completeRegister" element={currentUser == null ? <Navigate to={'/login'} /> : <CompleteRegister />} />
                     <Route path="/myAccount" element={userRole ? <MyAccount /> : <Navigate to={'/login'} />}>
                         <Route index element={<UsersDetails />} />
                         <Route path="details" element={<UsersDetails />} />

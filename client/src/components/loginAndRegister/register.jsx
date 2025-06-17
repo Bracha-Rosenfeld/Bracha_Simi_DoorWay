@@ -142,50 +142,46 @@
 //     </>
 //   )
 // }
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom'
+// 
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useCurrentUser } from '../userProvider';
 import CryptoJS from 'crypto-js';
-import styles from './register.module.css'
+import styles from './loginAndRegister.module.css';
 import { GoogleLogin } from '@react-oauth/google';
 
-// Sign Up Form
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVer, setPasswordVer] = useState('');
   const [alertDiv, setAlert] = useState('');
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser, isLoadingUser } = useCurrentUser();
+  const { setCurrentUser } = useCurrentUser();
+
   const KEY = CryptoJS.enc.Utf8.parse('1234567890123456');
   const IV = CryptoJS.enc.Utf8.parse('6543210987654321');
-  const [error, setError] = useState(null);
-  
+
   const manageMassages = (message) => {
     setAlert(message);
     setTimeout(() => setAlert(''), 5000);
-  }
+  };
 
   const validateEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
 
-  const getPasswordStrength = () => {
-    const requirements = [
-      { test: password.length >= 8, label: '8+ chars' },
-      { test: /[A-Z]/.test(password), label: 'Uppercase' },
-      { test: /[a-z]/.test(password), label: 'Lowercase' },
-      { test: /[0-9]/.test(password), label: 'Number' },
-      { test: /[!@#$%^&*(),.?":{}|<>]/.test(password), label: 'Special' }
-    ];
-    return requirements;
-  };
+  const getPasswordStrength = () => [
+    { label: 'At least 8 characters', test: password.length >= 8 },
+    { label: 'One uppercase letter', test: /[A-Z]/.test(password) },
+    { label: 'One lowercase letter', test: /[a-z]/.test(password) },
+    { label: 'One number', test: /[0-9]/.test(password) },
+    { label: 'One special character', test: /[!@#$%^&*(),.?":{}|<>]/.test(password) },
+  ];
 
-  const isPassStrong = () => {
-    return getPasswordStrength().every(req => req.test);
-  };
+  const isPassStrong = () => getPasswordStrength().every(req => req.test);
 
   const checkUserExists = async (email) => {
     try {
@@ -208,12 +204,10 @@ export default function Register() {
     }
   };
 
-  const verifyPassword = () => {
-    return (password === passwordVer);
-  }
+  const verifyPassword = () => password === passwordVer;
 
   const handleRegisterSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     checkUserExists(email).then((exists) => {
       if (exists) {
         manageMassages('User already exists');
@@ -230,26 +224,26 @@ export default function Register() {
                 }).toString(),
                 id: -1,
                 isRegisterd: false,
-              }
+              };
               setCurrentUser(currentUser);
               localStorage.removeItem('currentUser');
               navigate('/userDetails');
             } else {
-              manageMassages('Passwords do not match');
+              manageMassages('You have to use the same password. Please recheck!');
               setPasswordVer('');
             }
           } else {
-            manageMassages('Password must meet all requirements');
+            manageMassages('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
             setPassword('');
             setPasswordVer('');
           }
         } else {
-          manageMassages('Please enter a valid email address');
+          manageMassages('Email not valid!');
           setEmail('');
         }
       }
     });
-  }
+  };
 
   const handleGoogleSuccess = async ({ credential }) => {
     try {
@@ -264,17 +258,16 @@ export default function Register() {
       setCurrentUser({ id: user.id, username: user.username, email: user.email });
       navigate('/');
     } catch (e) {
-      manageMassages('Google registration failed');
+      setError(e.message);
     }
   };
 
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className={styles.registerForm}>
+    <div className={styles.authForm}>
       <div className={styles.container}>
         <h3 className={styles.title}>Create Account</h3>
-        
         <GoogleLogin
           width="100%"
           shape="rectangular"
@@ -284,34 +277,26 @@ export default function Register() {
           onSuccess={handleGoogleSuccess}
           onError={() => manageMassages('Google registration failed')}
         />
-
-        <div className={styles.divider} data-text="or continue with email"> </div>
-        
-        <div className={styles.steps}> <strong>1</strong> / 2 Steps </div>
-
-        <form onSubmit={handleRegisterSubmit}>
-          <input 
+        <div className={styles.divider} data-text="or continue with email"></div>
+        <div className={styles.steps}><strong>1</strong> / 2 Steps</div>
+        <form className={styles.form} onSubmit={handleRegisterSubmit}>
+          <input
             className={styles.input}
-            type="email" 
-            placeholder="Email address" 
+            type="email"
+            placeholder="Email address"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
-          
-          <input 
+          <input
             className={styles.input}
-            type="password" 
-            placeholder="Password" 
+            type="password"
+            placeholder="Password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setShowPasswordStrength(e.target.value.length > 0);
-            }}
+            onChange={(e) => { setPassword(e.target.value); setShowPasswordStrength(true); }}
             onFocus={() => setShowPasswordStrength(true)}
-            required 
+            required
           />
-
           {showPasswordStrength && password && (
             <div className={styles.passwordStrength}>
               <ul>
@@ -323,28 +308,22 @@ export default function Register() {
               </ul>
             </div>
           )}
-          
-          <input 
+          <input
             className={styles.input}
-            type="password" 
-            placeholder="Confirm password" 
+            type="password"
+            placeholder="Confirm password"
             value={passwordVer}
-            onChange={(e) => setPasswordVer(e.target.value)} 
-            required 
+            onChange={(e) => setPasswordVer(e.target.value)}
+            required
           />
-
-          <div className={styles.alert}>
-            {alertDiv}
-          </div>
-          
-          <button 
-            className={styles.button} 
+          <div className={styles.alert}>{alertDiv}</div>
+          <button
+            className={styles.button}
             type="submit"
             disabled={!email || !password || !passwordVer}
           >
             Create Account
           </button>
-          
           <div className={styles.linkContainer}>
             Already have an account?
             <Link className={styles.link} to="/login">Sign in</Link>
@@ -352,5 +331,5 @@ export default function Register() {
         </form>
       </div>
     </div>
-  )
+  );
 }
