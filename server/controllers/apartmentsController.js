@@ -107,6 +107,8 @@ exports.updateApartment = async (req, res) => {
         res.status(200).json('apartment' + id + ' updated');
 
     } catch (error) {
+        console.log(error);
+        
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 }
