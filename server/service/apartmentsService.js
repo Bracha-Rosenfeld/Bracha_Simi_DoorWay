@@ -61,14 +61,16 @@ exports.queryApartmentsByIds = async (ids) => {
         throw new Error('Error fetching apartments by IDs: ' + err.message);
     }
 }
+
 exports.queryApartmentById = async (id) => {
     try {
-        const [rows] = await db.query('SELECT * FROM apartments WHERE id = ?', [id]);
+        const [rows] = await db.query('SELECT a.*,u.phone AS owner_phone FROM apartments a JOIN users u ON a.publisher_id = u.id WHERE a.id = ?', [id]);
         return rows[0];
     } catch (err) {
         throw new Error('Error fetching apartment with ID: ' + id + ' ' + err.message);
     }
 }
+
 exports.postApartment = async (latitude, longitude, city, { publisher_id, address, price, type, title, num_of_rooms, area, floor_number, details, is_approved, image_url }) => {
 
     try {
