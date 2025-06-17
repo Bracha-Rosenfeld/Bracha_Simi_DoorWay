@@ -7,7 +7,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #dcdcdc 0%, #ffffffc2 50%, #ebebeb 100%);
 }
 
 .hero {
@@ -86,7 +86,8 @@
 .button {
   background: #ffffff;
   color: #374151;
-  border: 2px solid #e5e7eb;
+  border: 2px solid #fca5a5;
+  /* changed to light red */
   padding: 0.875rem 2rem;
   border-radius: 10px;
   font-size: 1rem;
@@ -110,7 +111,8 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
+  /* red tint */
   transition: left 0.5s;
 }
 
@@ -119,11 +121,11 @@
 }
 
 .button:hover {
-  background: #f8fafc;
-  border-color: #3b82f6;
-  color: #1f2937;
+  background: #fde8e8;
+  border-color: #ef4444;
+  color: #7f1d1d;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.15);
 }
 
 .button:active {
@@ -131,9 +133,9 @@
 }
 
 .buttonPrimary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+ background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); 
   color: #ffffff;
-  border-color: #3b82f6;
+  border-color: #ef4444;
 }
 
 .buttonPrimary::before {
@@ -141,10 +143,10 @@
 }
 
 .buttonPrimary:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  border-color: #2563eb;
+  background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+  border-color: #b91c1c;
   color: #ffffff;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
 }
 
 /* Responsive design */
@@ -152,17 +154,17 @@
   .container {
     padding: 1.5rem 1rem;
   }
-  
+
   .buttonGroup {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .button {
     width: 100%;
     max-width: 280px;
   }
-  
+
   .alert {
     margin: 1.5rem 0;
   }
@@ -172,11 +174,11 @@
   .hero {
     margin-bottom: 2rem;
   }
-  
+
   .title {
     margin-bottom: 0.75rem;
   }
-  
+
   .subtitle {
     margin-bottom: 1.5rem;
   }
