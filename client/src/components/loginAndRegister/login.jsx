@@ -188,32 +188,6 @@ export default function Login() {
     <div className={styles.authForm}>
       <div className={styles.container}>
         <h3 className={styles.title}>Welcome Back</h3>
-        <GoogleLogin
-          width="100%"
-          shape="rectangular"
-          theme="outline"
-          size="large"
-          text="signin_with"
-          onSuccess={cred => {
-            fetch('http://localhost:5000/users/google', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include',
-              body: JSON.stringify({ idToken: cred.credential })
-            })
-              .then(res => res.json())
-              .then(user => {
-                if (user && user.id) {
-                  setCurrentUser(user);
-                  navigate('/');
-                } else {
-                  manageMassages('Google login failed');
-                }
-              })
-              .catch(() => manageMassages('Google login failed'));
-          }}
-          onError={() => manageMassages('Google login failed')}
-        />
         <div className={styles.divider} data-text="or continue with email"></div>
         <form onSubmit={handleLoginSubmit} className={styles.form}>
           <input
@@ -234,6 +208,32 @@ export default function Login() {
           />
           <div className={styles.alert}>{alertDiv}</div>
           <button type="submit" className={styles.button}>Sign In</button>
+          <GoogleLogin
+            width="100%"
+            shape="rectangular"
+            theme="outline"
+            size="large"
+            text="signin_with"
+            onSuccess={cred => {
+              fetch('http://localhost:5000/users/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ idToken: cred.credential })
+              })
+                .then(res => res.json())
+                .then(user => {
+                  if (user && user.id) {
+                    setCurrentUser(user);
+                    navigate('/');
+                  } else {
+                    manageMassages('Google login failed');
+                  }
+                })
+                .catch(() => manageMassages('Google login failed'));
+            }}
+            onError={() => manageMassages('Google login failed')}
+          />
           <div className={styles.linkContainer}>
             Don't have an account?
             <Link to="/register" className={styles.link}>Sign up</Link>

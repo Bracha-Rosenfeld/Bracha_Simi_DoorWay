@@ -268,15 +268,6 @@ export default function Register() {
     <div className={styles.authForm}>
       <div className={styles.container}>
         <h3 className={styles.title}>Create Account</h3>
-        <GoogleLogin
-          width="100%"
-          shape="rectangular"
-          theme="outline"
-          size="large"
-          text="signup_with"
-          onSuccess={handleGoogleSuccess}
-          onError={() => manageMassages('Google registration failed')}
-        />
         <div className={styles.divider} data-text="or continue with email"></div>
         <div className={styles.steps}><strong>1</strong> / 2 Steps</div>
         <form className={styles.form} onSubmit={handleRegisterSubmit}>
@@ -324,6 +315,17 @@ export default function Register() {
           >
             Create Account
           </button>
+          <div className="google-button-container">
+            <GoogleLogin
+              width="100%"
+              shape="rectangular"
+              theme="outline"
+              size="large"
+              text="signup_with"
+              onSuccess={handleGoogleSuccess}
+              onError={() => manageMassages('Google registration failed')}
+            />
+          </div>
           <div className={styles.linkContainer}>
             Already have an account?
             <Link className={styles.link} to="/login">Sign in</Link>
