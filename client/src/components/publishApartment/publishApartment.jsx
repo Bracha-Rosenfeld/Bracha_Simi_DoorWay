@@ -125,7 +125,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCurrentUser } from '../components/userProvider'
+import { useCurrentUser } from '../userProvider'
 import axios from 'axios';
 import styles from './PublishApartment.module.css';
 

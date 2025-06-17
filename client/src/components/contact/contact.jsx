@@ -96,7 +96,7 @@
 
 
 import React, { useState } from 'react';
-import TawkTo from './tawkTo';
+import TawkTo from '../tawkTo';
 import styles from './Contact.module.css';
 
 const Contact = ({ userRole }) => {

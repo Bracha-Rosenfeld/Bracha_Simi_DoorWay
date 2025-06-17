@@ -76,7 +76,7 @@
 
 import { useNavigate } from 'react-router-dom';
 import SubscriptionPayment from './SubscriptionPayment';
-import PublishApartments from '../publishApartment';
+// import PublishApartments from '../publishApartment/publishApartment';
 import { useCurrentUser } from '../userProvider';
 import React, { useState } from 'react';
 import styles from './deals.module.css';

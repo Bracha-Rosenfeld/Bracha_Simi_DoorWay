@@ -103,8 +103,8 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ApartmentDetails from './apartments/apartmentDetails';
-import { useCurrentUser } from './userProvider';
+import ApartmentDetails from '../apartments/apartmentDetails';
+import { useCurrentUser } from '../userProvider';
 import styles from './AdminHome.module.css';
 
 const AdminHome = () => {

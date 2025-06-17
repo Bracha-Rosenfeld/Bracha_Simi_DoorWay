@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './layout';
-import Home from '../components/home';
+import Home from '../components/home/home';
 import About from '../components/about/about';
 import Deals from '../components/deals/deals';
 import Login from '../components/login/login';
 import Register from '../components/register/register';
 import Apartments from '../components/apartments/apartments';
 import ShowSubscriptionOptions from './deals/showSubscriptionOptions'
-import PublishApartment from './publishApartment'
+import PublishApartment from './publishApartment/publishApartment'
 import MyAccount from '../components/userAccount/myAccount';
 import UsersDetails from '../components/userAccount/usersDetails';
 import UsersApartments from '../components/userAccount/usersApartments';
 import UserDetails from '../components/userDetails/userDetails';
-import AdminHome from '../components/adminHome';
-import AllUsers from './allUsers';
+import AdminHome from './adminHome/adminHome';
+import AllUsers from './allUsers/allUsers';
 import NotFound from '../components/notFound';
-import Cart from './cart';
+import Cart from './apartments/cart';
 import { useCurrentUser } from './userProvider';
 import axios from 'axios';
 
