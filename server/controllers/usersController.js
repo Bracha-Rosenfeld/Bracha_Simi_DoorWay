@@ -2,6 +2,7 @@ const { queryAllUsers, queryUserByEmail, queryUserById, postUser, queryUserPassw
 const { getCoordinatesFromAddress } = require('../helpers/calculations');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
+const { sendUserWasBlockedEmail } = require('../helpers/mailer')
 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'Bracha_and_Simi_The_Doorway100%';

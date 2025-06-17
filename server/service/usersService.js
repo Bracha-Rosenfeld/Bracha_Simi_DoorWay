@@ -49,7 +49,6 @@ exports.putUser = async (id, { username, email, phone, address }, latitude, long
 }
 exports.deleteUser = async (id) => {
     try {
-        console.log('in delete user!');
         //check if the user us admin.
         const userRoles = await queryAllUserRoles(id);
         const role = userRoles[0];
@@ -60,17 +59,14 @@ exports.deleteUser = async (id) => {
         const [res1] = await db.query('DELETE FROM passwords WHERE user_id = ?', [id]);
         //delete the user's roles.
         const rolesWereDeleted = await deleteAllUserRole(id);
-        console.log('rolesWereDeleted', rolesWereDeleted);
         //delet the user's cart.
         const cartWasDeleted = await deleteAllFavorite(id);
-        console.log('cartWasDeleted', cartWasDeleted);
         //delete the user's apartments
         const apaertmentsWereDeleted = await deleteAllUsersApartments(id);
-        console.log('apaertmentsWereDeleted', apaertmentsWereDeleted);
         //delete the user!
-        const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
+        const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);      
         return result.affectedRows > 0;
-    } catch (err) {
+    } catch (err) {      
         throw new Error('Error deleting user: ' + err.message);
     }
 }

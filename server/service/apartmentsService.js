@@ -2,9 +2,9 @@ const path = require('path');
 const { deleteFile } = require('./uploadService'); // נניח שזה הנתיב הנכון
 const db = require('../../database/connections')
 const { deleteAllFavoritesByAptId } = require('../helpers/helpers');
-const { log } = require('console');
+const { error } = require('console');
 
-exports.queryAllApartments = async (is_approved, limit, offset) => {
+exports.queryAllApartments = async (is_approved, limit = 10, offset = 0) => {
     const baseQuery = `
         SELECT a.*, u.phone AS owner_phone
         FROM apartments a
@@ -51,11 +51,11 @@ exports.queryApartmentsByIds = async (ids) => {
     const placeholders = ids.map(() => '?').join(', ');
     try {
         const [rows] = await db.query(
-          `SELECT a.*, u.phone AS owner_phone
+            `SELECT a.*, u.phone AS owner_phone
            FROM apartments a
            JOIN users u ON a.publisher_id = u.id
            WHERE a.id IN (${placeholders})`,
-          ids
+            ids
         );
         return rows;
     } catch (err) {
