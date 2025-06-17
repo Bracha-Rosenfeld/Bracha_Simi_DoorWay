@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 
 const UserContext = createContext();
 
@@ -7,16 +8,26 @@ export const UserProvider = ({ children }) => {
     const [isLoadingUser, setIsLoadingUser] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/users/currentUser', {
-            method: 'GET',
-            credentials: 'include',
+
+        axios.get('http://localhost:5000/users/currentUser', {
+            withCredentials: true
         })
-            .then(res => res.ok ? res.json() : Promise.reject())
-            .then(user => setCurrentUser(user))
-            .catch(() => setCurrentUser({
-                id: -1, username: '', email: '', phone: null || '', address: null||''
-            }))
-            .finally(() => setIsLoadingUser(false));
+            .then(res => {
+                setCurrentUser(res.data);
+            })
+            .catch(() => {
+                setCurrentUser({
+                    id: -1,
+                    username: '',
+                    email: '',
+                    phone: null || '',
+                    address: null || ''
+                });
+            })
+            .finally(() => {
+                setIsLoadingUser(false);
+            });
+
     }, []);
 
     return (

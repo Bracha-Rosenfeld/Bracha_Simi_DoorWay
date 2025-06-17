@@ -45,17 +45,13 @@ const CompleteRegister = () => {
       role_name: 'publisher'
     };
     try {
-      const response = await fetch('http://localhost:5000/users', {
-        method: 'POST',
+      const response = await axios.post('http://localhost:5000/users', newUser, {
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'include',
-        body: JSON.stringify(newUser)
+        withCredentials: true
       });
-      if (!response.ok)
-        throw new Error(`Error: ${response.status}`);
-      const data = await response.json();
+      const data = response.data;
       setCurrentUser({ id: data.id, username: data.username, email: data.email, phone: data.phone, address: data.address });
       navigate('/myAccount');
     } catch (err) {

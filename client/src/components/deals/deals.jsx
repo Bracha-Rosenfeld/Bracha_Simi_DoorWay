@@ -4,6 +4,7 @@ import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useCurrentUser } from '../userProvider';
 import ExtendSubscription from './ExtendSubscription';
 import styles from './deals.module.css';
+import axios from 'axios';
 
 const Deals = () => {
   const { currentUser, setCurrentUser, isLoadingUser } = useCurrentUser();
@@ -13,14 +14,13 @@ const Deals = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       if (currentUser && currentUser.id && currentUser.id !== -1) {
+
         try {
-          const res = await fetch(`http://localhost:5000/users/roles`,
-            { withCredentials: true }
-          );
-          if (res.ok) {
-            const roles = await res.json();
-            setUserRoles(roles);
-          }
+          const res = await axios.get('http://localhost:5000/users/roles', {
+            withCredentials: true
+          });
+          const roles = res.data;
+          setUserRoles(roles);
         } catch (err) {
           console.error('Failed to fetch user roles:', err);
         }
@@ -28,8 +28,6 @@ const Deals = () => {
     };
     fetchRoles();
   }, [currentUser]);
-
-  const isViewer = userRoles.includes('viewer');
 
   const choosePublish = () => {
     navigate('/publish');
@@ -65,7 +63,7 @@ const Deals = () => {
             Choose to Publish
           </button>
         </div>
-        {isViewer ? <ExtendSubscription /> : <ShowSubscriptionOptions />}
+        {userRoles.includes('viewer') ? <ExtendSubscription /> : <ShowSubscriptionOptions />}
       </div>
     </div>
   );

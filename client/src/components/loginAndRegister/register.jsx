@@ -4,7 +4,7 @@ import { useCurrentUser } from '../userProvider';
 import CryptoJS from 'crypto-js';
 import styles from './loginAndRegister.module.css';
 import { GoogleLogin } from '@react-oauth/google';
-
+import axios from 'axios';
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,19 +40,26 @@ export default function Register() {
 
   const checkUserExists = async (email) => {
     try {
-      const response = await fetch('http://localhost:5000/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await axios.post(
+        'http://localhost:5000/users/login',
+        {
+          email: email,
+          password: password
         },
-        credentials: 'include',
-        body: JSON.stringify({ "email": email, "password": password })
-      });
-      const res = await response.json();
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
+      );
+
+      const res = response.data;
       if (res.user)
         return true;
       else
         return false;
+
     } catch (err) {
       setError(err.message);
       return false;
@@ -102,16 +109,19 @@ export default function Register() {
 
   const handleGoogleSuccess = async ({ credential }) => {
     try {
-      const res = await fetch('http://localhost:5000/users/google', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ idToken: credential })
-      });
-      if (!res.ok) throw new Error('Google signup failed');
-      const user = await res.json();
+      const response = await axios.post(
+        'http://localhost:5000/users/google',
+        { idToken: credential },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
+
+      const user = response.data;
       setCurrentUser({ id: user.id, username: user.username, email: user.email });
       navigate('/');
+
     } catch (e) {
       setError(e.message);
     }

@@ -1,11 +1,13 @@
+require('axios');
 exports.getCoordinatesFromAddress = async (address) => {
   const apiKey = process.env.API_KEY;
   const url = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${encodeURIComponent(address)}&format=json`;
-
-  const response = await fetch(url);
-    if (!response.ok) {    
+  try {
+    const response = await axios.get(url);
+  } catch (error) {
     throw new Error("Invalid address or API error. " + address);
   }
+
 
   const data = await response.json();
 
@@ -33,10 +35,12 @@ exports.getCityFromCoordinates = async (latitude, longitude) => {
   const apiKey = process.env.API_KEY;
   const url = `https://us1.locationiq.com/v1/reverse.php?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&accept-language=en`;
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Reverse geocoding API error.");
+  try {
+    const response = await axios.get(url);
+  } catch (error) {
+    throw new Error("Reverse geocoding API error. " + address);
   }
+
 
   const data = await response.json();
   if (!data.address || !data.address.city) {

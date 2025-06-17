@@ -4,7 +4,7 @@ import { useCurrentUser } from '../userProvider';
 import { useNavigate, Link } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import { GoogleLogin } from '@react-oauth/google';
-
+import axios from 'axios';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,28 +29,35 @@ export default function Login() {
         padding: CryptoJS.pad.Pkcs7,
       }).toString();
 
-      const response = await fetch('http://localhost:5000/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await axios.post(
+        'http://localhost:5000/users/login',
+        {
+          email: email,
+          password: encryptedPassword
         },
-        credentials: 'include',
-        body: JSON.stringify({ "email": email, "password": encryptedPassword })
-      });
-      if (!response.ok) {
-        setAlert('User does not exist! Try to register!');
-        return { ok: false, user: null };
-      }
-      const user = await response.json();
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
+      );
+
+      const user = response.data;
       if (user)
         return { ok: true, user: user };
       else
         return { ok: false, user: null };
+
     } catch (err) {
-      setError(err.message);
+      if (err.response?.status === 401) {
+        setAlert('User does not exist! Try to register!');
+      } else {
+        setError(err.message);
+      }
       return { ok: false, user: null };
     }
-  };
+  }
 
   const handleLoginSubmit = (event) => {
     event.preventDefault();
@@ -96,23 +103,26 @@ export default function Login() {
             theme="outline"
             size="large"
             text="signin_with"
-            onSuccess={cred => {
-              fetch('http://localhost:5000/users/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ idToken: cred.credential })
-              })
-                .then(res => res.json())
-                .then(user => {
-                  if (user && user.id) {
-                    setCurrentUser(user);
-                    navigate('/');
-                  } else {
-                    manageMassages('Google login failed');
+            onSuccess={async cred => {
+              try {
+                const response = await axios.post(
+                  'http://localhost:5000/users/google',
+                  { idToken: cred.credential },
+                  {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
                   }
-                })
-                .catch(() => manageMassages('Google login failed'));
+                );
+                const user = response.data;
+                if (user && user.id) {
+                  setCurrentUser(user);
+                  navigate('/');
+                } else {
+                  manageMassages('Google login failed');
+                }
+              } catch (error) {
+                manageMassages('Google login failed');
+              }
             }}
             onError={() => manageMassages('Google login failed')}
           />

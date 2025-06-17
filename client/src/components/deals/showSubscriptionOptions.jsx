@@ -1,4 +1,4 @@
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import SubscriptionPayment from './SubscriptionPayment';
 import styles from './deals.module.css';
@@ -32,7 +32,7 @@ const showSubscriptionOptions = ({ setUserRole }) => {
           headers: {
             'Content-Type': 'application/json'
           },
-          withCredentials: true 
+          withCredentials: true
         }
       );
 
@@ -104,16 +104,27 @@ const showSubscriptionOptions = ({ setUserRole }) => {
       </div>
 
       {showPayment && (
-        <SubscriptionPayment
-          amount={amountToPay}
-          onSuccess={async () => {
-            setShowPayment(false);
-            addUserRole();
-            setUserRole('viewer');
-            navigate('/apartments');
-          }}
-          onCancel={() => setShowPayment(false)}
-        />
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <button
+              className={styles.closeBtn}
+              onClick={() => setShowPayment(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <SubscriptionPayment
+              amount={amountToPay}
+              onSuccess={async () => {
+                setShowPayment(false);
+                addUserRole();
+                setUserRole('viewer');
+                navigate('/apartments');
+              }}
+              onCancel={() => setShowPayment(false)}
+            />
+          </div>
+        </div>
       )}
     </>
   );

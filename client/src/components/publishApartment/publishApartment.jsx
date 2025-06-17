@@ -59,13 +59,18 @@ export default function PublishApartment() {
       } else {
         newApartment = formData;
       }
-      const res = await fetch('http://localhost:5000/apartments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(newApartment)
-      });
-      if (!res.ok) throw new Error('Failed to add apartment');
+      try {
+        const response = await axios.post(
+          'http://localhost:5000/apartments',
+          newApartment,
+          {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+          }
+        );
+      } catch (error) {
+        throw new Error('Failed to add apartment');
+      }
       setWasAdded(true);
       setImageFile(null);
       setFormData({
@@ -80,7 +85,7 @@ export default function PublishApartment() {
         is_approved: false,
         image_url: ''
       });
-    setWasAdded(true);
+      setWasAdded(true);
     } catch (error) {
       setError('An error occurred while adding the apartment: ' + error.message);
     }
@@ -119,13 +124,13 @@ export default function PublishApartment() {
       </div>
 
       {error && <div className={styles.error}>⚠️ {error}</div>}
-      
+
       <div className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label className={styles.label}>Property Title</label>
-            <input 
-              name="title" 
+            <input
+              name="title"
               placeholder="e.g., Spacious 2BR Downtown Apartment"
               onChange={handleChange}
               value={formData.title}
@@ -136,8 +141,8 @@ export default function PublishApartment() {
 
           <div className={styles.inputGroup}>
             <label className={styles.label}>Address</label>
-            <input 
-              name="address" 
+            <input
+              name="address"
               placeholder="Full property address"
               onChange={handleChange}
               value={formData.address}
@@ -149,8 +154,8 @@ export default function PublishApartment() {
           <div className={styles.twoColumn}>
             <div className={styles.inputGroup}>
               <label className={styles.label}>Price</label>
-              <input 
-                name="price" 
+              <input
+                name="price"
                 placeholder="Monthly rent or sale price"
                 onChange={handleChange}
                 value={formData.price}
@@ -162,9 +167,9 @@ export default function PublishApartment() {
 
             <div className={styles.inputGroup}>
               <label className={styles.label}>Listing Type</label>
-              <select 
-                name="type" 
-                value={formData.type} 
+              <select
+                name="type"
+                value={formData.type}
                 onChange={handleChange}
                 className={styles.select}
               >
@@ -177,8 +182,8 @@ export default function PublishApartment() {
           <div className={styles.twoColumn}>
             <div className={styles.inputGroup}>
               <label className={styles.label}>Number of Rooms</label>
-              <input 
-                name="num_of_rooms" 
+              <input
+                name="num_of_rooms"
                 placeholder="e.g., 3"
                 onChange={handleChange}
                 value={formData.num_of_rooms}
@@ -191,8 +196,8 @@ export default function PublishApartment() {
 
             <div className={styles.inputGroup}>
               <label className={styles.label}>Area (sq ft)</label>
-              <input 
-                name="area" 
+              <input
+                name="area"
                 placeholder="e.g., 850"
                 onChange={handleChange}
                 value={formData.area}
@@ -206,8 +211,8 @@ export default function PublishApartment() {
 
           <div className={styles.inputGroup}>
             <label className={styles.label}>Floor Number</label>
-            <input 
-              name="floor_number" 
+            <input
+              name="floor_number"
               placeholder="e.g., 3rd floor"
               onChange={handleChange}
               value={formData.floor_number}
@@ -218,8 +223,8 @@ export default function PublishApartment() {
 
           <div className={styles.inputGroup}>
             <label className={styles.label}>Property Details</label>
-            <textarea 
-              name="details" 
+            <textarea
+              name="details"
               placeholder="Describe your property features, amenities, nearby attractions..."
               onChange={handleChange}
               value={formData.details}
@@ -231,9 +236,9 @@ export default function PublishApartment() {
           <div className={styles.inputGroup}>
             <label className={styles.label}>Property Image</label>
             <div className={styles.fileInput}>
-              <input 
-                type="file" 
-                onChange={handleFileChange} 
+              <input
+                type="file"
+                onChange={handleFileChange}
                 accept="image/*"
               />
               <div className={styles.fileInputText}>
