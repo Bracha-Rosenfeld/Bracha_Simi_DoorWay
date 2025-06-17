@@ -1,4 +1,4 @@
-const { queryAllUsers, queryUserByEmail, queryUserById, postUser, queryUserPassword, putUser, deleteUser, queryUserRoleName, queryUserRoleId } = require('../service/usersService');
+const { queryAllUsers, queryUserByEmail, queryUserById, postUser, queryUserPassword, putUser, deleteUser } = require('../service/usersService');
 const { getCoordinatesFromAddress } = require('../helpers/calculations');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
@@ -51,7 +51,6 @@ exports.createUser = async (req, res) => {
         }
         const fullUser = await queryUserById(user.id);
 
-        // Generate JWT token
         const token = jwt.sign(
             {
                 id: fullUser.id,
@@ -66,9 +65,6 @@ exports.createUser = async (req, res) => {
 
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
         return res.status(200).json({ ...fullUser, token });
-        //const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
-        //res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
-        //res.status(200).json({ ...user, token });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message + req.body });
     }
@@ -76,8 +72,7 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const id = req.params.id;
-        //const address = req.body.address;
+        const id = req.user.id;
         let latitude, longitude;
         if (req.body.address) {
             [latitude, longitude] = await getCoordinatesFromAddress(req.body.address);
@@ -113,9 +108,7 @@ exports.updateUser = async (req, res) => {
 
     } catch (error) {
         console.error('updateUser error:', error);
-        return res
-            .status(500)
-            .json({ error: 'Internal server error. ' + error.message });
+        return res.status(500).json({ error: 'Internal server error. ' + error.message });
     }
 };
 
@@ -127,7 +120,6 @@ exports.removeUser = async (req, res) => {
         if (!isDelete) {
             return res.status(404).json({ error: 'User with id:' + id + ' not found' });
         }
-        // Send approval email
         const emailSent = await sendUserWasBlockedEmail(user.email, user.username);
         if (!emailSent) {
             console.log('Failed to send approval email');
@@ -152,7 +144,6 @@ exports.manageLogin = async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         const fullUser = await queryUserById(user.id);
-        // Generate JWT token
         const token = jwt.sign(
             {
                 id: fullUser.id,
@@ -167,9 +158,6 @@ exports.manageLogin = async (req, res) => {
 
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
         return res.status(200).json({ ...fullUser, token });
-        // const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
-        // res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
-        // res.status(200).json({ ...user, token });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
@@ -180,7 +168,7 @@ exports.manageLogout = (req, res) => {
     res.status(200).json({ message: 'Logged out' });
 
 }
-// New endpoint to get current user from token
+
 exports.getCurrentUser = async (req, res) => {
     const token = req.cookies.token;
     if (!token) {
@@ -208,14 +196,13 @@ exports.googleAuth = async (req, res) => {
         let user = await queryUserByEmail(payload.email);
 
         if (!user) {
-            //const roleId = await queryUserRoleId('publisher');
             user = await postUser(
                 {
                     username: payload.name,
                     email: payload.email,
                     phone: null,
                     address: null,
-                    password: null,     // סיסמה ריקה – משתמש Google
+                    password: null,
                 },
                 null, null, 'publisher'
             );
@@ -236,18 +223,7 @@ exports.googleAuth = async (req, res) => {
 
         res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
         return res.status(200).json({ ...fullUser, token });
-        // const token = jwt.sign(
-        //     {
-        //         id: user.id,
-        //         email: user.email,
-        //         username: user.username,
-        //     },
-        //     JWT_SECRET,
-        //     { expiresIn: '7d' }
-        // );
 
-        // res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
-        // res.status(200).json({ ...user, token });
 
     } catch (err) {
         console.error('googleAuth error:', err);

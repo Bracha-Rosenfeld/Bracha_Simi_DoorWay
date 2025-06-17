@@ -28,11 +28,10 @@ async function notifyAndDeleteExpiredRoles() {
             const formattedDate = new Date(role.expiry_date).toLocaleDateString('en-GB');
             await sendExpiryEmail(user.email, user.username, formattedDate);
 
-            // Delete the expired role
             await db.query(`
-        DELETE FROM user_roles 
-        WHERE user_id = ? AND role_id = ?
-      `, [role.user_id, role.role_id]);
+                DELETE FROM user_roles 
+                WHERE user_id = ? AND role_id = ?`,
+                [role.user_id, role.role_id]);
         }
 
         console.log('✅ All expired users notified and roles removed.');
@@ -41,5 +40,4 @@ async function notifyAndDeleteExpiredRoles() {
     }
 }
 
-// Run the function immediately:
 notifyAndDeleteExpiredRoles();

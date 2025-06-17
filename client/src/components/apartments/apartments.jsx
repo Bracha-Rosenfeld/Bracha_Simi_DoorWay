@@ -49,7 +49,7 @@ export default function Apartments() {
       });
       const data = response.data;
       console.log("data: ", data);
-     
+
       if (data.length < LIMIT) setHasMore(false);
       setApartments(prev => [...prev, ...data]);
       setOffset(prev => prev + LIMIT);
@@ -70,7 +70,7 @@ export default function Apartments() {
   if (loading && apartments.length === 0) {
     return <div className={styles.loadingMessage}>Loading apartments...</div>;
   }
-  
+
   if (error) {
     return <div className={styles.errorMessage}>{error}</div>;
   }
@@ -80,9 +80,9 @@ export default function Apartments() {
       <div className={styles.filterContainer}>
         <div className={styles.filterGroup}>
           <label className={styles.filterLabel}>Filter by city:</label>
-          <select 
+          <select
             className={styles.filterSelect}
-            value={cityFilter} 
+            value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
           >
             <option value="">All Cities</option>
@@ -91,12 +91,12 @@ export default function Apartments() {
             ))}
           </select>
         </div>
-        
+
         <div className={styles.filterGroup}>
           <label className={styles.filterLabel}>Filter by type:</label>
-          <select 
+          <select
             className={styles.filterSelect}
-            value={typeFilter} 
+            value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
           >
             <option value="">All Types</option>
@@ -109,7 +109,7 @@ export default function Apartments() {
         </div>
       </div>
 
-      {filteredApartments.length === 0 ? (
+      {/* {filteredApartments.length === 0 ? (
         <div className={styles.noResults}>No apartments found matching your criteria.</div>
       ) : (
         filteredApartments.map((apt) => (
@@ -118,8 +118,20 @@ export default function Apartments() {
             <AddToCartButton aptId={apt.id} />
           </div>
         ))
+      )} */}
+      {filteredApartments.length === 0 ? (
+        <div className={styles.noResults}>No apartments found matching your criteria.</div>
+      ) : (
+        <div className={styles.apartmentsGrid}>
+          {filteredApartments.map((apt) => (
+            <div key={apt.id} className={styles.apartmentCard}>
+              <ApartmentDetails apt={apt} />
+              <AddToCartButton aptId={apt.id} />
+            </div>
+          ))}
+        </div>
       )}
-      
+
       {loading && <div className={styles.loadingMessage}>Loading more apartments...</div>}
     </div>
   );

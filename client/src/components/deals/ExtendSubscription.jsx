@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import SubscriptionPayment from './SubscriptionPayment';
-// import PublishApartments from '../publishApartment/publishApartment';
 import { useCurrentUser } from '../userProvider';
 import React, { useState } from 'react';
 import styles from './deals.module.css';
@@ -30,7 +29,7 @@ const ExtendSubscription = () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          withCredentials: true // אם את משתמשת בקוקיז / JWT
+          withCredentials: true
         }
       );
       if (!response.ok) {
@@ -52,7 +51,6 @@ const ExtendSubscription = () => {
         </p>
 
         <div className={styles.plansGrid}>
-          {/* Extend Monthly */}
           <div className={styles.planCard}>
             <div className={styles.planHeader}>
               <h3 className={styles.planTitle}>Extend Monthly Plan</h3>
@@ -80,7 +78,6 @@ const ExtendSubscription = () => {
             </button>
           </div>
 
-          {/* Extend Bi-Monthly */}
           <div className={styles.planCard}>
             <div className={styles.planHeader}>
               <h3 className={styles.planTitle}>Extend Bi-Monthly Plan</h3>
@@ -110,7 +107,6 @@ const ExtendSubscription = () => {
         </div>
       </div>
 
-      {/* Payment Section */}
       {showPayment && (
         <SubscriptionPayment
           amount={amountToPay}

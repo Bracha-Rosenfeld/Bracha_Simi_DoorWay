@@ -10,36 +10,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// exports.sendVerificationEmail = async (toEmail, token) => {
-//   const mailOptions = {
-//     from: process.env.APP_EMAIL,
-//     to: toEmail,
-//     subject: "Verify your email",
-//     text: `Hello, please verify your email by clicking on the following link: http://localhost:5173/verify-email?token=${token}`,
-//   };
-
-//   try {
-//     const result = await transporter.sendMail(mailOptions);
-//     return result;
-//   } catch (error) {
-//     throw new Error("Failed to send verification email: " + error.message);
-//   }
-// }
-// exports.sendResetPasswordEmail = async (toEmail, token) => {
-//   const mailOptions = {
-//     from: process.env.APP_EMAIL,
-//     to: toEmail,
-//     subject: "Reset your password",
-//     text: `Hello, please reset your password by clicking on the following link: http://localhost:5173/reset-password?token=${token}`,
-//   };
-
-//   try {
-//     const result = await transporter.sendMail(mailOptions);
-//     return result;
-//   } catch (error) {
-//     throw new Error("Failed to send reset password email: " + error.message);
-//   }
-// };
 exports.sendNewApartmentEmail = async (toEmail, username, apartmentTitle) => {
   const mailOptions = {
     from: process.env.APP_EMAIL,
@@ -203,6 +173,7 @@ The DoorWay Team
     throw new Error("Failed to send apartment deleted email: " + error.message);
   }
 };
+
 exports.sendUserWasBlockedEmail = async (toEmail, username) => {
   const mailOptions = {
     from: process.env.APP_EMAIL,

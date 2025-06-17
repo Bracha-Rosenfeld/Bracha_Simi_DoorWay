@@ -13,6 +13,7 @@ exports.getAllUserRoles = async (req, res) => {
         res.status(500).json({ error: 'Internal server error. ' + error.message });
     }
 };
+
 exports.getUserRoleByRoleName = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -26,6 +27,7 @@ exports.getUserRoleByRoleName = async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 };
+
 exports.createUserRole = async (req, res) => {
     try {
         const userId = req.user.id;

@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
     const [isLoadingUser, setIsLoadingUser] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/users/me', {
+        fetch('http://localhost:5000/users/currentUser', {
             method: 'GET',
             credentials: 'include',
         })

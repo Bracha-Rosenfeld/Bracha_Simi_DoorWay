@@ -35,7 +35,7 @@ const UsersDetails = () => {
     const saveChanges = async () => {
         try {
             const response = await axios.put(
-                `http://localhost:5000/users/${currentUser.id}`,
+                `http://localhost:5000/users`,
                 {
                     username: userData.username,
                     email: userData.email,

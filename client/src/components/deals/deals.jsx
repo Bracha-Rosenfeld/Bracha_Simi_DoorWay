@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ViewApartments from './showSubscriptionOptions';
+import ShowSubscriptionOptions from './showSubscriptionOptions';
 import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useCurrentUser } from '../userProvider';
 import ExtendSubscription from './ExtendSubscription';
@@ -45,7 +45,6 @@ const Deals = () => {
       </div>
 
       <div className={styles.plansGrid}>
-        {/* Free Publishing Plan */}
         <div className={`${styles.planCard} ${styles.freePlan}`}>
           <div className={styles.planHeader}>
             <h3 className={styles.planTitle}>Publish - For Free!</h3>
@@ -66,9 +65,7 @@ const Deals = () => {
             Choose to Publish
           </button>
         </div>
-
-        {/* Subscription Plans */}
-        {isViewer ? <ExtendSubscription /> : <ViewApartments />}
+        {isViewer ? <ExtendSubscription /> : <ShowSubscriptionOptions />}
       </div>
     </div>
   );

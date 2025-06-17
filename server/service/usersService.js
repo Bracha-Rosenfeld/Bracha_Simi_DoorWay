@@ -25,10 +25,12 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
             'INSERT INTO users (username, email, phone, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
             [username, email, phone, address, latitude, longitude]
         );
-        await db.query(
-            'INSERT INTO passwords (user_id,password) VALUES (?,?)',
-            [result.insertId, password]
-        );
+        if (password != NULL) {
+            await db.query(
+                'INSERT INTO passwords (user_id,password) VALUES (?,?)',
+                [result.insertId, password]
+            );
+        }
         const roleResult = await postUserRole(result.insertId, roleName);
         return { id: result.insertId, username: username, email: email };
     } catch (err) {
@@ -64,9 +66,9 @@ exports.deleteUser = async (id) => {
         //delete the user's apartments
         const apaertmentsWereDeleted = await deleteAllUsersApartments(id);
         //delete the user!
-        const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);      
+        const [result] = await db.query('DELETE FROM users WHERE id = ?', [id]);
         return result.affectedRows > 0;
-    } catch (err) {      
+    } catch (err) {
         throw new Error('Error deleting user: ' + err.message);
     }
 }

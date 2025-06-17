@@ -1,13 +1,10 @@
-import { useCurrentUser } from '../userProvider';
-import { Navigate, useNavigate, Link } from 'react-router-dom';
-import NavBar from '../navBar/navBar';
-import React, { useState, useEffect } from 'react';
+import {  useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import SubscriptionPayment from './SubscriptionPayment';
 import styles from './deals.module.css';
 
-const ViewApartments = ({ setUserRole }) => {
+const showSubscriptionOptions = ({ setUserRole }) => {
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser } = useCurrentUser();
   const [showPayment, setShowPayment] = useState(false);
   const [amountToPay, setAmountToPay] = useState(null);
   const [showSubscriptionOptions, setShowSubscriptionOptions] = useState(false);
@@ -49,7 +46,6 @@ const ViewApartments = ({ setUserRole }) => {
 
   return (
     <>
-      {/* Monthly Plan */}
       <div className={styles.planCard}>
         <div className={styles.planHeader}>
           <h3 className={styles.planTitle}>Monthly Plan</h3>
@@ -78,7 +74,6 @@ const ViewApartments = ({ setUserRole }) => {
         </button>
       </div>
 
-      {/* Bi-Monthly Plan */}
       <div className={`${styles.planCard} ${styles.featured}`}>
         <div className={styles.planBadge}>Best Value</div>
         <div className={styles.planHeader}>
@@ -108,7 +103,6 @@ const ViewApartments = ({ setUserRole }) => {
         </button>
       </div>
 
-      {/* Payment Section */}
       {showPayment && (
         <SubscriptionPayment
           amount={amountToPay}
@@ -125,4 +119,4 @@ const ViewApartments = ({ setUserRole }) => {
   );
 };
 
-export default ViewApartments;
+export default showSubscriptionOptions;

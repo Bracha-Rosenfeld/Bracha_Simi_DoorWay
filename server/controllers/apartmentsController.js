@@ -2,6 +2,7 @@ const { queryAllApartments, queryAllUsersApartments, queryApartmentById, postApa
 const { queryUserById } = require('../service/usersService');
 const { getCoordinatesFromAddress, getCityFromCoordinates } = require('../helpers/calculations');
 const { sendNewApartmentEmail, sendApprovalEmail, sendApartmentDeletedEmail, sendApartmentRejectedEmail } = require('../helpers/mailer');
+
 exports.getAllApartments = async (req, res) => {
     try {
         const isApproved = req.query.is_approved;
@@ -105,6 +106,7 @@ exports.updateApartment = async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 }
+
 exports.removeApartment = async (req, res) => {
     try {
         const id = req.params.id;

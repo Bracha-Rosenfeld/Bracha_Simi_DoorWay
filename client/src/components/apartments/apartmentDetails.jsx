@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { useCurrentUser } from '../userProvider';
 import styles from './apartments.module.css'
 
 const ApartmentDetails = ({ apt }) => {

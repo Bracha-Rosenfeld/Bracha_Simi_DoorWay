@@ -15,7 +15,7 @@ import UsersApartments from '../components/userAccount/usersApartments';
 import CompleteRegister from './loginAndRegister/completeRegister';
 import AdminHome from './adminHome/adminHome';
 import AllUsers from './allUsers/allUsers';
-import NotFound from '../components/notFound';
+import NotFound from './notFound/notFound';
 import Cart from './apartments/cart';
 import { useCurrentUser } from './userProvider';
 import axios from 'axios';

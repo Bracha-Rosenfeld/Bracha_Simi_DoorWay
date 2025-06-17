@@ -31,7 +31,6 @@ exports.getCoordinatesFromAddress = async (address) => {
 
 exports.getCityFromCoordinates = async (latitude, longitude) => {
   const apiKey = process.env.API_KEY;
-  //const url = `https://us1.locationiq.com/v1/reverse.php?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json`;
   const url = `https://us1.locationiq.com/v1/reverse.php?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&accept-language=en`;
 
   const response = await fetch(url);

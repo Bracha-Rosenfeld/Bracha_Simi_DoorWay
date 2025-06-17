@@ -267,3 +267,51 @@
     font-size: 0.9rem;
   }
 }
+/* Add this new class for the apartments grid container */
+.apartmentsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Modify the existing .apartmentCard class - remove margin-bottom */
+.apartmentCard {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  /* Remove this line: margin-bottom: 2rem; */
+  transition: all 0.3s ease;
+  border: 1px solid #f1f2f6;
+}
+
+/* Add responsive behavior - modify existing media queries */
+@media (max-width: 768px) {
+  .apartmentsContainer {
+    padding: 1rem;
+  }
+  
+  .filterContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .apartmentGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .apartmentContent {
+    padding: 1.5rem;
+  }
+  
+  .apartmentTitle {
+    font-size: 1.3rem;
+  }
+  
+  /* Add this for single column on mobile */
+  .apartmentsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

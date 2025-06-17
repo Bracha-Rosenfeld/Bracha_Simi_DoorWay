@@ -1,5 +1,5 @@
 const e = require('express');
-const { queryAllFavorites, queryFavoriteById, postFavorite, deleteFavorite } = require('../service/cartService');
+const { queryAllFavorites, postFavorite, deleteFavorite } = require('../service/cartService');
 exports.getAllFavorites = async (req, res) => {
   try {
     const favorites = await queryAllFavorites(req.user.id);

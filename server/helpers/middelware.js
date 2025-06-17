@@ -3,12 +3,11 @@ const jwt = require('jsonwebtoken');
 exports.validateSignup = (req, res, next) => {
     const { email, password } = req.body;
 
-    // Check if all fields are provided
+  
     if (!email || !password) {
         return res.status(400).json({ error: 'All fields are required. Please fill out all the fields.' });
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return res.status(400).json({ error: 'Invalid email format. Please enter a valid email address.' });

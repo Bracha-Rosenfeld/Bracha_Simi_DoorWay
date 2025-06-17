@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ApartmentDetails from '../apartments/apartmentDetails';
-import { useCurrentUser } from '../userProvider';
 import styles from './AdminHome.module.css';
 
 const AdminHome = () => {
@@ -57,11 +56,11 @@ const AdminHome = () => {
         if (!selectedApartment) return;
 
         try {
-            const response = await axios.put(`http://localhost:5000/apartments/${selectedApartment.id}/approve`, { 
-                price: selectedApartment.price, 
-                title: selectedApartment.title, 
-                details: selectedApartment.details, 
-                is_approved: 1 
+            const response = await axios.put(`http://localhost:5000/apartments/${selectedApartment.id}/approve`, {
+                price: selectedApartment.price,
+                title: selectedApartment.title,
+                details: selectedApartment.details,
+                is_approved: 1
             });
             if (response.status === 200) {
                 setApartments((prev) => prev.filter((a) => a.id !== selectedApartment.id));
@@ -79,7 +78,7 @@ const AdminHome = () => {
         try {
             await axios.delete(
                 `http://localhost:5000/apartments/${selectedApartment.id}/reject`,
-                { withCredentials: true } 
+                { withCredentials: true }
             );
             setApartments((prev) => prev.filter((a) => a.id !== selectedApartment.id));
             setShowRejectModal(false);
@@ -117,10 +116,6 @@ const AdminHome = () => {
 
     const sortedApartments = [...filteredApartments].sort((a, b) => {
         switch (sortBy) {
-            case 'newest':
-                return new Date(b.created_at || 0) - new Date(a.created_at || 0);
-            case 'oldest':
-                return new Date(a.created_at || 0) - new Date(b.created_at || 0);
             case 'price-high':
                 return (b.price || 0) - (a.price || 0);
             case 'price-low':
@@ -139,8 +134,8 @@ const AdminHome = () => {
                     <div className={styles.errorIcon}>⚠️</div>
                     <h3>Error</h3>
                     <p>{error}</p>
-                    <button 
-                        onClick={() => window.location.reload()} 
+                    <button
+                        onClick={() => window.location.reload()}
                         className={styles.retryButton}
                     >
                         Retry
@@ -169,16 +164,14 @@ const AdminHome = () => {
                         className={styles.searchInput}
                     />
                 </div>
-                
+
                 <div className={styles.sortContainer}>
                     <label className={styles.sortLabel}>Sort by:</label>
-                    <select 
-                        value={sortBy} 
+                    <select
+                        value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
                         className={styles.sortSelect}
                     >
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
                         <option value="price-high">Price: High to Low</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="title">Title A-Z</option>
@@ -219,20 +212,20 @@ const AdminHome = () => {
                                 </div>
                                 <div className={styles.apartmentId}>ID: {apt.id}</div>
                             </div>
-                            
+
                             <div className={styles.apartmentContent}>
                                 <ApartmentDetails apt={apt} />
                             </div>
-                            
+
                             <div className={styles.apartmentActions}>
-                                <button 
+                                <button
                                     onClick={() => handleApproveClick(apt)}
                                     className={styles.approveButton}
                                     title="Approve apartment"
                                 >
                                     ✅ Approve
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => handleRejectClick(apt)}
                                     className={styles.rejectButton}
                                     title="Reject apartment"
@@ -258,7 +251,6 @@ const AdminHome = () => {
                 </div>
             )}
 
-            {/* Approve Confirmation Modal */}
             {showApproveModal && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modal}>
@@ -279,13 +271,13 @@ const AdminHome = () => {
                             <p className={styles.confirmText}>This will make the apartment visible to all users.</p>
                         </div>
                         <div className={styles.modalActions}>
-                            <button 
+                            <button
                                 onClick={cancelAction}
                                 className={styles.cancelButton}
                             >
                                 Cancel
                             </button>
-                            <button 
+                            <button
                                 onClick={confirmApprove}
                                 className={styles.confirmApproveButton}
                             >
@@ -296,7 +288,6 @@ const AdminHome = () => {
                 </div>
             )}
 
-            {/* Reject Confirmation Modal */}
             {showRejectModal && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modal}>
@@ -317,13 +308,13 @@ const AdminHome = () => {
                             <p className={styles.warningText}>This action will permanently delete the apartment listing.</p>
                         </div>
                         <div className={styles.modalActions}>
-                            <button 
+                            <button
                                 onClick={cancelAction}
                                 className={styles.cancelButton}
                             >
                                 Cancel
                             </button>
-                            <button 
+                            <button
                                 onClick={confirmReject}
                                 className={styles.confirmRejectButton}
                             >
