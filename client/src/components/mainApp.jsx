@@ -9,9 +9,9 @@ import Register from '../components/register/register';
 import Apartments from '../components/apartments/apartments';
 import ShowSubscriptionOptions from './showSubscriptionOptions'
 import PublishApartment from './publishApartment'
-import MyAccount from '../components/myAccount';
-import UsersDetails from '../components/usersDetails';
-import UsersApartments from '../components/usersApartments';
+import MyAccount from '../components/userAccount/myAccount';
+import UsersDetails from '../components/userAccount/usersDetails';
+import UsersApartments from '../components/userAccount/usersApartments';
 import UserDetails from '../components/userDetails/userDetails';
 import AdminHome from '../components/adminHome';
 import AllUsers from './allUsers';

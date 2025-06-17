@@ -20,7 +20,7 @@
 
 // export default LogoutButton;
 
-import { useCurrentUser } from './userProvider';
+import { useCurrentUser } from '../userProvider';
 import { useNavigate } from 'react-router-dom';
 import styles from './userAccount.module.css';
 

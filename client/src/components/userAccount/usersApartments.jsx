@@ -137,7 +137,7 @@
 
 
 import React, { useState, useEffect } from 'react'
-import { useCurrentUser } from './userProvider';
+import { useCurrentUser } from '../userProvider';
 import axios from 'axios';
 import styles from './userAccount.module.css';
 
