@@ -58,19 +58,9 @@ exports.deleteUser = async (id) => {
         }
         //delete the user's password.
         const [res1] = await db.query('DELETE FROM passwords WHERE user_id = ?', [id]);
-        // if (res1.affectedRows === 0) {
-        //     console.log('No password found for user with ID: ' + id);
-
-        //     throw new Error('No password found for user with ID: ' + id);
-        // }
         //delete the user's roles.
         const rolesWereDeleted = await deleteAllUserRole(id);
         console.log('rolesWereDeleted', rolesWereDeleted);
-        
-        // if (!rolesWereDeleted) {
-        //     console.log('No roles found for user with ID: ' + id);
-        //     throw new Error('No roles found for user with ID: ' + id);
-        // }
         //delet the user's cart.
         const cartWasDeleted = await deleteAllFavorite(id);
         console.log('cartWasDeleted', cartWasDeleted);
