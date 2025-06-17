@@ -3,11 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './layout';
 import Home from '../components/home';
 import About from '../components/about/about';
-import Deals from '../components/deals';
+import Deals from '../components/deals/deals';
 import Login from '../components/login/login';
 import Register from '../components/register/register';
 import Apartments from '../components/apartments/apartments';
-import ShowSubscriptionOptions from './showSubscriptionOptions'
+import ShowSubscriptionOptions from './deals/showSubscriptionOptions'
 import PublishApartment from './publishApartment'
 import MyAccount from '../components/userAccount/myAccount';
 import UsersDetails from '../components/userAccount/usersDetails';

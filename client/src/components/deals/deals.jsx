@@ -51,7 +51,7 @@
 import React, { useState, useEffect } from 'react';
 import ViewApartments from './showSubscriptionOptions';
 import { Navigate, useNavigate, Link } from 'react-router-dom';
-import { useCurrentUser } from './userProvider';
+import { useCurrentUser } from '../userProvider';
 import ExtendSubscription from './ExtendSubscription';
 import styles from './deals.module.css';
 

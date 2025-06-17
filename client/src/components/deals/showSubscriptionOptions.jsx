@@ -78,9 +78,9 @@
 // export default viewApartments
 
 
-import { useCurrentUser } from './userProvider';
+import { useCurrentUser } from '../userProvider';
 import { Navigate, useNavigate, Link } from 'react-router-dom';
-import NavBar from './navBar/navBar';
+import NavBar from '../navBar/navBar';
 import React, { useState, useEffect } from 'react';
 import SubscriptionPayment from './SubscriptionPayment';
 import styles from './deals.module.css';
