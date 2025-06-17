@@ -11,7 +11,7 @@ const Cart = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (isLoadingUser) return;// Wait for the user to load
+        if (isLoadingUser) return;
 
         if (currentUser && currentUser.id !== -1) {
             axios.get(`http://localhost:5000/users/cart`, { withCredentials: true })

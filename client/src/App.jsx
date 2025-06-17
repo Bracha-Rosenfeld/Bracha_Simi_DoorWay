@@ -1,5 +1,6 @@
 import React from 'react'
-import MainApp from './components/MainApp.jsx'
+// import MainApp from './MainApp.jsx'
+import MainApp from './components/mainApp';
 import { UserProvider } from './components/userProvider';
 import './App.css'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
