@@ -1,83 +1,3 @@
-// import { useCurrentUser } from './userProvider'
-// import { Navigate, useNavigate, Link } from 'react-router-dom';
-// import NavBar from './navBar/navBar';
-// import React, { useState, useEffect } from 'react';
-// import SubscriptionPayment from './SubscriptionPayment';
-
-// const viewApartments = ({ setUserRole }) => {
-//     const navigate = useNavigate();
-//     const { currentUser, setCurrentUser } = useCurrentUser();
-//     const [showPayment, setShowPayment] = useState(false);
-//     const [amountToPay, setAmountToPay] = useState(null);
-//     const [showSubscriptionOptions, setShowSubscriptionOptions] = useState(false);
-
-//     const choosePlan = (amount) => {
-//         setAmountToPay(amount);
-//         setShowSubscriptionOptions(false);
-//         setShowPayment(true);
-//     };
-
-//     const addUserRole = async () => {
-//         try {
-//             const expiryDate = amountToPay === 80 ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
-//             const expiry_d = expiryDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
-//             const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`, {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     role_name: "viewer",
-//                     expiry_date: expiry_d,
-//                 }),
-//             });
-//             if (!response.ok) {
-//                 throw new Error('Failed to add viewer role');
-//             }
-//             // Optionally handle success here
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     }
-
-//     return (
-//         <div>
-
-//             <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
-//                 <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
-//                     <h3>Monthly Plan</h3>
-//                     <p>Get full access to all apartment listings for one month.</p>
-//                     <p><strong>Price:</strong> $80</p>
-//                     <button onClick={() => choosePlan(80)}>Choose Monthly</button>
-//                 </div>
-//                 <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '250px' }}>
-//                     <h3>Bi-Monthly Plan</h3>
-//                     <p>Access all apartments for two months at a discounted rate.</p>
-//                     <p><strong>Price:</strong> $150</p>
-//                     <button onClick={() => choosePlan(150)}>Choose Bi-Monthly</button>
-//                 </div>
-//             </div>
-
-//             {/* Payment Section */}
-//             {showPayment && (
-//                 <SubscriptionPayment
-//                     amount={amountToPay}
-//                     onSuccess={async () => {
-//                         setShowPayment(false);
-//                         addUserRole();
-//                         setUserRole('viewer');
-//                         navigate('/apartments');
-//                     }}
-//                     onCancel={() => setShowPayment(false)}
-//                 />
-//             )}
-//         </div>
-//     )
-// }
-
-// export default viewApartments
-
-
 import { useCurrentUser } from '../userProvider';
 import { Navigate, useNavigate, Link } from 'react-router-dom';
 import NavBar from '../navBar/navBar';
@@ -100,22 +20,25 @@ const ViewApartments = ({ setUserRole }) => {
 
   const addUserRole = async () => {
     try {
-      const expiryDate = amountToPay === 80 
-        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) 
+      const expiryDate = amountToPay === 80
+        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         : new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
       const expiry_d = expiryDate.toISOString().split('T')[0];
-      
-      const response = await fetch(`http://localhost:5000/users/${currentUser.id}/roles`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+
+      const response = await axios.post(
+        `http://localhost:5000/users/roles`,
+        {
           role_name: "viewer",
-          expiry_date: expiry_d,
-        }),
-      });
-      
+          expiry_date: expiry_d
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true 
+        }
+      );
+
       if (!response.ok) {
         throw new Error('Failed to add viewer role');
       }
@@ -147,8 +70,8 @@ const ViewApartments = ({ setUserRole }) => {
           <li>Detailed property analytics</li>
           <li>Mobile app access</li>
         </ul>
-        <button 
-          className={`${styles.planButton} ${styles.secondary}`} 
+        <button
+          className={`${styles.planButton} ${styles.secondary}`}
           onClick={() => choosePlan(80)}
         >
           Choose Monthly
@@ -177,8 +100,8 @@ const ViewApartments = ({ setUserRole }) => {
           <li>Personal account manager</li>
           <li>API access for developers</li>
         </ul>
-        <button 
-          className={`${styles.planButton} ${styles.primary}`} 
+        <button
+          className={`${styles.planButton} ${styles.primary}`}
           onClick={() => choosePlan(150)}
         >
           Choose Bi-Monthly

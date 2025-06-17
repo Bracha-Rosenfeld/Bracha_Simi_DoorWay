@@ -26,7 +26,7 @@ const mainApp = () => {
     const fetchCurrentUserRole = async () => {
         if (isLoadingUser) return;
         if (currentUser && currentUser.id != -1) {
-            const roles = axios.get(`http://localhost:5000/users/${currentUser.id}/roles`, {
+            const roles = axios.get(`http://localhost:5000/users/roles`, {
                 withCredentials: true
             }).then((response) => {
                 if (response.data && response.data.length > 0) {

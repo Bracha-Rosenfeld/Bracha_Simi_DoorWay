@@ -5,7 +5,7 @@ const rolesRoutes = require('./usersRolesRoutes');
 const cartRoutes = require('./cartRoutes');
 const router = express.Router();
 router.use('/cart', cartRoutes); // Mounting favorites routes under /favorites
-router.use('/:userId/roles', rolesRoutes)
+router.use('/roles', rolesRoutes)
 router.get('/', getAllUsers);
 router.get('/me', getCurrentUser); // New endpoint to get current user from token
 router.get('/:id', getUserById);

@@ -3,7 +3,7 @@ const { queryUserById } = require('../service/usersService');
 const { sendSubsciptionEmail, sendExtandSubsciptionEmail } = require('../helpers/mailer');
 exports.getAllUserRoles = async (req, res) => {
     try {
-        const id = req.params.userId;
+        const id = req.user.id;
         const userRoles = await queryAllUserRoles(id);
         if (!userRoles || userRoles.length === 0) {
             return res.status(404).json({ error: 'No roles found for user with id' + id });
@@ -15,7 +15,7 @@ exports.getAllUserRoles = async (req, res) => {
 };
 exports.getUserRoleByRoleName = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user.id;
         const roleName = req.params.roleName;
         const userRolesList = await queryUserRoleByRoleName(userId, roleName);
         if (!userRolesList || userRolesList.length === 0) {
@@ -28,7 +28,7 @@ exports.getUserRoleByRoleName = async (req, res) => {
 };
 exports.createUserRole = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user.id;
         const roleName = req.body.role_name;
         const expiryDate = req.body.expiry_date;
         const userRole = await postUserRole(userId, roleName, expiryDate);
@@ -50,7 +50,7 @@ exports.createUserRole = async (req, res) => {
     }
 };
 exports.updateRoleExpiryDate = async (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const roleName = req.params.roleName;
     const numOfDaysToAdd = req.body.num_of_days;
     if (!roleName || !userId) {
@@ -76,7 +76,7 @@ exports.updateRoleExpiryDate = async (req, res) => {
 }
 exports.removeUserRole = async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user.id;
         const roleName = req.params.roleName;
         if (!roleName || !userId) {
             return res.status(400).json({ error: 'User role name and user id are required' });
