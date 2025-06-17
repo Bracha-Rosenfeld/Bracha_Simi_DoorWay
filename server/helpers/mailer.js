@@ -96,7 +96,7 @@ The DoorWay Team
     const result = await transporter.sendMail(mailOptions);
     return result;
   } catch (error) {
-    throw new Error("Failed to send approval email: " + error.message);
+    throw new Error("Failed to send apartment approval email: " + error.message);
   }
 };
 
@@ -123,7 +123,7 @@ Thank you for choosing DoorWay,
     const result = await transporter.sendMail(mailOptions);
     return result;
   } catch (error) {
-    throw new Error("Failed to send approval email: " + error.message);
+    throw new Error("Failed to send subscription approval email: " + error.message);
   }
 }
 exports.sendExtandSubsciptionEmail = async (toEmail, username, numOfDaysToAdd, expiry_date) => {
@@ -151,7 +151,7 @@ The DoorWay Team
     const result = await transporter.sendMail(mailOptions);
     return result;
   } catch (error) {
-    throw new Error("Failed to send approval email: " + error.message);
+    throw new Error("Failed to send suscription was extanded email: " + error.message);
   }
 }
 
@@ -177,7 +177,7 @@ Thank you for being with us,
     const result = await transporter.sendMail(mailOptions);
     return result;
   } catch (error) {
-    throw new Error("Failed to send approval email: " + error.message);
+    throw new Error("Failed to send subscription was expired email: " + error.message);
   }
 }
 
@@ -203,3 +203,25 @@ The DoorWay Team
     throw new Error("Failed to send apartment deleted email: " + error.message);
   }
 };
+exports.sendUserWasBlockedEmail = async (toEmail, username) => {
+  const mailOptions = {
+    from: process.env.APP_EMAIL,
+    to: toEmail,
+    subject: 'Your Account Has Been Deactivated',
+    text: `Dear ${username},
+
+We’d like to inform you that your account has been deactivated and your access to the platform has been revoked.
+
+If you believe this was done in error or would like to clarify the reason, feel free to contact our support team.
+
+Thank you for your understanding,
+– The DoorWay Team`,
+  };
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to send acount was deleted email: " + error.message);
+  }
+}
+

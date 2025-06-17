@@ -121,9 +121,17 @@ exports.updateUser = async (req, res) => {
 exports.removeUser = async (req, res) => {
     try {
         const id = req.params.id;
+        const user = queryUserById(id);
         const isDelete = await deleteUser(id);
         if (!isDelete) {
             return res.status(404).json({ error: 'User with id:' + id + ' not found' });
+        }
+        // Send approval email
+        const emailSent = await sendUserWasBlockedEmail(user.email, user.username);
+        if (!emailSent) {
+            console.log('Failed to send approval email');
+        } else {
+            console.log('Approval email sent successfully');
         }
         res.status(200).json('user' + id + ' deleted');
     } catch (error) {
