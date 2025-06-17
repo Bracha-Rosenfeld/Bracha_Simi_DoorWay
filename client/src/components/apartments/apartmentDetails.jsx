@@ -49,12 +49,6 @@ const ApartmentDetails = ({ apt }) => {
     return <div className={styles.errorMessage}>Error: {error}</div>;
   }
   
-  useEffect(() => {
-    console.log('apt data:', apt);
-  }, [apt]);
-  
-  console.log("apt.phone: ", apt.phone)
-  
   return (
     <div className={styles.apartmentCard}>
       <div className={styles.apartmentContent}>
