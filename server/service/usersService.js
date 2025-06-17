@@ -25,7 +25,7 @@ exports.postUser = async ({ username, email, phone, address, password }, latitud
             'INSERT INTO users (username, email, phone, address, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
             [username, email, phone, address, latitude, longitude]
         );
-        if (password != NULL) {
+        if (password != null) {
             await db.query(
                 'INSERT INTO passwords (user_id,password) VALUES (?,?)',
                 [result.insertId, password]
