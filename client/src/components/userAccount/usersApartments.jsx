@@ -466,7 +466,7 @@ const UsersApartments = () => {
                                     <div className={styles.apartmentDetails}>
                                         <div className={styles.apartmentField}>
                                             <label className={styles.apartmentLabel}>Price:</label>
-                                            <div className={styles.apartmentValue}>${apt.price}</div>
+                                            <div className={styles.apartmentValue}>₪{apt.price}</div>
                                         </div>
                                         
                                         <div className={styles.apartmentField}>

@@ -65,13 +65,13 @@ const mainApp = () => {
                 <Routes>
                     <Route path="/" element={userRole === 'admin' ? <Navigate to={'/adminHome'} /> : <Home />} />
                     <Route path="/about" element={<About />} />
-                    <Route path="/allusers" element={userRole === 'admin' ? <AllUsers /> : <Navigate to={'/'} />} />
+                    <Route path="/allusers" element={userRole == 'admin' ? <AllUsers /> : <NotFound />} />
                     <Route path="/deals" element={<Deals />} />
                     <Route path="/login" element={userRole == null ? <Login /> : <Navigate to={'/myAccount'} />} />
                     <Route path="/register" element={userRole == null ? <Register /> : <Navigate to={'/'} />} />
                     <Route path="/completeRegister" element={currentUser == null ? <Navigate to={'/login'} /> : <CompleteRegister />} />
                     <Route path="/myAccount" element={userRole ? <MyAccount /> : <Navigate to={'/login'} />}>
-                        <Route index element={<UsersDetails />} />
+                        <Route index element={<Navigate to={'/myAccount/details'} />} />
                         <Route path="details" element={<UsersDetails />} />
                         <Route path="apartments" element={<UsersApartments />} />
                     </Route>
