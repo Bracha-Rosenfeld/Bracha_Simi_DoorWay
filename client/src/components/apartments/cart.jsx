@@ -14,7 +14,7 @@ const Cart = () => {
         if (isLoadingUser) return;// Wait for the user to load
 
         if (currentUser && currentUser.id !== -1) {
-            axios.get(`http://localhost:5000/users/${currentUser.id}/cart`)
+            axios.get(`http://localhost:5000/users/cart`, { withCredentials: true })
                 .then(response => {
                     setFavorites(response.data);
                 })
@@ -30,7 +30,7 @@ const Cart = () => {
 
     const handleRemove = async (apartmentId) => {
         try {
-            await axios.delete(`http://localhost:5000/users/${currentUser.id}/cart/${apartmentId}`);
+            await axios.delete(`http://localhost:5000/users/cart/${apartmentId}` ,{ withCredentials: true });
             setFavorites((prev) =>
                 prev.filter((item) => item.id !== apartmentId)
             );

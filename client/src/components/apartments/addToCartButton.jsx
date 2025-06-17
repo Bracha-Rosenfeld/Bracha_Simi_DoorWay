@@ -53,16 +53,16 @@ import { useCurrentUser } from '../userProvider'
 import axios from 'axios'
 import styles from './apartments.module.css'
 
-const AddToCartButton = ({aptId}) => {
+const AddToCartButton = ({ aptId }) => {
     const { currentUser, isLoadingUser } = useCurrentUser();
     const [favorites, setFavorites] = useState([]);
     const [isInCart, setIsInCart] = useState(false);
     const [error, setError] = useState('');
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const cart = await axios.get(`http://localhost:5000/users/${currentUser.id}/cart`);
+                const cart = await axios.get(`http://localhost:5000/users/cart`, { withCredentials: true });
                 setFavorites(cart.data);
                 setIsInCart(cart.data.some(item => item.id === aptId));
             } catch (err) {
@@ -76,12 +76,14 @@ const AddToCartButton = ({aptId}) => {
             setError('User not logged in');
         }
     }, [currentUser, isLoadingUser]);
-    
+
     const handleAddToCart = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/users/${currentUser.id}/cart`, {
-                apartment_id: aptId,
-            });
+            const response = await axios.post(
+                'http://localhost:5000/users/cart',
+                { apartment_id: aptId },
+                { withCredentials: true }
+            );
             if (response.status === 200) {
                 setIsInCart(true);
             }
@@ -89,15 +91,15 @@ const AddToCartButton = ({aptId}) => {
             setError(err.response?.data?.error || 'Error adding to favorites');
         }
     }
-    
+
     if (error) {
         return <div className={styles.errorMessage}>Error: {error}</div>;
     }
-    
+
     return (
-        <button 
+        <button
             className={styles.addToCartButton}
-            onClick={handleAddToCart} 
+            onClick={handleAddToCart}
             disabled={isInCart}
         >
             {isInCart ? 'Already in Cart' : 'Add to Cart'}
