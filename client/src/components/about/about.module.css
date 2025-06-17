@@ -1,4 +1,4 @@
-.container {
+/* .container {
   padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
@@ -43,4 +43,330 @@
   font-size: 1.25rem;
   font-style: italic;
   color: #d7263d;
+} */
+
+
+
+
+/* About.module.css */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: #2c3e50;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 0 40px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+  margin: 0 -20px 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 20px;
+  position: relative;
+  z-index: 1;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.titleUnderline {
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #dc3545 0%, #c82333 100%);
+  margin: 0 auto;
+  border-radius: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+.content {
+  padding: 0 0 60px;
+}
+
+.introSection {
+  text-align: center;
+  margin-bottom: 60px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.paragraph {
+  font-size: 1.1rem;
+  margin: 0 0 20px;
+  color: #4a5568;
+  line-height: 1.7;
+}
+
+.paragraph strong {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.featureCard {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.featureTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 20px;
+  border-bottom: 2px solid #dc3545;
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.highlightCard {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(220, 53, 69, 0.3);
+}
+
+.highlightCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  transform: rotate(45deg);
+}
+
+.highlightIcon {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.highlight {
+  font-size: 1rem;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.highlight strong {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.section {
+  margin-bottom: 50px;
+}
+
+.subtitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 30px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.subtitle::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 30px;
+  background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+  border-radius: 2px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list li {
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+  position: relative;
+  padding-left: 25px;
+  color: #4a5568;
+}
+
+.list li::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: #dc3545;
+  font-size: 0.8rem;
+}
+
+.list li:last-child {
+  border-bottom: none;
+}
+
+.list li strong {
+  color: #dc3545;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.benefitItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+  border-left: 4px solid #dc3545;
+  transition: transform 0.2s ease;
+}
+
+.benefitItem:hover {
+  transform: translateY(-2px);
+}
+
+.benefitIcon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.benefitTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 5px;
+}
+
+.benefitDesc {
+  font-size: 0.95rem;
+  color: #718096;
+  margin: 0;
+}
+
+.storyCard {
+  background: linear-gradient(135deg, #f7f8fc 0%, #ffffff 100%);
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  position: relative;
+}
+
+.storyCard::before {
+  content: '"';
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 4rem;
+  color: #dc3545;
+  opacity: 0.3;
+  font-family: Georgia, serif;
+}
+
+.sloganSection {
+  text-align: center;
+  padding: 50px 0;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  margin: 50px -20px 0;
+  border-radius: 20px 20px 0 0;
+}
+
+.slogan {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  background: linear-gradient(45deg, #ffffff, #f8f9fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .title {
+    font-size: 2.2rem;
+  }
+  
+  .hero {
+    margin: 0 -15px 30px;
+    padding: 40px 0 30px;
+  }
+  
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .benefitsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .subtitle {
+    font-size: 1.6rem;
+  }
+  
+  .slogan {
+    font-size: 1.4rem;
+    padding: 0 20px;
+  }
+  
+  .featureCard,
+  .highlightCard {
+    padding: 20px;
+  }
+  
+  .storyCard {
+    padding: 25px;
+  }
 }
