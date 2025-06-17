@@ -44,6 +44,7 @@ exports.queryAllUsersApartments = async (publisher_id) => {
     }
 }
 
+//is used in cart service
 exports.queryApartmentsByIds = async (ids) => {
     if (!Array.isArray(ids) || ids.length === 0) return [];
 
@@ -118,33 +119,25 @@ exports.deleteApartment = async (apartmentId) => {
         throw new Error('Error deleting apartment: ' + err.message);
     }
 };
+
+//is in use in user service.
 exports.deleteAllUsersApartments = async (userId) => {
     try {
-        console.log('in deleteAllUsersApartments ');
         const [apartmentsIds] = await db.query('SELECT id FROM apartments WHERE publisher_id = ?', [userId]);
-        console.log('apartmentsIds', apartmentsIds);
         if (apartmentsIds && apartmentsIds.length > 0) {
             for (const apartmentId of apartmentsIds) {
                 const isInCart = await deleteAllFavoritesByAptId(apartmentId.id);
-                console.log('isInCart', isInCart);
             }
         }
         const [img_urls] = await db.query('SELECT image_url FROM apartments WHERE publisher_id = ?', [userId]);
         if (img_urls.length === 0) {
             for (const url of img_urls) {
-                console.log('url.image_url', url.image_url);
                 const relativePath = url.image_url.startsWith('/') ? url.image_url.slice(1) : url.image_url;
-                console.log('relativePath', relativePath);
-
                 const imagePath = path.resolve(__dirname, '..', relativePath);
-                console.log('imagePath', imagePath);
                 await deleteFile(imagePath);
-                console.log('imgae was deleted!');
             }
         }
-        console.log('deleting apartments!');
         const result = await db.query('DELETE FROM apartments WHERE publisher_id = ?', [userId]);
-        console.log('result', result);
         return result.affectedRows > 0;
 
     } catch (err) {

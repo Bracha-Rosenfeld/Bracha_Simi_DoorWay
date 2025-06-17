@@ -23,7 +23,7 @@ import axios from 'axios';
 const mainApp = () => {
     const { currentUser, isLoadingUser } = useCurrentUser();
     const [userRole, setUserRole] = useState(null);
-    const fetchCurrentUserRole = async (params) => {
+    const fetchCurrentUserRole = async () => {
         if (isLoadingUser) return;
         if (currentUser && currentUser.id != -1) {
             const roles = axios.get(`http://localhost:5000/users/${currentUser.id}/roles`, {
@@ -41,7 +41,7 @@ const mainApp = () => {
                     setUserRole(null);
                 }
             }).catch((error) => {
-                setError('Error fetching user roles:', error);
+                console.error('Error fetching user roles:', error);
                 setUserRole(null); // Fallback to myAccount if roles fetch fails
             });
         }

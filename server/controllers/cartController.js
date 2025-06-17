@@ -8,17 +8,17 @@ exports.getAllFavorites = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 }
-exports.getFavoriteById = async (req, res) => {
-  try {
-    const favorite = await queryFavoriteById(req.params.userId, req.params.apartmentId);
-    if (!favorite) {
-      return res.status(404).json({ error: 'Favorite with id:' + req.params.apartmentId + ' not found' });
-    }
-    res.json(favorite);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-}
+// exports.getFavoriteById = async (req, res) => {
+//   try {
+//     const favorite = await queryFavoriteById(req.params.userId, req.params.apartmentId);
+//     if (!favorite) {
+//       return res.status(404).json({ error: 'Favorite with id:' + req.params.apartmentId + ' not found' });
+//     }
+//     res.json(favorite);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// }
 exports.createFavorite = async (req, res) => {
   try {
     const favorite = await postFavorite(req.params.userId,req.body.apartment_id);

@@ -20,7 +20,6 @@ exports.getAllApartments = async (req, res) => {
             const usersApartments = await queryAllUsersApartments(parseInt(publisherId));
             return res.status(200).json(usersApartments);
         }
-        // If no query parameter is provided, return all apartments
         const apartments = await queryAllApartments(limit, offset);
         if (!apartments || apartments.length === 0) {
             return res.status(404).json({ error: 'No apartments found' });
@@ -55,9 +54,6 @@ exports.createApartment = async (req, res) => {
             return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
         }
         const city = await getCityFromCoordinates(latitude, longitude);
-        // if (isNaN(city)) {
-        //     return res.status(400).json({ error: 'Invalid address coordinates' })
-        // }
         const apartment = await postApartment(latitude, longitude, city, req.body);
         if (!apartment || apartment.length === 0) {
             return res.status(404).json({ error: 'Apartment cannot be posted' });
@@ -96,7 +92,6 @@ exports.updateApartment = async (req, res) => {
                 return res.status(404).json({ error: 'Publisher with id:' + apartment.publisher_id + ' not found' });
             }
 
-            // Send approval email
             const emailSent = await sendApprovalEmail(publisher.email, publisher.username, apartment.title, apartment.type);
             if (!emailSent) {
                 console.log('Failed to send approval email');
@@ -107,26 +102,20 @@ exports.updateApartment = async (req, res) => {
         res.status(200).json('apartment' + id + ' updated');
 
     } catch (error) {
-        console.log(error);
-        
         res.status(500).json({ error: 'Internal server error.' + error.message });
     }
 }
 exports.removeApartment = async (req, res) => {
     try {
         const id = req.params.id;
-
         const apartment = await queryApartmentById(id);
         if (!apartment || apartment.length === 0) {
             return res.status(404).json({ error: 'Apartment with id:' + id + ' not found' });
         }
-
-        // Fetch publisher info
         const publisher = await queryUserById(apartment.publisher_id);
         if (!publisher || publisher.length === 0) {
             return res.status(404).json({ error: 'Publisher with id:' + apartment.publisher_id + ' not found' });
         }
-
         const isDelete = await deleteApartment(id);
         if (!isDelete) {
             return res.status(404).json({ error: 'Appartment with id:' + user.id + ' not found' });
@@ -141,18 +130,14 @@ exports.removeApartment = async (req, res) => {
 exports.rejectApartment = async (req, res) => {
     try {
         const id = req.params.id;
-
         const apartment = await queryApartmentById(id);
-
         if (!apartment) {
             return res.status(404).json({ error: 'Apartment not found' });
         }
         const publisher = await queryUserById(apartment.publisher_id);
-
         if (!publisher) {
             return res.status(404).json({ error: 'Publisher not found' });
         }
-
         await sendApartmentRejectedEmail(publisher.email, publisher.username, apartment.title);
         const deleted = await deleteApartment(id);
         if (!deleted) {
