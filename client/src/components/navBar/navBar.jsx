@@ -12,6 +12,7 @@ const NavBar = ({ userRole }) => {
                 <ul className={styles.navList}>
                     {userRole == 'admin' && <li className={styles.navItem}><Link to="/adminHome" className={styles.navLink}>Unopproved Apartments</Link></li>}
                     {userRole == 'admin' && <li className={styles.navItem}><Link to="/allusers" className={styles.navLink}>Users</Link></li>}
+                    {userRole == 'admin' && <li className={styles.navItem}><Link to="/publish" className={styles.navLink}>Publish</Link></li>}
                     {userRole !== 'admin' && <li className={styles.navItem}><Link to="/about" className={styles.navLink}>About</Link></li>}
                     <li className={styles.navItem}><Link to={userRole == 'admin' ? '/apartments' : '/deals'} className={styles.navLink}>{userRole == 'admin' ? 'Apartments' : 'Deals'}</Link></li>
                     <li className={styles.navItem}><a href="#contact" className={styles.navLink}>Contact</a></li>
