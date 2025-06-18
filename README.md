@@ -16,7 +16,7 @@ DoorWay is a complete web application developed as a school project to demonstra
 
 ### Property Management
 - **Property Listings** - Add, edit, and manage rental properties with full details
-- **Media Support** - Upload and manage property images, audio descriptions, and documents
+- **Media Support** - Upload and manage property images
 - **Advanced Search & Filtering** - Find properties by location, price, type, and amenities
 - **Property Details** - Comprehensive property information display
 
@@ -29,7 +29,7 @@ DoorWay is a complete web application developed as a school project to demonstra
 ### Technical Features
 - **RESTful API** - Well-defined API endpoints for all operations
 - **Database Integration** - MySQL with logical table architecture
-- **File Management** - Handle various media types (images, audio, documents)
+- **File Management** - Handle media (images)
 - **Modular Architecture** - Organized codebase with separation of concerns
 
 ## Tech Stack
