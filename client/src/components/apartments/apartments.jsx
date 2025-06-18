@@ -108,17 +108,6 @@ export default function Apartments() {
           </select>
         </div>
       </div>
-
-      {/* {filteredApartments.length === 0 ? (
-        <div className={styles.noResults}>No apartments found matching your criteria.</div>
-      ) : (
-        filteredApartments.map((apt) => (
-          <div key={apt.id}>
-            <ApartmentDetails apt={apt} />
-            <AddToCartButton aptId={apt.id} />
-          </div>
-        ))
-      )} */}
       {filteredApartments.length === 0 ? (
         <div className={styles.noResults}>No apartments found matching your criteria.</div>
       ) : (

@@ -32,7 +32,7 @@ const Cart = () => {
 
     const handleRemove = async (apartmentId) => {
         try {
-            await axios.delete(`http://localhost:5000/users/cart/${apartmentId}` ,{ withCredentials: true });
+            await axios.delete(`http://localhost:5000/users/cart/${apartmentId}`, { withCredentials: true });
             setFavorites((prev) =>
                 prev.filter((item) => item.id !== apartmentId)
             );
@@ -49,17 +49,21 @@ const Cart = () => {
             {favorites.length === 0 ? (
                 <p>No favorites found.</p>
             ) : (
-                <ul>
-                    {favorites.map((item) => (
-                        <li key={item.apartment_id}>
-                            <ApartmentDetails apt={item} />
-                            <button onClick={() => handleRemove(item.id)}>
-                                Remove
-                            </button>
-                            
-                        </li>
-                    ))}
-                </ul>
+                <div className={styles.apartmentsContainer}>
+                    <div className={styles.apartmentsGrid}>
+                        <ul>
+                            {favorites.map((item) => (
+                                <li key={item.id} className={styles.apartmentCard}>
+                                    <ApartmentDetails apt={item} />
+                                    <button onClick={() => handleRemove(item.id)}>
+                                        Remove
+                                    </button>
+
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
             )}
         </div>
     );
