@@ -66,8 +66,8 @@ DoorWay is a complete web application developed as a school project to demonstra
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/doorway.git
-   cd doorway
+gh repo clone Bracha-Rosenfeld/Bracha_Simi_DoorWay
+cd Bracha_Simi_DoorWay
    ```
 
 2. **Install server dependencies**
