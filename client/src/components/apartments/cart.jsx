@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useCurrentUser } from '../userProvider';
 import ApartmentDetails from './apartmentDetails';
 import axios from 'axios';
+import styles from './apartments.module.css'
+
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -54,6 +56,7 @@ const Cart = () => {
                             <button onClick={() => handleRemove(item.id)}>
                                 Remove
                             </button>
+                            
                         </li>
                     ))}
                 </ul>
