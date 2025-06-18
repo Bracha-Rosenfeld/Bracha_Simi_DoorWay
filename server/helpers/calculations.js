@@ -1,35 +1,37 @@
-require('axios');
+const axios = require('axios');
+
 exports.getCoordinatesFromAddress = async (address) => {
   const apiKey = process.env.API_KEY;
   const url = `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${encodeURIComponent(address)}&format=json`;
+
   try {
     const response = await axios.get(url);
+    const data = response.data;
+
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error("Address not found.");
+    }
+
+    const firstResult = data[0];
+
+    if (!firstResult.lat || !firstResult.lon) {
+      throw new Error("Missing latitude or longitude in response.");
+    }
+
+    const latitude = parseFloat(firstResult.lat);
+    const longitude = parseFloat(firstResult.lon);
+
+    if (isNaN(latitude) || isNaN(longitude)) {
+      throw new Error("Invalid latitude or longitude format.");
+    }
+
+    return [latitude, longitude];
+
   } catch (error) {
-    throw new Error("Invalid address or API error. " + address);
+    throw new Error("Invalid address or API error. " + address + " - " + error.message);
   }
-
-
-  const data = await response.json();
-
-  if (!Array.isArray(data) || data.length === 0) {
-    throw new Error("Address not found.");
-  }
-
-  const firstResult = data[0];
-
-  if (!firstResult.lat || !firstResult.lon) {
-    throw new Error("Missing latitude or longitude in response.");
-  }
-
-  const latitude = parseFloat(firstResult.lat);
-  const longitude = parseFloat(firstResult.lon);
-
-  if (isNaN(latitude) || isNaN(longitude)) {
-    throw new Error("Invalid latitude or longitude format.");
-  }
-
-  return [latitude, longitude];
 }
+
 
 exports.getCityFromCoordinates = async (latitude, longitude) => {
   const apiKey = process.env.API_KEY;
@@ -37,20 +39,21 @@ exports.getCityFromCoordinates = async (latitude, longitude) => {
 
   try {
     const response = await axios.get(url);
+    const data = response.data;
+
+    if (!data.address || !data.address.city) {
+      return (
+        data.address.town ||
+        data.address.village ||
+        data.address.county ||
+        data.address.state ||
+        'Unknown'
+      );
+    }
+
+    return data.address.city;
+
   } catch (error) {
-    throw new Error("Reverse geocoding API error. " + address);
+    throw new Error("Reverse geocoding API error. " + error.message);
   }
-
-
-  const data = await response.json();
-  if (!data.address || !data.address.city) {
-    return (
-      data.address.town ||
-      data.address.village ||
-      data.address.county ||
-      data.address.state ||
-      'Unknown'
-    );
-  }
-  return data.address.city;
 };

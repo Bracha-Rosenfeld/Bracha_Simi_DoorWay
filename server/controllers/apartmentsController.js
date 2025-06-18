@@ -50,12 +50,11 @@ exports.createApartment = async (req, res) => {
             return res.status(400).json({ error: 'Address is required' + req.body.address });
         }
         const [latitude, longitude] = await getCoordinatesFromAddress(address);
-
         if (isNaN(latitude) || isNaN(longitude)) {
             return res.status(400).json({ error: 'Invalid address coordinates' + req.body.address });
         }
-        const city = await getCityFromCoordinates(latitude, longitude);
-        const apartment = await postApartment(latitude, longitude, city, req.body);
+        const city = await getCityFromCoordinates(latitude, longitude);     
+        const apartment = await postApartment(latitude, longitude, city, req.body);       
         if (!apartment || apartment.length === 0) {
             return res.status(404).json({ error: 'Apartment cannot be posted' });
         }
