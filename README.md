@@ -83,7 +83,7 @@ DoorWay is a complete web application developed as a school project to demonstra
    ```
 
 4. **Database Setup**
-   - Create a MySQL database named `doorway`
+   - Create a MySQL database named `mydatabase`
    - Run the SQL scripts in the `/database` folder to create tables
    - The database includes properly structured tables for users, properties, and media
 
@@ -93,7 +93,7 @@ DoorWay is a complete web application developed as a school project to demonstra
    MYSQL_HOST=localhost
    MYSQL_USER=your_mysql_username
    MYSQL_PASSWORD=your_mysql_password
-   MYSQL_DATABASE=doorway
+   MYSQL_DATABASE=mydatabase
    ```
 
 6. **Run the application**
@@ -106,7 +106,7 @@ DoorWay is a complete web application developed as a school project to demonstra
    ```
 
 7. **Access the application**
-   Open your browser and go to `http://localhost:3000`
+   Open your browser and go to `http://localhost:5000`
 
 ## Project Structure
 
@@ -121,9 +121,9 @@ doorway/
 ## Usage
 
 ### For Property Owners
-1. Register and login to your property owner account
+1. Register and login to your property owner account (regular or google login)
 2. Add new rental properties with detailed information
-3. Upload property images, audio tours, and relevant documents
+3. Upload property images
 4. Manage your property listings and view rental inquiries
 5. Access owner dashboard with property analytics
 
@@ -146,7 +146,7 @@ doorway/
 - **Node.js & Express** - Server-side development with modular routing
 - **MySQL** - Relational database with structured schema design
 - **RESTful API** - Well-defined API endpoints for client-server communication
-- **Media Handling** - Support for images, audio, and document uploads
+- **Media Handling** - Support for images uploads
 - **Responsive Design** - Mobile and desktop optimized interface
 
 ---
