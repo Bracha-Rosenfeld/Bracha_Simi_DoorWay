@@ -52,8 +52,6 @@ DoorWay is a complete web application developed as a school project to demonstra
 
 ### Media Support
 - **Images** - Property photos and user avatars
-- **Audio** - Property audio descriptions and tours
-- **Documents** - Lease agreements and property documents
 - **Text Content** - Rich property descriptions and user communications
 
 ## Getting Started
